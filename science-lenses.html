@@ -1,1 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Convex or Concave? - Lens Practice</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+    color: #f0f0f0;
+    padding: 10px;
+    overflow-x: hidden;
+  }
 
+  .header {
+    text-align: center;
+    padding: 20px 15px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 20px;
+    margin-bottom: 15px;
+    max-width: 700px;
+    margin-left: auto; margin-right: auto;
+  }
+  .header h1 { font-size: 1.8rem; margin-bottom: 6px; }
+  .header h1 span { background: linear-gradient(90deg, #00b894, #00cec9, #6c5ce7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .header p { color: #aaa; font-size: 0.95rem; }
+
+  .score-bar {
+    display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
+    max-width: 700px; margin: 0 auto 15px;
+    padding: 12px 20px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 14px;
+    font-weight: 700; font-size: 1.1rem;
+  }
+  .score-bar .correct-count { color: #2ed573; }
+  .score-bar .wrong-count { color: #ff6b6b; }
+  .score-bar .streak-count { color: #f9ca24; }
+  .score-bar .total-count { color: #74b9ff; }
+
+  .progress-bar { max-width: 700px; margin: 0 auto 20px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #00b894, #6c5ce7); transition: width 0.4s; }
+
+  .game-area {
+    max-width: 700px; margin: 0 auto; padding-bottom: 60px;
+  }
+
+  .question-card {
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    padding: 28px 24px;
+    color: #333;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    animation: slideIn 0.4s ease;
+    text-align: center;
+  }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+  .q-number { font-size: 0.85rem; color: #999; margin-bottom: 8px; font-weight: 600; }
+  .q-text { font-size: 1.25rem; font-weight: 600; margin-bottom: 6px; line-height: 1.4; }
+  .q-es { font-size: 0.8rem; color: #999; font-style: italic; margin-bottom: 16px; }
+  .q-es::before { content: "🇪🇸 "; }
+
+  .q-image {
+    margin: 16px auto;
+    padding: 16px;
+    background: rgba(0,0,0,0.03);
+    border-radius: 14px;
+    max-width: 360px;
+  }
+  .q-image svg { max-width: 100%; height: auto; }
+  .q-image-caption { font-size: 0.8rem; color: #888; margin-top: 8px; font-style: italic; }
+
+  .choices {
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    margin-top: 18px;
+  }
+  .choice-btn {
+    padding: 16px 36px;
+    border: 3px solid #e0e0e0;
+    border-radius: 16px;
+    background: #fff;
+    font-size: 1.15rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s;
+    min-width: 160px;
+  }
+  .choice-btn:hover { transform: scale(1.05); border-color: #6c5ce7; background: #f8f4ff; }
+  .choice-btn:active { transform: scale(0.97); }
+  .choice-btn.convex { color: #00b894; }
+  .choice-btn.concave { color: #6c5ce7; }
+  .choice-btn.both { color: #e17055; }
+  .choice-btn.correct-pick { border-color: #2ed573; background: #e8f8f0; animation: bounce 0.4s; }
+  .choice-btn.wrong-pick { border-color: #ff6b6b; background: #fdeaea; animation: shake 0.4s; }
+  .choice-btn:disabled { cursor: default; opacity: 0.7; }
+
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+  .feedback {
+    margin-top: 16px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    display: none;
+  }
+  .feedback.show { display: block; animation: slideIn 0.3s; }
+  .feedback.correct { background: #e8f8f0; color: #00b894; border: 2px solid #00b894; }
+  .feedback.wrong { background: #fdeaea; color: #e74c3c; border: 2px solid #ff6b6b; }
+  .feedback .explain { font-weight: 400; font-size: 0.9rem; margin-top: 6px; color: #555; }
+  .feedback .explain-es { font-size: 0.78rem; color: #999; font-style: italic; margin-top: 3px; }
+
+  .next-btn {
+    display: none;
+    margin: 18px auto 0;
+    padding: 14px 36px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .next-btn:hover { transform: scale(1.05); }
+  .next-btn.show { display: block; }
+
+  .end-screen {
+    text-align: center;
+    padding: 40px 20px;
+    animation: slideIn 0.5s;
+  }
+  .end-screen h2 { font-size: 2rem; margin-bottom: 12px; }
+  .end-screen .big-emoji { font-size: 3.5rem; margin: 10px 0; }
+  .end-screen p { font-size: 1.1rem; color: #ddd; margin-bottom: 8px; }
+  .end-screen .final-score { font-size: 1.8rem; font-weight: 800; color: #2ed573; margin: 16px 0; }
+  .retry-btn {
+    margin-top: 20px;
+    padding: 14px 40px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #00b894, #00cec9);
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .retry-btn:hover { transform: scale(1.05); }
+
+  .confetti-piece {
+    position: fixed; top: -20px; width: 10px; height: 10px;
+    border-radius: 2px; z-index: 9999; pointer-events: none;
+    animation: confettiFall 2.5s ease-in forwards;
+  }
+  @keyframes confettiFall { 0%{transform:translateY(0) rotate(0);opacity:1} 100%{transform:translateY(110vh) rotate(720deg);opacity:0} }
+
+  .float-emoji {
+    position: fixed; font-size: 2rem; pointer-events: none; z-index: 9999;
+    animation: floatUp 1.5s ease-out forwards;
+  }
+  @keyframes floatUp { 0%{opacity:1;transform:translateY(0) scale(1)} 100%{opacity:0;transform:translateY(-100px) scale(1.4)} }
+
+  /* Cheat sheet toggle */
+  .cheat-sheet-toggle {
+    display: block; margin: 0 auto 15px; padding: 10px 20px;
+    background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px; color: #aaa; font-size: 0.9rem; font-weight: 600;
+    cursor: pointer; transition: 0.3s;
+  }
+  .cheat-sheet-toggle:hover { background: rgba(255,255,255,0.15); color: #fff; }
+  .cheat-sheet {
+    max-width: 700px; margin: 0 auto 20px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 14px; padding: 16px 20px;
+    display: none; font-size: 0.9rem; line-height: 1.7;
+  }
+  .cheat-sheet.show { display: block; animation: slideIn 0.3s; }
+  .cheat-sheet h3 { color: #00cec9; margin-bottom: 8px; }
+  .cheat-sheet .lens-info { display: flex; gap: 20px; flex-wrap: wrap; }
+  .cheat-sheet .lens-box { flex: 1; min-width: 200px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 10px; }
+  .cheat-sheet .lens-box h4 { margin-bottom: 4px; }
+  .cheat-sheet .convex-title { color: #00b894; }
+  .cheat-sheet .concave-title { color: #a29bfe; }
+  .cheat-sheet ul { padding-left: 18px; color: #ccc; }
+  .cheat-sheet .es-small { font-size: 0.78rem; color: #888; font-style: italic; }
+
+  @media (max-width: 500px) {
+    .header h1 { font-size: 1.4rem; }
+    .q-text { font-size: 1.1rem; }
+    .choice-btn { min-width: 130px; padding: 14px 24px; font-size: 1rem; }
+    .choices { gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🔍 <span>Convex or Concave?</span></h1>
+  <p>Choose the correct lens for each question!</p>
+</div>
+
+<button class="cheat-sheet-toggle" onclick="toggleCheat()">📖 Quick Review (tap to show/hide)</button>
+<div class="cheat-sheet" id="cheatSheet">
+  <h3>🔍 Lens Quick Reference</h3>
+  <div class="lens-info">
+    <div class="lens-box">
+      <h4 class="convex-title">CONVEX LENS</h4>
+      <ul>
+        <li>Bulges <strong>outward</strong> (thicker in middle)</li>
+        <li><strong>Converges</strong> (focuses) light</li>
+        <li>Used in: magnifying glass, camera, eye, telescope</li>
+        <li>Makes things look <strong>bigger</strong> (when close)</li>
+      </ul>
+      <p class="es-small">🇪🇸 Lente convexa: se curva hacia afuera, concentra la luz. Se usa en lupas, cámaras, ojos.</p>
+    </div>
+    <div class="lens-box">
+      <h4 class="concave-title">CONCAVE LENS</h4>
+      <ul>
+        <li>Curves <strong>inward</strong> (thinner in middle)</li>
+        <li><strong>Diverges</strong> (spreads) light</li>
+        <li>Used in: glasses for nearsighted, peepholes, laser beams</li>
+        <li>Makes things look <strong>smaller</strong></li>
+      </ul>
+      <p class="es-small">🇪🇸 Lente cóncava: se curva hacia adentro, dispersa la luz. Se usa en gafas para miopes, mirillas.</p>
+    </div>
+  </div>
+  <p style="margin-top:10px;color:#ffeaa7;font-weight:600">💡 Remember: conveX = X marks the spot where light focuses! concAVE = like a CAVE going inward!</p>
+  <p class="es-small">🇪🇸 Recuerda: conveXa = la X marca el punto donde se enfoca la luz. cóncAVA = como una CUEVA hacia adentro.</p>
+</div>
+
+<div class="score-bar">
+  <span class="correct-count">✅ <span id="correctNum">0</span></span>
+  <span class="wrong-count">❌ <span id="wrongNum">0</span></span>
+  <span class="streak-count">🔥 <span id="streakNum">0</span></span>
+  <span class="total-count">📋 <span id="totalNum">0</span>/25</span>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+<div class="game-area" id="gameArea"></div>
+
+<script>
+const questions = [
+  // Basic identification
+  { q: "Which lens bulges OUTWARD (thicker in the middle)?", es: "¿Qué lente se curva hacia AFUERA (más gruesa en el medio)?", a: "convex", explain: "Convex lenses bulge outward like a ball!", explainEs: "Las lentes convexas se curvan hacia afuera como una pelota.", img: "convex" },
+  { q: "Which lens curves INWARD (thinner in the middle)?", es: "¿Qué lente se curva hacia ADENTRO (más fina en el medio)?", a: "concave", explain: "Concave lenses curve inward like a cave!", explainEs: "Las lentes cóncavas se curvan hacia adentro como una cueva.", img: "concave" },
+  { q: "Which lens CONVERGES (focuses) light to a single point?", es: "¿Qué lente CONVERGE (enfoca) la luz en un solo punto?", a: "convex", explain: "Convex lenses bring light rays together to a focal point.", explainEs: "Las lentes convexas juntan los rayos de luz en un punto focal.", img: "convex-light" },
+  { q: "Which lens DIVERGES (spreads apart) light rays?", es: "¿Qué lente DIVERGE (separa) los rayos de luz?", a: "concave", explain: "Concave lenses spread light rays apart.", explainEs: "Las lentes cóncavas separan los rayos de luz.", img: "concave-light" },
+
+  // Uses / applications
+  { q: "A magnifying glass uses which type of lens?", es: "Una lupa usa qué tipo de lente?", a: "convex", explain: "Magnifying glasses use convex lenses to focus and enlarge.", explainEs: "Las lupas usan lentes convexas para enfocar y agrandar." },
+  { q: "Glasses for NEARSIGHTED people use which lens?", es: "Las gafas para personas MIOPES usan qué lente?", a: "concave", explain: "Nearsighted people need concave lenses to spread light before it enters the eye.", explainEs: "Los miopes necesitan lentes cóncavas para dispersar la luz antes de que entre al ojo." },
+  { q: "Your EYE contains which type of lens?", es: "Tu OJO contiene qué tipo de lente?", a: "convex", explain: "Your eye has a natural convex lens that focuses light onto the retina.", explainEs: "Tu ojo tiene una lente convexa natural que enfoca la luz en la retina." },
+  { q: "A camera uses which type of lens to focus images?", es: "Una cámara usa qué tipo de lente para enfocar imágenes?", a: "convex", explain: "Cameras use convex lenses to focus light and create sharp images.", explainEs: "Las cámaras usan lentes convexas para enfocar la luz y crear imágenes nítidas." },
+  { q: "A peephole in a door uses which lens?", es: "Una mirilla en una puerta usa qué lente?", a: "concave", explain: "Peepholes use concave lenses to give a wider field of view.", explainEs: "Las mirillas usan lentes cóncavas para dar un campo de visión más amplio." },
+  { q: "A telescope's main lens is which type?", es: "La lente principal de un telescopio es de qué tipo?", a: "convex", explain: "Telescopes use convex lenses to gather and focus distant light.", explainEs: "Los telescopios usan lentes convexas para recoger y enfocar la luz lejana." },
+
+  // Properties
+  { q: "Which lens makes objects appear LARGER when you look through it?", es: "¿Qué lente hace que los objetos se vean MÁS GRANDES?", a: "convex", explain: "Convex lenses magnify objects when held close to them.", explainEs: "Las lentes convexas agrandan los objetos cuando se ponen cerca." },
+  { q: "Which lens makes objects appear SMALLER?", es: "¿Qué lente hace que los objetos se vean MÁS PEQUEÑOS?", a: "concave", explain: "Concave lenses make things look smaller because they spread light.", explainEs: "Las lentes cóncavas hacen que las cosas se vean más pequeñas porque dispersan la luz." },
+  { q: "Which lens can be used to START A FIRE with sunlight?", es: "¿Qué lente puede usarse para HACER FUEGO con la luz del sol?", a: "convex", explain: "A convex lens focuses sunlight to an intense hot point!", explainEs: "Una lente convexa concentra la luz del sol en un punto muy caliente." },
+  { q: "Which lens has a FOCAL POINT where all light meets?", es: "¿Qué lente tiene un PUNTO FOCAL donde toda la luz se junta?", a: "convex", explain: "Convex lenses converge light to one focal point.", explainEs: "Las lentes convexas convergen la luz en un punto focal." },
+
+  // Both lenses work by...
+  { q: "Both convex AND concave lenses work because of which principle?", es: "Ambas lentes (convexa y cóncava) funcionan gracias a qué principio?", a: "both", explain: "Both work because of REFRACTION - they bend light!", explainEs: "Ambas funcionan por la REFRACCIÓN – ¡doblan la luz!", threeOptions: true },
+
+  // More scenarios
+  { q: "To correct FARSIGHTEDNESS (can't see close things), which lens is used?", es: "Para corregir la HIPERMETROPÍA (no ve de cerca), ¿qué lente se usa?", a: "convex", explain: "Farsighted people need convex lenses to help focus on near objects.", explainEs: "Los hipermétropes necesitan lentes convexas para enfocar objetos cercanos." },
+  { q: "Which lens would a scientist use to FOCUS a laser beam?", es: "¿Qué lente usaría un científico para ENFOCAR un rayo láser?", a: "convex", explain: "Convex lenses focus (converge) light, including laser beams.", explainEs: "Las lentes convexas enfocan (convergen) la luz, incluidos los rayos láser." },
+  { q: "Which lens would SPREAD a laser beam wider?", es: "¿Qué lente EXPANDIRÍA un rayo láser?", a: "concave", explain: "Concave lenses diverge (spread) light outward.", explainEs: "Las lentes cóncavas divergen (expanden) la luz hacia afuera." },
+  { q: "A projector uses which lens to project images onto a screen?", es: "Un proyector usa qué lente para proyectar imágenes en una pantalla?", a: "convex", explain: "Projectors use convex lenses to focus light into a projected image.", explainEs: "Los proyectores usan lentes convexas para enfocar la luz en una imagen proyectada." },
+  { q: "Which lens is shaped like the outside of a sphere?", es: "¿Qué lente tiene forma del exterior de una esfera?", a: "convex", explain: "Convex = curves outward like the outside of a ball.", explainEs: "Convexa = se curva hacia afuera como el exterior de una pelota." },
+  { q: "Which lens is shaped like the INSIDE of a bowl?", es: "¿Qué lente tiene forma del INTERIOR de un tazón?", a: "concave", explain: "Concave = curves inward like the inside of a bowl or cave.", explainEs: "Cóncava = se curva hacia adentro como el interior de un tazón o cueva." },
+
+  // Tricky ones
+  { q: "If light rays come together after passing through a lens, the lens is:", es: "Si los rayos de luz se juntan después de pasar por una lente, la lente es:", a: "convex", explain: "Light converging = convex lens!", explainEs: "Luz convergiendo = ¡lente convexa!" },
+  { q: "If light rays spread out after passing through a lens, the lens is:", es: "Si los rayos de luz se separan después de pasar por una lente, la lente es:", a: "concave", explain: "Light diverging = concave lens!", explainEs: "Luz divergiendo = ¡lente cóncava!" },
+  { q: "A reading glass that makes letters bigger uses which lens?", es: "Un lente de lectura que agranda las letras usa qué tipo de lente?", a: "convex", explain: "Reading glasses for farsightedness use convex lenses.", explainEs: "Los lentes de lectura para hipermetropía usan lentes convexas." },
+  { q: "Which type of lens do binoculars use?", es: "¿Qué tipo de lente usan los binoculares?", a: "convex", explain: "Binoculars use convex lenses to gather light from far away.", explainEs: "Los binoculares usan lentes convexas para recoger luz de lejos." },
+];
+
+// State
+let currentQ = 0;
+let correctCount = 0;
+let wrongCount = 0;
+let streak = 0;
+let order = [];
+let answered = false;
+
+// Audio
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playTone(freq, dur, type='sine', vol=0.15) {
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = type; osc.frequency.value = freq;
+  gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+  osc.connect(gain).connect(audioCtx.destination);
+  osc.start(); osc.stop(audioCtx.currentTime + dur);
+}
+function sfxCorrect() { playTone(523,0.1); setTimeout(()=>playTone(659,0.1),100); setTimeout(()=>playTone(784,0.15),200); }
+function sfxWrong() { playTone(200,0.15,'sawtooth',0.1); setTimeout(()=>playTone(160,0.2,'sawtooth',0.08),150); }
+
+function shuffle(arr) {
+  const a = [...arr]; for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a;
+}
+
+function spawnConfetti(count=25) {
+  const colors = ['#00b894','#6c5ce7','#f9ca24','#ff6b6b','#74b9ff','#fd79a8','#2ed573'];
+  for(let i=0;i<count;i++){
+    const el=document.createElement('div'); el.className='confetti-piece';
+    el.style.left=Math.random()*100+'vw';
+    el.style.background=colors[Math.floor(Math.random()*colors.length)];
+    el.style.animationDuration=(2+Math.random()*1.5)+'s';
+    el.style.animationDelay=(Math.random()*0.6)+'s';
+    el.style.width=(6+Math.random()*8)+'px'; el.style.height=(6+Math.random()*8)+'px';
+    document.body.appendChild(el); setTimeout(()=>el.remove(),4000);
+  }
+}
+
+function floatEmoji(emoji, x, y) {
+  const el=document.createElement('div'); el.className='float-emoji';
+  el.textContent=emoji; el.style.left=x+'px'; el.style.top=y+'px';
+  document.body.appendChild(el); setTimeout(()=>el.remove(),1500);
+}
+
+function getLensSVG(type) {
+  if (type === 'convex') return `
+    <svg viewBox="0 0 300 120" width="280">
+      <ellipse cx="150" cy="60" rx="25" ry="50" fill="rgba(0,184,148,0.15)" stroke="#00b894" stroke-width="2.5"/>
+      <text x="150" y="115" fill="#00b894" font-size="11" text-anchor="middle" font-weight="bold">Convex (bulges out)</text>
+    </svg>`;
+  if (type === 'concave') return `
+    <svg viewBox="0 0 300 120" width="280">
+      <path d="M135,10 Q155,60 135,110" fill="none" stroke="#6c5ce7" stroke-width="2.5"/>
+      <path d="M165,10 Q145,60 165,110" fill="none" stroke="#6c5ce7" stroke-width="2.5"/>
+      <text x="150" y="115" fill="#6c5ce7" font-size="11" text-anchor="middle" font-weight="bold">Concave (curves in)</text>
+    </svg>`;
+  if (type === 'convex-light') return `
+    <svg viewBox="0 0 340 120" width="300">
+      <ellipse cx="150" cy="60" rx="20" ry="45" fill="rgba(0,184,148,0.1)" stroke="#00b894" stroke-width="2"/>
+      <line x1="40" y1="30" x2="130" y2="50" stroke="#f9ca24" stroke-width="2"/>
+      <line x1="40" y1="60" x2="130" y2="60" stroke="#f9ca24" stroke-width="2"/>
+      <line x1="40" y1="90" x2="130" y2="70" stroke="#f9ca24" stroke-width="2"/>
+      <line x1="170" y1="50" x2="260" y2="60" stroke="#f9ca24" stroke-width="2" stroke-dasharray="5 3"/>
+      <line x1="170" y1="60" x2="260" y2="60" stroke="#f9ca24" stroke-width="2" stroke-dasharray="5 3"/>
+      <line x1="170" y1="70" x2="260" y2="60" stroke="#f9ca24" stroke-width="2" stroke-dasharray="5 3"/>
+      <circle cx="260" cy="60" r="5" fill="#f9ca24"/>
+      <text x="260" y="80" fill="#aaa" font-size="9" text-anchor="middle">focal point</text>
+      <text x="150" y="115" fill="#00b894" font-size="10" text-anchor="middle">Convex: light converges</text>
+    </svg>`;
+  if (type === 'concave-light') return `
+    <svg viewBox="0 0 340 120" width="300">
+      <path d="M140,15 Q158,60 140,105" fill="none" stroke="#6c5ce7" stroke-width="2"/>
+      <path d="M160,15 Q142,60 160,105" fill="none" stroke="#6c5ce7" stroke-width="2"/>
+      <line x1="40" y1="35" x2="140" y2="50" stroke="#f9ca24" stroke-width="2"/>
+      <line x1="40" y1="60" x2="140" y2="60" stroke="#f9ca24" stroke-width="2"/>
+      <line x1="40" y1="85" x2="140" y2="70" stroke="#f9ca24" stroke-width="2"/>
+      <line x1="160" y1="50" x2="290" y2="25" stroke="#f9ca24" stroke-width="2" stroke-dasharray="5 3"/>
+      <line x1="160" y1="60" x2="290" y2="60" stroke="#f9ca24" stroke-width="2" stroke-dasharray="5 3"/>
+      <line x1="160" y1="70" x2="290" y2="95" stroke="#f9ca24" stroke-width="2" stroke-dasharray="5 3"/>
+      <text x="150" y="115" fill="#6c5ce7" font-size="10" text-anchor="middle">Concave: light diverges</text>
+    </svg>`;
+  return '';
+}
+
+function renderQuestion() {
+  if (currentQ >= order.length) { showEnd(); return; }
+  answered = false;
+  const q = questions[order[currentQ]];
+  const area = document.getElementById('gameArea');
+
+  let imgHTML = '';
+  if (q.img) {
+    imgHTML = `<div class="q-image">${getLensSVG(q.img)}</div>`;
+  }
+
+  let choicesHTML = '';
+  if (q.threeOptions) {
+    choicesHTML = `
+      <div class="choices">
+        <button class="choice-btn convex" onclick="answer('convex',this)">CONVEX</button>
+        <button class="choice-btn concave" onclick="answer('concave',this)">CONCAVE</button>
+        <button class="choice-btn both" onclick="answer('both',this)">BOTH (Refraction)</button>
+      </div>`;
+  } else {
+    choicesHTML = `
+      <div class="choices">
+        <button class="choice-btn convex" onclick="answer('convex',this)">🔍 ONVEX</button>
+        <button class="choice-btn concave" onclick="answer('concave',this)">👓 ONCAVE</button>
+      </div>`;
+  }
+
+  area.innerHTML = `
+    <div class="question-card">
+      <div class="q-number">Question ${currentQ + 1} of ${order.length}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="q-es">${q.es}</div>
+      ${imgHTML}
+      ${choicesHTML}
+      <div class="feedback" id="feedback"></div>
+      <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next ➡️</button>
+    </div>
+  `;
+}
+
+function answer(choice, btn) {
+  if (answered) return;
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  answered = true;
+  const q = questions[order[currentQ]];
+  const correct = choice === q.a;
+  const fb = document.getElementById('feedback');
+  const btns = document.querySelectorAll('.choice-btn');
+  btns.forEach(b => b.disabled = true);
+
+  if (correct) {
+    correctCount++; streak++;
+    btn.classList.add('correct-pick');
+    fb.className = 'feedback correct show';
+    fb.innerHTML = `✅ Correct! ${q.explain}<div class="explain-es">🇪🇸 ${q.explainEs}</div>`;
+    sfxCorrect();
+    const rect = btn.getBoundingClientRect();
+    floatEmoji(streak >= 5 ? '🔥' : '⭐', rect.left + rect.width/2, rect.top);
+    if (streak >= 3) spawnConfetti(streak >= 5 ? 20 : 8);
+  } else {
+    wrongCount++; streak = 0;
+    btn.classList.add('wrong-pick');
+    // Highlight correct
+    btns.forEach(b => { if (b.textContent.toLowerCase().includes(q.a) || (q.a === 'both' && b.textContent.includes('BOTH'))) b.classList.add('correct-pick'); });
+    fb.className = 'feedback wrong show';
+    fb.innerHTML = `❌ The answer is <strong>${q.a.toUpperCase()}</strong>. ${q.explain}<div class="explain-es">🇪🇸 ${q.explainEs}</div>`;
+    sfxWrong();
+  }
+
+  document.getElementById('nextBtn').classList.add('show');
+  updateStats();
+}
+
+function nextQuestion() {
+  currentQ++;
+  updateStats();
+  renderQuestion();
+}
+
+function updateStats() {
+  document.getElementById('correctNum').textContent = correctCount;
+  document.getElementById('wrongNum').textContent = wrongCount;
+  document.getElementById('streakNum').textContent = streak;
+  document.getElementById('totalNum').textContent = currentQ;
+  document.getElementById('progressFill').style.width = ((currentQ / order.length) * 100) + '%';
+}
+
+function showEnd() {
+  const pct = Math.round((correctCount / order.length) * 100);
+  let emoji = '🏆', msg = "PERFECT! You're a lens master!";
+  if (pct < 100 && pct >= 80) { emoji = '⭐'; msg = "Excellent! Almost perfect!"; }
+  else if (pct < 80 && pct >= 60) { emoji = '👍'; msg = "Good job! Review and try again!"; }
+  else if (pct < 60) { emoji = '💪'; msg = "Keep practising! You'll get there!"; }
+
+  document.getElementById('gameArea').innerHTML = `
+    <div class="end-screen">
+      <div class="big-emoji">${emoji}</div>
+      <h2>${msg}</h2>
+      <div class="final-score">${correctCount}/${order.length} (${pct}%)</div>
+      <p>Correct: ${correctCount} | Wrong: ${wrongCount}</p>
+      <p style="font-size:0.85rem;color:#888;font-style:italic">🇪🇸 ¡${pct >= 80 ? 'Excelente trabajo, Hugo!' : 'Sigue practicando, tú puedes!'}</p>
+      <button class="retry-btn" onclick="startGame()">🔄 Play Again!</button>
+    </div>
+  `;
+  if (pct >= 80) spawnConfetti(40);
+}
+
+function toggleCheat() {
+  document.getElementById('cheatSheet').classList.toggle('show');
+}
+
+function startGame() {
+  order = shuffle([...Array(questions.length).keys()]);
+  currentQ = 0; correctCount = 0; wrongCount = 0; streak = 0;
+  updateStats();
+  renderQuestion();
+}
+
+startGame();
+</script>
+</body>
+</html>
