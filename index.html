@@ -3,397 +3,279 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hugo's Irregular Verbs Challenge! 🏆</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<title>Hugo's Study Hub</title>
 <style>
-:root{--blue:#3B82F6;--green:#10B981;--purple:#8B5CF6;--orange:#F59E0B;--red:#EF4444;--pink:#EC4899;--cyan:#06B6D4;--dark:#1E293B;--gray:#94A3B8;}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);min-height:100vh;color:var(--dark);}
-.container{max-width:900px;margin:0 auto;padding:15px;}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0c0c1d 0%, #1a1a3e 30%, #2d1b69 60%, #1a1a3e 100%);
+    color: #f0f0f0;
+    overflow-x: hidden;
+  }
 
-.hero{background:linear-gradient(135deg,#f857a6,#ff5858,#ffc371);background-size:400% 400%;animation:gshift 6s ease infinite;border-radius:24px;padding:28px 20px;text-align:center;margin-bottom:18px;box-shadow:0 10px 40px rgba(0,0,0,0.3);}
-@keyframes gshift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-.hero h1{font-family:'Fredoka One',cursive;font-size:2em;color:white;text-shadow:3px 3px 6px rgba(0,0,0,0.3);}
-.hero p{color:white;font-weight:700;margin-top:4px;font-size:0.95em;}
+  /* Stars background */
+  .stars {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .star-dot {
+    position: absolute; background: #fff; border-radius: 50%;
+    animation: twinkle var(--dur) ease-in-out infinite;
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: 0.2; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
 
-/* Score */
-.score-bar{background:white;border-radius:16px;padding:14px 20px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 15px rgba(0,0,0,0.1);flex-wrap:wrap;gap:8px;}
-.si{text-align:center;flex:1;min-width:70px;}
-.si .lb{font-size:0.7em;color:var(--gray);font-weight:700;text-transform:uppercase;}
-.si .vl{font-family:'Fredoka One',cursive;font-size:1.5em;}
-.si.s .vl{color:var(--orange);}
-.si.p .vl{color:var(--green);}
-.si.t .vl{color:var(--red);}
+  .container {
+    position: relative; z-index: 1;
+    max-width: 900px; margin: 0 auto; padding: 20px 16px 60px;
+  }
 
-/* Tabs */
-.tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
-.tab{flex:1;min-width:90px;padding:11px 8px;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.82em;cursor:pointer;transition:all 0.3s;color:white;text-shadow:1px 1px 2px rgba(0,0,0,0.2);}
-.tab:nth-child(1){background:linear-gradient(135deg,#f857a6,#ff5858);}
-.tab:nth-child(2){background:linear-gradient(135deg,#667eea,#764ba2);}
-.tab:nth-child(3){background:linear-gradient(135deg,#f093fb,#f5576c);}
-.tab:nth-child(4){background:linear-gradient(135deg,#4facfe,#00f2fe);}
-.tab:nth-child(5){background:linear-gradient(135deg,#43e97b,#38f9d7);}
-.tab.active{transform:scale(1.05);box-shadow:0 6px 20px rgba(0,0,0,0.3);}
-.tab:not(.active){opacity:0.5;transform:scale(0.93);}
+  /* Header */
+  .hub-header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    margin-bottom: 30px;
+  }
+  .hub-header .avatar {
+    width: 80px; height: 80px;
+    background: linear-gradient(135deg, #f9ca24, #f0932b);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem;
+    margin: 0 auto 16px;
+    box-shadow: 0 4px 25px rgba(249,202,36,0.4);
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  .hub-header h1 {
+    font-size: 2.4rem;
+    background: linear-gradient(90deg, #f9ca24, #f0932b, #ff6b6b, #6c5ce7, #00cec9);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientText 4s linear infinite;
+    margin-bottom: 8px;
+  }
+  @keyframes gradientText { 0%{background-position:0%} 100%{background-position:200%} }
+  .hub-header p { color: #a0a0c0; font-size: 1.1rem; }
 
-.section{display:none;}
-.section.active{display:block;}
+  /* Section titles */
+  .section-title {
+    display: flex; align-items: center; gap: 12px;
+    margin: 30px 0 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+  }
+  .section-title .icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+  }
+  .section-title h2 { font-size: 1.4rem; font-weight: 700; }
+  .section-title .badge {
+    margin-left: auto;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge-exam { background: rgba(255,71,87,0.2); color: #ff4757; border: 1px solid rgba(255,71,87,0.3); }
+  .badge-english { background: rgba(108,92,231,0.2); color: #a29bfe; border: 1px solid rgba(108,92,231,0.3); }
 
-.card{background:white;border-radius:20px;padding:22px;margin-bottom:18px;box-shadow:0 4px 15px rgba(0,0,0,0.08);border-left:6px solid var(--purple);}
-.card.red{border-left-color:var(--red);}
-.card.blue{border-left-color:var(--blue);}
-.card.green{border-left-color:var(--green);}
-.card.orange{border-left-color:var(--orange);}
-.card.pink{border-left-color:var(--pink);}
-.card.cyan{border-left-color:var(--cyan);}
-.card h2{font-family:'Fredoka One',cursive;font-size:1.3em;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
-.trad{display:block;font-size:0.78em;color:var(--gray);font-style:italic;margin-top:2px;font-weight:600;}
+  /* Cards grid */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
 
-/* Verb Table */
-.verb-table{width:100%;border-collapse:separate;border-spacing:0 4px;margin:10px 0;}
-.verb-table th{background:var(--purple);color:white;padding:8px 10px;font-size:0.85em;text-transform:uppercase;letter-spacing:0.5px;}
-.verb-table th:first-child{border-radius:10px 0 0 10px;}
-.verb-table th:last-child{border-radius:0 10px 10px 0;}
-.verb-table td{padding:6px 8px;background:#F8FAFC;font-size:0.92em;}
-.verb-table tr td:first-child{border-radius:8px 0 0 8px;font-weight:800;color:var(--purple);}
-.verb-table tr td:last-child{border-radius:0 8px 8px 0;}
-.verb-table input{border:2px dashed #CBD5E1;border-radius:8px;padding:4px 8px;font-family:'Nunito',sans-serif;font-size:0.9em;font-weight:700;width:100%;text-align:center;background:white;transition:all 0.3s;}
-.verb-table input:focus{border-color:var(--blue);outline:none;box-shadow:0 0 0 3px rgba(59,130,246,0.2);}
-.verb-table input.correct{border-color:var(--green);background:#ECFDF5;color:var(--green);}
-.verb-table input.wrong{border-color:var(--red);background:#FEF2F2;color:var(--red);animation:shake 0.5s;}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+  .card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    padding: 24px 22px;
+    cursor: pointer;
+    transition: all 0.35s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 4px;
+    background: var(--card-accent);
+    opacity: 0.7;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+    background: rgba(255,255,255,0.1);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    border-color: var(--card-accent);
+  }
+  .card:active { transform: scale(0.98); }
 
-.verb-table.blue th{background:var(--blue);}
-.verb-table.green th{background:var(--green);}
-.verb-table.orange th{background:var(--orange);}
-.verb-table.pink th{background:var(--pink);}
+  .card-emoji { font-size: 2.2rem; margin-bottom: 12px; display: block; }
+  .card-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; }
+  .card-desc { font-size: 0.88rem; color: #a0a0b8; line-height: 1.5; margin-bottom: 8px; }
+  .card-desc-es { font-size: 0.78rem; color: #707088; font-style: italic; }
+  .card-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-top: 8px;
+    text-transform: uppercase;
+    background: rgba(255,255,255,0.08);
+    color: #ccc;
+  }
 
-.check-btn{display:inline-block;padding:10px 22px;background:linear-gradient(135deg,var(--green),#059669);color:white;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.95em;cursor:pointer;margin-top:8px;transition:all 0.2s;}
-.check-btn:hover{transform:scale(1.05);box-shadow:0 4px 12px rgba(16,185,129,0.4);}
-.reset-btn{display:inline-block;padding:8px 18px;background:linear-gradient(135deg,var(--orange),#D97706);color:white;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.85em;cursor:pointer;margin-top:8px;margin-left:8px;}
+  /* Exam countdown */
+  .exam-alert {
+    background: linear-gradient(135deg, rgba(255,71,87,0.15), rgba(255,107,53,0.15));
+    border: 1px solid rgba(255,71,87,0.25);
+    border-radius: 16px;
+    padding: 18px 22px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,71,87,0)} 50%{box-shadow:0 0 20px 4px rgba(255,71,87,0.15)} }
+  .exam-alert .alert-icon { font-size: 2rem; }
+  .exam-alert .alert-text h3 { color: #ff6b6b; font-size: 1.1rem; }
+  .exam-alert .alert-text p { color: #ccc; font-size: 0.9rem; margin-top: 2px; }
 
-.feedback{margin-top:8px;padding:10px 14px;border-radius:10px;font-weight:700;display:none;}
-.feedback.show{display:block;}
-.feedback.success{background:#ECFDF5;color:#065F46;border:2px solid #6EE7B7;}
-.feedback.error{background:#FEF2F2;color:#991B1B;border:2px solid #FCA5A5;}
-.feedback.hint{background:#FFFBEB;color:#92400E;border:2px solid #FCD34D;}
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    color: #555;
+    font-size: 0.8rem;
+  }
 
-/* Progress bar */
-.progress-wrap{background:#E2E8F0;border-radius:20px;height:12px;margin:10px 0;overflow:hidden;}
-.progress-fill{height:100%;border-radius:20px;transition:width 0.5s ease;background:linear-gradient(90deg,var(--green),var(--cyan));}
-
-/* Hint toggle */
-.hint-btn{background:none;border:2px solid var(--orange);color:var(--orange);border-radius:8px;padding:4px 12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.8em;cursor:pointer;margin-top:6px;}
-.hint-box{display:none;background:#FFFBEB;border:2px solid #FCD34D;border-radius:10px;padding:10px;margin:8px 0;font-size:0.85em;color:#92400E;}
-.hint-box.show{display:block;}
-
-.emoji-rain{position:fixed;font-size:2em;animation:drop 2s ease-in forwards;z-index:1000;pointer-events:none;}
-@keyframes drop{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
-
-/* Timer */
-.timer{font-family:'Fredoka One',cursive;font-size:1.3em;color:var(--red);text-align:center;margin:8px 0;}
-
-/* ===== MOBILE RESPONSIVE ===== */
-@media(max-width:700px){
-  .container{padding:10px 6px;}
-  .hero{padding:18px 12px;border-radius:18px;margin-bottom:12px;}
-  .hero h1{font-size:1.3em;}
-  .hero p{font-size:0.82em;}
-  .score-bar{padding:10px 8px;margin-bottom:12px;border-radius:12px;gap:4px;}
-  .si .vl{font-size:1.2em;}
-  .si .lb{font-size:0.62em;}
-  .tabs{gap:5px;margin-bottom:12px;}
-  .tab{min-width:unset;padding:9px 4px;font-size:0.72em;border-radius:10px;}
-  .card{padding:14px 10px;border-radius:14px;margin-bottom:12px;}
-  .card h2{font-size:1.1em;}
-  .card p{font-size:0.85em;}
-
-  /* Convert table to card layout on mobile */
-  .verb-table{border-spacing:0 8px;}
-  .verb-table thead{display:none;}
-  .verb-table tr{display:flex;flex-wrap:wrap;background:#F8FAFC;border-radius:12px;padding:10px 8px;gap:6px;align-items:center;margin-bottom:4px;}
-  .verb-table td{display:block;padding:0;background:transparent;border-radius:0 !important;}
-  .verb-table tr td:first-child{width:100%;font-size:1.1em;color:var(--purple);font-weight:800;margin-bottom:2px;border-bottom:2px solid #E2E8F0;padding-bottom:6px;}
-  .verb-table tr td:not(:first-child){flex:1;min-width:calc(33% - 8px);position:relative;}
-  .verb-table tr td:not(:first-child)::before{content:attr(data-label);display:block;font-size:0.6em;font-weight:800;color:var(--gray);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;}
-  .verb-table input{font-size:0.85em;padding:8px 6px;border-radius:10px;min-height:36px;-webkit-appearance:none;}
-
-  .check-btn{width:100%;padding:14px;font-size:1em;border-radius:14px;margin-top:10px;}
-  .reset-btn{width:48%;padding:10px;font-size:0.85em;margin-top:8px;margin-left:0;}
-  .hint-btn{width:48%;margin-top:8px;padding:8px 10px;}
-  .feedback{font-size:0.85em;padding:8px 10px;}
-  .hint-box{font-size:0.8em;padding:8px;}
-  .progress-wrap{height:10px;}
-}
-
-@media(max-width:380px){
-  .hero h1{font-size:1.1em;}
-  .tab{font-size:0.65em;padding:7px 3px;}
-  .si .vl{font-size:1em;}
-  .verb-table tr td:not(:first-child){min-width:100%;}
-  .verb-table input{font-size:0.9em;padding:10px 8px;min-height:40px;}
-}
+  /* Responsive */
+  @media (max-width: 600px) {
+    .hub-header h1 { font-size: 1.8rem; }
+    .hub-header { padding: 30px 15px 20px; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .section-title h2 { font-size: 1.2rem; }
+    .exam-alert { flex-direction: column; text-align: center; }
+  }
 </style>
 </head>
 <body>
+
+<div class="stars" id="starsContainer"></div>
+
 <div class="container">
 
-<div class="hero">
-  <h1>⚔️ Irregular Verbs Challenge! 🏆</h1>
-  <p>Master the irregular verbs! Fill in Past Simple, Past Participle & Meaning!</p>
-  <p style="font-size:0.85em;opacity:0.9">¡Domina los verbos irregulares! Rellena el Past Simple, Past Participle y significado</p>
-</div>
-
-<div class="score-bar">
-  <div class="si s"><div class="lb">Stars ⭐</div><div class="vl" id="stars">0</div></div>
-  <div class="si p"><div class="lb">Correct ✅</div><div class="vl" id="corrCount">0</div></div>
-  <div class="si t"><div class="lb">Total Verbs</div><div class="vl" id="totalV">0 / 50</div></div>
-</div>
-
-<div class="tabs">
-  <button class="tab active" onclick="showSec('g1')">⚡ Level 1</button>
-  <button class="tab" onclick="showSec('g2')">🔥 Level 2</button>
-  <button class="tab" onclick="showSec('g3')">💎 Level 3</button>
-  <button class="tab" onclick="showSec('g4')">🏆 Level 4</button>
-  <button class="tab" onclick="showSec('g5')">👑 BOSS</button>
-</div>
-
-<!-- ==================== LEVEL 1: Easy Verbs ==================== -->
-<div class="section active" id="sec-g1">
-<div class="card">
-  <h2>⚡ Level 1: Easy Verbs</h2>
-  <p>Fill in the Past Simple, Past Participle and Spanish meaning. <span class="trad">Rellena el Past Simple, Past Participle y el significado en español.</span></p>
-  <div class="progress-wrap"><div class="progress-fill" id="prog1" style="width:0%"></div></div>
-
-  <table class="verb-table" id="vt1">
-    <tr><th>Infinitive</th><th>Past Simple</th><th>Past Participle</th><th>Spanish 🇪🇸</th></tr>
-    <tr><td>be</td><td><input data-a="was/were"></td><td><input data-a="been"></td><td><input data-a="ser/estar"></td></tr>
-    <tr><td>have</td><td><input data-a="had"></td><td><input data-a="had"></td><td><input data-a="tener"></td></tr>
-    <tr><td>do</td><td><input data-a="did"></td><td><input data-a="done"></td><td><input data-a="hacer"></td></tr>
-    <tr><td>go</td><td><input data-a="went"></td><td><input data-a="gone"></td><td><input data-a="ir"></td></tr>
-    <tr><td>say</td><td><input data-a="said"></td><td><input data-a="said"></td><td><input data-a="decir"></td></tr>
-    <tr><td>get</td><td><input data-a="got"></td><td><input data-a="got"></td><td><input data-a="obtener/conseguir"></td></tr>
-    <tr><td>make</td><td><input data-a="made"></td><td><input data-a="made"></td><td><input data-a="hacer/fabricar"></td></tr>
-    <tr><td>know</td><td><input data-a="knew"></td><td><input data-a="known"></td><td><input data-a="saber/conocer"></td></tr>
-    <tr><td>see</td><td><input data-a="saw"></td><td><input data-a="seen"></td><td><input data-a="ver"></td></tr>
-    <tr><td>come</td><td><input data-a="came"></td><td><input data-a="come"></td><td><input data-a="venir"></td></tr>
-  </table>
-  <button class="check-btn" onclick="checkTable('vt1','fb1','prog1',10)">Check Level 1! ⚡</button>
-  <button class="reset-btn" onclick="resetTable('vt1','fb1','prog1')">🔄 Reset</button>
-  <button class="hint-btn" onclick="toggleHint('hint1')">💡 Need a hint?</button>
-  <div class="feedback" id="fb1"></div>
-  <div class="hint-box" id="hint1">
-    <b>Tip:</b> "be" is special → was (I/he/she/it) / were (you/we/they). "go" → went → gone. "see" → saw → seen. "come" → came → come (¡el participle es igual que el infinitive!).
+  <!-- Header -->
+  <div class="hub-header">
+    <div class="avatar">🚀</div>
+    <h1>Hugo's Study Hub</h1>
+    <p>Your interactive learning space - Let's go!</p>
   </div>
-</div>
-</div>
 
-<!-- ==================== LEVEL 2: Common Verbs ==================== -->
-<div class="section" id="sec-g2">
-<div class="card blue">
-  <h2>🔥 Level 2: Common Verbs</h2>
-  <p>These are verbs you'll use ALL the time! <span class="trad">¡Estos verbos los usarás TODO el tiempo!</span></p>
-  <div class="progress-wrap"><div class="progress-fill" id="prog2" style="width:0%"></div></div>
-
-  <table class="verb-table blue" id="vt2">
-    <tr><th>Infinitive</th><th>Past Simple</th><th>Past Participle</th><th>Spanish 🇪🇸</th></tr>
-    <tr><td>eat</td><td><input data-a="ate"></td><td><input data-a="eaten"></td><td><input data-a="comer"></td></tr>
-    <tr><td>drink</td><td><input data-a="drank"></td><td><input data-a="drunk"></td><td><input data-a="beber"></td></tr>
-    <tr><td>take</td><td><input data-a="took"></td><td><input data-a="taken"></td><td><input data-a="tomar/coger"></td></tr>
-    <tr><td>give</td><td><input data-a="gave"></td><td><input data-a="given"></td><td><input data-a="dar"></td></tr>
-    <tr><td>find</td><td><input data-a="found"></td><td><input data-a="found"></td><td><input data-a="encontrar"></td></tr>
-    <tr><td>think</td><td><input data-a="thought"></td><td><input data-a="thought"></td><td><input data-a="pensar"></td></tr>
-    <tr><td>tell</td><td><input data-a="told"></td><td><input data-a="told"></td><td><input data-a="decir/contar"></td></tr>
-    <tr><td>buy</td><td><input data-a="bought"></td><td><input data-a="bought"></td><td><input data-a="comprar"></td></tr>
-    <tr><td>write</td><td><input data-a="wrote"></td><td><input data-a="written"></td><td><input data-a="escribir"></td></tr>
-    <tr><td>read</td><td><input data-a="read"></td><td><input data-a="read"></td><td><input data-a="leer"></td></tr>
-  </table>
-  <button class="check-btn" onclick="checkTable('vt2','fb2','prog2',10)">Check Level 2! 🔥</button>
-  <button class="reset-btn" onclick="resetTable('vt2','fb2','prog2')">🔄 Reset</button>
-  <button class="hint-btn" onclick="toggleHint('hint2')">💡 Hint</button>
-  <div class="feedback" id="fb2"></div>
-  <div class="hint-box" id="hint2">
-    <b>Tip:</b> "eat" → ate → eaten (like beat!). "buy" and "think" both end in "-ought": bought, thought. "read" → read → read (¡se escribe igual pero se pronuncia "red"!).
+  <!-- Exam Alert -->
+  <div class="exam-alert">
+    <div class="alert-icon">🚨</div>
+    <div class="alert-text">
+      <h3>Science Exam - Wednesday!</h3>
+      <p>Properties of Light and Sound — Practice every day to ace it! 💪</p>
+    </div>
   </div>
-</div>
-</div>
 
-<!-- ==================== LEVEL 3: Action Verbs ==================== -->
-<div class="section" id="sec-g3">
-<div class="card pink">
-  <h2>💎 Level 3: Action Verbs</h2>
-  <p>Verbs for actions and movement! <span class="trad">¡Verbos de acciones y movimiento!</span></p>
-  <div class="progress-wrap"><div class="progress-fill" id="prog3" style="width:0%"></div></div>
-
-  <table class="verb-table pink" id="vt3">
-    <tr><th>Infinitive</th><th>Past Simple</th><th>Past Participle</th><th>Spanish 🇪🇸</th></tr>
-    <tr><td>run</td><td><input data-a="ran"></td><td><input data-a="run"></td><td><input data-a="correr"></td></tr>
-    <tr><td>swim</td><td><input data-a="swam"></td><td><input data-a="swum"></td><td><input data-a="nadar"></td></tr>
-    <tr><td>fly</td><td><input data-a="flew"></td><td><input data-a="flown"></td><td><input data-a="volar"></td></tr>
-    <tr><td>ride</td><td><input data-a="rode"></td><td><input data-a="ridden"></td><td><input data-a="montar"></td></tr>
-    <tr><td>drive</td><td><input data-a="drove"></td><td><input data-a="driven"></td><td><input data-a="conducir"></td></tr>
-    <tr><td>break</td><td><input data-a="broke"></td><td><input data-a="broken"></td><td><input data-a="romper"></td></tr>
-    <tr><td>fall</td><td><input data-a="fell"></td><td><input data-a="fallen"></td><td><input data-a="caer"></td></tr>
-    <tr><td>throw</td><td><input data-a="threw"></td><td><input data-a="thrown"></td><td><input data-a="lanzar/tirar"></td></tr>
-    <tr><td>catch</td><td><input data-a="caught"></td><td><input data-a="caught"></td><td><input data-a="atrapar/coger"></td></tr>
-    <tr><td>hit</td><td><input data-a="hit"></td><td><input data-a="hit"></td><td><input data-a="golpear"></td></tr>
-  </table>
-  <button class="check-btn" onclick="checkTable('vt3','fb3','prog3',10)">Check Level 3! 💎</button>
-  <button class="reset-btn" onclick="resetTable('vt3','fb3','prog3')">🔄 Reset</button>
-  <button class="hint-btn" onclick="toggleHint('hint3')">💡 Hint</button>
-  <div class="feedback" id="fb3"></div>
-  <div class="hint-box" id="hint3">
-    <b>Tip:</b> "swim" changes vowel: swim → swam → swum. "drive" → drove → driven (like "ride"!). "hit" never changes! "catch" → caught → caught (like "teach" → taught).
+  <!-- SCIENCE SECTION -->
+  <div class="section-title">
+    <div class="icon" style="background:linear-gradient(135deg,#ff6b6b,#ff8e53);">🔬</div>
+    <h2>Science — Light & Sound</h2>
+    <span class="badge badge-exam">Exam Wed</span>
   </div>
-</div>
-</div>
 
-<!-- ==================== LEVEL 4: Tricky Verbs ==================== -->
-<div class="section" id="sec-g4">
-<div class="card orange">
-  <h2>🏆 Level 4: Tricky Verbs</h2>
-  <p>These are the hard ones! Can you beat them? <span class="trad">¡Estos son los difíciles! ¿Puedes con ellos?</span></p>
-  <div class="progress-wrap"><div class="progress-fill" id="prog4" style="width:0%"></div></div>
+  <div class="cards-grid">
+    <a class="card" href="science-review.html" style="--card-accent:#00cec9;">
+      <span class="card-emoji">📖</span>
+      <div class="card-title">Study & Review</div>
+      <div class="card-desc">All 8 chapters with interactive diagrams, fun facts, and mini-quizzes. Start here!</div>
+      <div class="card-desc-es">🇪🇸 Los 8 capítulos con diagramas, datos curiosos y mini-quizzes.</div>
+      <span class="card-tag">📚 8 chapters</span>
+    </a>
 
-  <table class="verb-table orange" id="vt4">
-    <tr><th>Infinitive</th><th>Past Simple</th><th>Past Participle</th><th>Spanish 🇪🇸</th></tr>
-    <tr><td>speak</td><td><input data-a="spoke"></td><td><input data-a="spoken"></td><td><input data-a="hablar"></td></tr>
-    <tr><td>choose</td><td><input data-a="chose"></td><td><input data-a="chosen"></td><td><input data-a="elegir"></td></tr>
-    <tr><td>forget</td><td><input data-a="forgot"></td><td><input data-a="forgotten"></td><td><input data-a="olvidar"></td></tr>
-    <tr><td>begin</td><td><input data-a="began"></td><td><input data-a="begun"></td><td><input data-a="empezar"></td></tr>
-    <tr><td>sing</td><td><input data-a="sang"></td><td><input data-a="sung"></td><td><input data-a="cantar"></td></tr>
-    <tr><td>wear</td><td><input data-a="wore"></td><td><input data-a="worn"></td><td><input data-a="llevar/vestir"></td></tr>
-    <tr><td>teach</td><td><input data-a="taught"></td><td><input data-a="taught"></td><td><input data-a="enseñar"></td></tr>
-    <tr><td>sleep</td><td><input data-a="slept"></td><td><input data-a="slept"></td><td><input data-a="dormir"></td></tr>
-    <tr><td>feel</td><td><input data-a="felt"></td><td><input data-a="felt"></td><td><input data-a="sentir"></td></tr>
-    <tr><td>lose</td><td><input data-a="lost"></td><td><input data-a="lost"></td><td><input data-a="perder"></td></tr>
-  </table>
-  <button class="check-btn" onclick="checkTable('vt4','fb4','prog4',10)">Check Level 4! 🏆</button>
-  <button class="reset-btn" onclick="resetTable('vt4','fb4','prog4')">🔄 Reset</button>
-  <button class="hint-btn" onclick="toggleHint('hint4')">💡 Hint</button>
-  <div class="feedback" id="fb4"></div>
-  <div class="hint-box" id="hint4">
-    <b>Tip:</b> "begin/sing/swim" all change vowels: i → a → u. "speak/choose/forget" add -en for participle: spoken, chosen, forgotten. "teach" → taught (like catch → caught!). "sleep/feel/lose" → slept/felt/lost.
+    <a class="card" href="science-vocabulary.html" style="--card-accent:#6c5ce7;">
+      <span class="card-emoji">🧠</span>
+      <div class="card-title">Vocabulary Trainer</div>
+      <div class="card-desc">24 key terms with flashcards, matching game, fill-the-blank, and speed round!</div>
+      <div class="card-desc-es">🇪🇸 24 términos clave con tarjetas, juego de emparejar, completar y ronda rápida.</div>
+      <span class="card-tag">🎮 4 game modes</span>
+    </a>
+
+    <a class="card" href="science-exam-practice.html" style="--card-accent:#ff4757;">
+      <span class="card-emoji">📝</span>
+      <div class="card-title">Exam Practice</div>
+      <div class="card-desc">90+ exercises: true/false, multiple choice, fill-in, matching, diagrams, and a mock exam!</div>
+      <div class="card-desc-es">🇪🇸 +90 ejercicios: verdadero/falso, opción múltiple, completar, emparejar y examen simulado.</div>
+      <span class="card-tag">🔥 90+ questions</span>
+    </a>
+
+    <a class="card" href="science-lenses.html" style="--card-accent:#00b894;">
+      <span class="card-emoji">🔍</span>
+      <div class="card-title">Convex or Concave?</div>
+      <div class="card-desc">25 questions to master the difference between convex and concave lenses.</div>
+      <div class="card-desc-es">🇪🇸 25 preguntas para dominar la diferencia entre lentes convexas y cóncavas.</div>
+      <span class="card-tag">🔬 25 questions</span>
+    </a>
   </div>
-</div>
-</div>
 
-<!-- ==================== LEVEL 5: BOSS BATTLE ==================== -->
-<div class="section" id="sec-g5">
-<div class="card red">
-  <h2>👑 BOSS BATTLE: The Final 10!</h2>
-  <p>Only the bravest get here! Beat the boss and become VERB MASTER! <span class="trad">¡Solo los más valientes llegan aquí! ¡Vence al jefe y conviértete en MAESTRO DE VERBOS!</span></p>
-  <div class="progress-wrap"><div class="progress-fill" id="prog5" style="width:0%"></div></div>
-
-  <table class="verb-table" id="vt5" style="--th-bg:var(--red);">
-    <tr><th style="background:var(--red)">Infinitive</th><th style="background:var(--red)">Past Simple</th><th style="background:var(--red)">Past Participle</th><th style="background:var(--red)">Spanish 🇪🇸</th></tr>
-    <tr><td>put</td><td><input data-a="put"></td><td><input data-a="put"></td><td><input data-a="poner"></td></tr>
-    <tr><td>cut</td><td><input data-a="cut"></td><td><input data-a="cut"></td><td><input data-a="cortar"></td></tr>
-    <tr><td>let</td><td><input data-a="let"></td><td><input data-a="let"></td><td><input data-a="dejar/permitir"></td></tr>
-    <tr><td>pay</td><td><input data-a="paid"></td><td><input data-a="paid"></td><td><input data-a="pagar"></td></tr>
-    <tr><td>spend</td><td><input data-a="spent"></td><td><input data-a="spent"></td><td><input data-a="gastar/pasar"></td></tr>
-    <tr><td>build</td><td><input data-a="built"></td><td><input data-a="built"></td><td><input data-a="construir"></td></tr>
-    <tr><td>send</td><td><input data-a="sent"></td><td><input data-a="sent"></td><td><input data-a="enviar"></td></tr>
-    <tr><td>win</td><td><input data-a="won"></td><td><input data-a="won"></td><td><input data-a="ganar"></td></tr>
-    <tr><td>draw</td><td><input data-a="drew"></td><td><input data-a="drawn"></td><td><input data-a="dibujar"></td></tr>
-    <tr><td>grow</td><td><input data-a="grew"></td><td><input data-a="grown"></td><td><input data-a="crecer"></td></tr>
-  </table>
-  <button class="check-btn" onclick="checkTable('vt5','fb5','prog5',10)">DEFEAT THE BOSS! 👑</button>
-  <button class="reset-btn" onclick="resetTable('vt5','fb5','prog5')">🔄 Reset</button>
-  <button class="hint-btn" onclick="toggleHint('hint5')">💡 Hint</button>
-  <div class="feedback" id="fb5"></div>
-  <div class="hint-box" id="hint5">
-    <b>Tip:</b> "put/cut/let/hit" NEVER change — they stay the same in all 3 forms! "draw/grow" are like "know": drew/drawn, grew/grown. "spend/build/send" → spent/built/sent.
+  <!-- ENGLISH SECTION -->
+  <div class="section-title">
+    <div class="icon" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe);">🇬🇧</div>
+    <h2>English</h2>
+    <span class="badge badge-english">Practice</span>
   </div>
-</div>
-</div>
+
+  <div class="cards-grid">
+    <a class="card" href="irregular-verbs.html" style="--card-accent:#a29bfe;">
+      <span class="card-emoji">💪</span>
+      <div class="card-title">Irregular Verbs Challenge</div>
+      <div class="card-desc">50 irregular verbs across 5 levels. Complete all levels to become a verb master!</div>
+      <div class="card-desc-es">🇪🇸 50 verbos irregulares en 5 niveles. ¡Completa todos para ser un maestro!</div>
+      <span class="card-tag">⭐ 5 levels</span>
+    </a>
+  </div>
+
+  <div class="footer">
+    Made with ❤️ for Hugo — Keep studying, you've got this! 🌟
+  </div>
 
 </div>
 
 <script>
-let totalStars=0,totalCorrect=0,totalChecked=0;
-
-function rain(e){for(let i=0;i<12;i++){setTimeout(()=>{const d=document.createElement('div');d.className='emoji-rain';d.textContent=e[Math.floor(Math.random()*e.length)];d.style.left=Math.random()*100+'vw';d.style.top='-30px';document.body.appendChild(d);setTimeout(()=>d.remove(),2500);},i*80);}}
-
-function showSec(id){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('sec-'+id).classList.add('active');
-  event.target.classList.add('active');
+// Create twinkling stars background
+const container = document.getElementById('starsContainer');
+for (let i = 0; i < 80; i++) {
+  const star = document.createElement('div');
+  star.className = 'star-dot';
+  const size = Math.random() * 3 + 1;
+  star.style.width = size + 'px';
+  star.style.height = size + 'px';
+  star.style.left = Math.random() * 100 + '%';
+  star.style.top = Math.random() * 100 + '%';
+  star.style.setProperty('--dur', (2 + Math.random() * 4) + 's');
+  star.style.animationDelay = Math.random() * 4 + 's';
+  container.appendChild(star);
 }
-
-function normalize(s){return s.toLowerCase().trim().replace(/\s+/g,' ');}
-
-function checkTable(tableId,fbId,progId,verbCount){
-  const table=document.getElementById(tableId);
-  const inputs=table.querySelectorAll('input[data-a]');
-  let correct=0,total=inputs.length,answered=0;
-
-  inputs.forEach(inp=>{
-    const answers=inp.dataset.a.split('/').map(a=>normalize(a));
-    const user=normalize(inp.value);
-    if(user===''){inp.classList.remove('correct','wrong');return;}
-    answered++;
-    if(answers.includes(user)){
-      inp.classList.remove('wrong');
-      inp.classList.add('correct');
-      correct++;
-    } else {
-      inp.classList.remove('correct');
-      inp.classList.add('wrong');
-    }
-  });
-
-  const pct=Math.round((correct/total)*100);
-  document.getElementById(progId).style.width=pct+'%';
-
-  const fb=document.getElementById(fbId);
-  if(correct===total){
-    fb.textContent=`🎉 PERFECT! All ${verbCount} verbs correct! +${verbCount*3} stars!`;
-    fb.className='feedback show success';
-    totalStars+=verbCount*3;totalCorrect+=correct;
-    rain(['🌟','🏆','🎉','💎','👑']);
-  } else if(correct>=total*0.7){
-    fb.textContent=`🔥 Great! ${correct}/${total} correct (${pct}%)! Fix the red ones!`;
-    fb.className='feedback show hint';
-    totalStars+=correct;totalCorrect+=correct;
-  } else if(answered>0){
-    fb.textContent=`💪 ${correct}/${total} correct (${pct}%). Keep going! Use hints!`;
-    fb.className='feedback show error';
-    totalCorrect+=correct;
-  } else {
-    fb.textContent='✏️ Fill in some answers first!';
-    fb.className='feedback show hint';
-    return;
-  }
-
-  document.getElementById('stars').textContent=totalStars;
-  document.getElementById('corrCount').textContent=totalCorrect;
-  document.getElementById('totalV').textContent=totalCorrect+' / 150';
-}
-
-function resetTable(tableId,fbId,progId){
-  const table=document.getElementById(tableId);
-  table.querySelectorAll('input').forEach(inp=>{
-    inp.value='';inp.classList.remove('correct','wrong');
-  });
-  document.getElementById(fbId).className='feedback';
-  document.getElementById(progId).style.width='0%';
-}
-
-function toggleHint(id){
-  document.getElementById(id).classList.toggle('show');
-}
-
-// Add mobile labels to table cells
-document.querySelectorAll('.verb-table').forEach(table=>{
-  const headers=['','Past Simple','Past Participle','Spanish'];
-  table.querySelectorAll('tr').forEach(row=>{
-    if(row.querySelector('th'))return;
-    const cells=row.querySelectorAll('td');
-    cells.forEach((td,i)=>{if(headers[i])td.setAttribute('data-label',headers[i]);});
-  });
-});
 </script>
 </body>
 </html>
