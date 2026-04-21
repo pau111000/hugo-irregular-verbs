@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Exam Practice - Light & Sound</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff6b35, #f7c948, #ff3864, #ff6b35);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes glow { 0%,100% { box-shadow: 0 0 5px #fff; } 50% { box-shadow: 0 0 20px #fff, 0 0 40px #f7c948; } }
+        @keyframes fireMode { 0% { border-color: #ff3864; } 33% { border-color: #ff6b35; } 66% { border-color: #f7c948; } 100% { border-color: #ff3864; } }
+        @keyframes confettiFall { 0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+        @keyframes slideIn { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes starPop { 0% { transform: scale(0); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
+
+        .container { max-width: 800px; margin: 0 auto; }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .header h1 { font-size: 1.8em; color: #333; margin-bottom: 5px; }
+        .header .subtitle { font-size: 1.1em; color: #666; }
+
+        .dashboard {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .stats-row { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
+        .stat-box {
+            text-align: center;
+            padding: 10px 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            color: white;
+            min-width: 80px;
+        }
+        .stat-box .stat-value { font-size: 1.5em; font-weight: bold; }
+        .stat-box .stat-label { font-size: 0.7em; opacity: 0.9; }
+
+        .overall-progress { margin-top: 10px; }
+        .progress-bar-container {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00c853, #64dd17);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+            color: white;
+            font-weight: bold;
+        }
+
+        .stars-display { font-size: 2em; margin: 10px 0; }
+        .star { display: inline-block; transition: all 0.3s; }
+        .star.earned { animation: starPop 0.5s ease; }
+
+        .badges-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 10px; }
+        .badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            background: #eee;
+            color: #999;
+        }
+        .badge.earned { background: linear-gradient(135deg, #f7c948, #ff6b35); color: white; animation: pulse 2s infinite; }
+
+        .streak-display {
+            text-align: center;
+            font-size: 1.2em;
+            padding: 8px;
+            border-radius: 10px;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+        .streak-display.fire {
+            background: linear-gradient(135deg, #ff3864, #ff6b35, #f7c948);
+            color: white;
+            animation: fireMode 0.5s infinite, pulse 1s infinite;
+            font-weight: bold;
+        }
+
+        .section-nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .nav-card {
+            background: white;
+            border-radius: 15px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 3px solid transparent;
+        }
+        .nav-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+        .nav-card:active { transform: scale(0.95); }
+        .nav-card .nav-emoji { font-size: 2em; display: block; margin-bottom: 5px; }
+        .nav-card .nav-title { font-size: 0.8em; font-weight: bold; color: #333; }
+        .nav-card .nav-progress { font-size: 0.7em; color: #666; margin-top: 5px; }
+        .nav-card.completed { border-color: #00c853; background: #e8f5e9; }
+        .nav-card.active { border-color: #2196f3; animation: glow 2s infinite; }
+
+        .section-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: slideIn 0.5s ease;
+            display: none;
+        }
+        .section-container.active { display: block; }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px dashed #ddd;
+        }
+        .section-header h2 { font-size: 1.5em; margin-bottom: 5px; }
+        .section-header .section-desc { color: #666; font-size: 0.9em; }
+
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+            animation: slideIn 0.3s ease;
+        }
+        .question-card.correct { border-color: #00c853; background: #e8f5e9; }
+        .question-card.incorrect { border-color: #ff1744; background: #fce4ec; animation: shake 0.5s; }
+
+        .question-text { font-size: 1.1em; margin-bottom: 15px; font-weight: 500; color: #333; }
+        .question-number { color: #667eea; font-weight: bold; }
+        .es-hint { display: block; font-size: 0.75em; color: #999; font-style: italic; margin-top: 4px; }
+        .es-hint::before { content: "🇪🇸 "; }
+
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: bold;
+            min-width: 48px;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn:active { transform: scale(0.95); }
+
+        .btn-true { background: linear-gradient(135deg, #00c853, #64dd17); color: white; }
+        .btn-false { background: linear-gradient(135deg, #ff1744, #d50000); color: white; }
+        .btn-true:hover { box-shadow: 0 5px 15px rgba(0,200,83,0.4); }
+        .btn-false:hover { box-shadow: 0 5px 15px rgba(255,23,68,0.4); }
+
+        .btn-option {
+            background: white;
+            border: 2px solid #ddd;
+            color: #333;
+            width: 100%;
+            text-align: left;
+            padding: 15px 20px;
+            border-radius: 12px;
+        }
+        .btn-option:hover { border-color: #667eea; background: #f0f0ff; }
+        .btn-option.selected-correct { background: #e8f5e9; border-color: #00c853; }
+        .btn-option.selected-incorrect { background: #fce4ec; border-color: #ff1744; }
+        .btn-option.show-correct { background: #e8f5e9; border-color: #00c853; }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1em;
+        }
+        .btn-primary:hover { box-shadow: 0 5px 20px rgba(102,126,234,0.4); }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f7c948, #ff6b35);
+            color: white;
+        }
+
+        .btn-small { padding: 8px 16px; font-size: 0.85em; min-height: 36px; }
+
+        .fill-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s;
+            min-height: 48px;
+        }
+        .fill-input:focus { outline: none; border-color: #667eea; box-shadow: 0 0 10px rgba(102,126,234,0.3); }
+        .fill-input.correct { border-color: #00c853; background: #e8f5e9; }
+        .fill-input.incorrect { border-color: #ff1744; background: #fce4ec; }
+
+        .feedback {
+            margin-top: 10px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            display: none;
+        }
+        .feedback.show { display: block; animation: slideIn 0.3s; }
+        .feedback.correct { background: #e8f5e9; color: #2e7d32; }
+        .feedback.incorrect { background: #fce4ec; color: #c62828; }
+
+        .matching-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        @media (max-width: 600px) { .matching-container { grid-template-columns: 1fr; } }
+        .match-item {
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        .match-term { background: #e3f2fd; border: 2px solid #2196f3; color: #1565c0; }
+        .match-def { background: #fff3e0; border: 2px solid #ff9800; color: #e65100; }
+        .match-item.selected { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .match-item.matched { opacity: 0.5; pointer-events: none; background: #e8f5e9; border-color: #00c853; }
+        .match-item.wrong { animation: shake 0.5s; border-color: #ff1744; }
+
+        .sort-container { margin-top: 15px; }
+        .sort-items { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
+        .sort-item {
+            padding: 10px 15px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9em;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+        .sort-item:hover { transform: scale(1.05); }
+        .sort-item.placed { opacity: 0.4; pointer-events: none; }
+        .sort-categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+        .sort-category {
+            border: 2px dashed #aaa;
+            border-radius: 15px;
+            padding: 10px;
+            min-height: 100px;
+            text-align: center;
+        }
+        .sort-category h4 { margin-bottom: 8px; font-size: 0.9em; color: #333; }
+        .sort-category .placed-items { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; }
+        .sort-category .placed-tag {
+            padding: 5px 10px;
+            background: #e8f5e9;
+            border-radius: 15px;
+            font-size: 0.8em;
+            color: #2e7d32;
+        }
+        .sort-category .wrong-tag { background: #fce4ec; color: #c62828; }
+
+        .diagram-container { text-align: center; margin: 15px 0; }
+        .diagram-container svg { max-width: 100%; height: auto; }
+        .hotspot {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .hotspot:hover { opacity: 0.8; }
+        .hotspot.labeled { fill: #00c853; }
+
+        .label-options { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 15px; }
+        .label-btn {
+            padding: 8px 16px;
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.2s;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+        .label-btn:hover { background: #bbdefb; }
+        .label-btn.used { opacity: 0.4; pointer-events: none; }
+
+        .timer-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        .timer-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00c853, #f7c948, #ff1744);
+            transition: width 1s linear;
+        }
+        .timer-text { text-align: center; font-size: 1.2em; font-weight: bold; color: #333; margin-bottom: 10px; }
+
+        .results-card {
+            text-align: center;
+            padding: 30px;
+            animation: slideIn 0.5s;
+        }
+        .results-grade { font-size: 4em; font-weight: bold; margin: 15px 0; }
+        .results-grade.grade-a { color: #00c853; }
+        .results-grade.grade-b { color: #64dd17; }
+        .results-grade.grade-c { color: #f7c948; }
+        .results-grade.grade-d { color: #ff6b35; }
+        .results-grade.grade-f { color: #ff1744; }
+
+        .confetti-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            animation: confettiFall 3s linear forwards;
+        }
+
+        .exam-ready-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+        }
+        .exam-ready-overlay.show { display: flex; }
+        .exam-ready-overlay h1 { color: #f7c948; font-size: 3em; animation: bounce 1s infinite; }
+        .exam-ready-overlay p { color: white; font-size: 1.3em; margin-top: 15px; }
+        .exam-ready-overlay .close-btn { margin-top: 20px; }
+
+        .section-results { margin-top: 20px; padding-top: 20px; border-top: 2px solid #eee; }
+        .wrong-answers-list { text-align: left; margin-top: 15px; }
+        .wrong-answer-item { padding: 10px; background: #fff3e0; border-radius: 8px; margin-bottom: 8px; font-size: 0.9em; }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.4em; }
+            .section-nav { grid-template-columns: repeat(2, 1fr); }
+            .stats-row { gap: 5px; }
+            .stat-box { min-width: 60px; padding: 8px 10px; }
+            .stat-box .stat-value { font-size: 1.2em; }
+            .question-card { padding: 15px; }
+            .matching-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>🔬 Science Exam Practice 🔬</h1>
+        <div class="subtitle">Properties of Light & Sound - Let's Go Hugo! 🚀</div>
+    </div>
+
+    <div class="dashboard">
+        <div class="stats-row">
+            <div class="stat-box">
+                <div class="stat-value" id="totalScore">0</div>
+                <div class="stat-label">Score</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="totalCorrect">0</div>
+                <div class="stat-label">Correct</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="totalAttempted">0</div>
+                <div class="stat-label">Attempted</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="streakCount">0</div>
+                <div class="stat-label">Streak 🔥</div>
+            </div>
+        </div>
+        <div class="stars-display" id="starsDisplay">☆☆☆☆☆</div>
+        <div class="overall-progress">
+            <small>Overall Progress</small>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="overallProgress" style="width:0%">0%</div>
+            </div>
+        </div>
+        <div class="streak-display" id="streakDisplay"></div>
+        <div class="badges-row" id="badgesRow">
+            <span class="badge" id="badge-tf">🎯 True/False</span>
+            <span class="badge" id="badge-mc">📝 Multiple Choice</span>
+            <span class="badge" id="badge-fill">✏️ Fill Blank</span>
+            <span class="badge" id="badge-match">🔗 Matching</span>
+            <span class="badge" id="badge-sort">📦 Sorting</span>
+            <span class="badge" id="badge-diagram">🏷️ Diagrams</span>
+            <span class="badge" id="badge-exam">🏆 Mini Exam</span>
+        </div>
+    </div>
+
+    <div class="section-nav" id="sectionNav">
+        <div class="nav-card" onclick="showSection('tf')">
+            <span class="nav-emoji">✅❌</span>
+            <div class="nav-title">True or False</div>
+            <div class="nav-progress" id="nav-tf-progress">0/20</div>
+        </div>
+        <div class="nav-card" onclick="showSection('mc')">
+            <span class="nav-emoji">🔤</span>
+            <div class="nav-title">Multiple Choice</div>
+            <div class="nav-progress" id="nav-mc-progress">0/20</div>
+        </div>
+        <div class="nav-card" onclick="showSection('fill')">
+            <span class="nav-emoji">✏️</span>
+            <div class="nav-title">Fill the Blank</div>
+            <div class="nav-progress" id="nav-fill-progress">0/15</div>
+        </div>
+        <div class="nav-card" onclick="showSection('match')">
+            <span class="nav-emoji">🔗</span>
+            <div class="nav-title">Matching</div>
+            <div class="nav-progress" id="nav-match-progress">0/20</div>
+        </div>
+        <div class="nav-card" onclick="showSection('sort')">
+            <span class="nav-emoji">📦</span>
+            <div class="nav-title">Categorize</div>
+            <div class="nav-progress" id="nav-sort-progress">0/3</div>
+        </div>
+        <div class="nav-card" onclick="showSection('diagram')">
+            <span class="nav-emoji">🏷️</span>
+            <div class="nav-title">Diagrams</div>
+            <div class="nav-progress" id="nav-diagram-progress">0/2</div>
+        </div>
+        <div class="nav-card" onclick="showSection('exam')">
+            <span class="nav-emoji">🏆</span>
+            <div class="nav-title">Mini Exam</div>
+            <div class="nav-progress" id="nav-exam-progress">Not started</div>
+        </div>
+    </div>
+
+    <!-- TRUE OR FALSE SECTION -->
+    <div class="section-container" id="section-tf">
+        <div class="section-header">
+            <h2>✅❌ True or False</h2>
+            <div class="section-desc">20 Questions - Is it TRUE or FALSE?</div>
+            <div class="progress-bar-container" style="margin-top:10px">
+                <div class="progress-bar-fill" id="tf-progress-bar" style="width:0%"></div>
+            </div>
+        </div>
+        <div id="tf-questions"></div>
+        <div class="section-results" id="tf-results" style="display:none"></div>
+    </div>
+
+    <!-- MULTIPLE CHOICE SECTION -->
+    <div class="section-container" id="section-mc">
+        <div class="section-header">
+            <h2>🔤 Multiple Choice</h2>
+            <div class="section-desc">20 Questions - Pick the correct answer!</div>
+            <div class="progress-bar-container" style="margin-top:10px">
+                <div class="progress-bar-fill" id="mc-progress-bar" style="width:0%"></div>
+            </div>
+        </div>
+        <div id="mc-questions"></div>
+        <div class="section-results" id="mc-results" style="display:none"></div>
+    </div>
+
+    <!-- FILL IN THE BLANK SECTION -->
+    <div class="section-container" id="section-fill">
+        <div class="section-header">
+            <h2>✏️ Fill in the Blank</h2>
+            <div class="section-desc">15 Questions - Type the missing word!</div>
+            <div class="progress-bar-container" style="margin-top:10px">
+                <div class="progress-bar-fill" id="fill-progress-bar" style="width:0%"></div>
+            </div>
+        </div>
+        <div id="fill-questions"></div>
+        <div class="section-results" id="fill-results" style="display:none"></div>
+    </div>
+
+    <!-- MATCHING SECTION -->
+    <div class="section-container" id="section-match">
+        <div class="section-header">
+            <h2>🔗 Matching</h2>
+            <div class="section-desc">2 Sets of 10 - Match terms to definitions!</div>
+            <div class="progress-bar-container" style="margin-top:10px">
+                <div class="progress-bar-fill" id="match-progress-bar" style="width:0%"></div>
+            </div>
+        </div>
+        <div id="match-exercises"></div>
+        <div class="section-results" id="match-results" style="display:none"></div>
+    </div>
+
+    <!-- CATEGORIZE SECTION -->
+    <div class="section-container" id="section-sort">
+        <div class="section-header">
+            <h2>📦 Categorize & Sort</h2>
+            <div class="section-desc">3 Exercises - Put items in the right category!</div>
+            <div class="progress-bar-container" style="margin-top:10px">
+                <div class="progress-bar-fill" id="sort-progress-bar" style="width:0%"></div>
+            </div>
+        </div>
+        <div id="sort-exercises"></div>
+        <div class="section-results" id="sort-results" style="display:none"></div>
+    </div>
+
+    <!-- DIAGRAM SECTION -->
+    <div class="section-container" id="section-diagram">
+        <div class="section-header">
+            <h2>🏷️ Label the Diagram</h2>
+            <div class="section-desc">2 Exercises - Click the correct labels!</div>
+            <div class="progress-bar-container" style="margin-top:10px">
+                <div class="progress-bar-fill" id="diagram-progress-bar" style="width:0%"></div>
+            </div>
+        </div>
+        <div id="diagram-exercises"></div>
+        <div class="section-results" id="diagram-results" style="display:none"></div>
+    </div>
+
+    <!-- MINI EXAM SECTION -->
+    <div class="section-container" id="section-exam">
+        <div class="section-header">
+            <h2>🏆 Mini Exam Simulation</h2>
+            <div class="section-desc">15 Questions - Timed! 15 minutes. Good luck!</div>
+        </div>
+        <div id="exam-start-screen">
+            <div style="text-align:center;padding:30px">
+                <p style="font-size:1.2em;margin-bottom:20px">Ready to test yourself? You have 15 minutes to answer 15 mixed questions.</p>
+                <button class="btn btn-primary" onclick="startExam()">🚀 Start Exam!</button>
+            </div>
+        </div>
+        <div id="exam-content" style="display:none">
+            <div class="timer-text" id="examTimer">15:00</div>
+            <div class="timer-bar"><div class="timer-fill" id="examTimerBar" style="width:100%"></div></div>
+            <div id="exam-questions"></div>
+            <div style="text-align:center;margin-top:20px">
+                <button class="btn btn-primary" id="submitExamBtn" onclick="submitExam()">📋 Submit Exam</button>
+            </div>
+        </div>
+        <div id="exam-results" style="display:none"></div>
+    </div>
+</div>
+
+<!-- Confetti container -->
+<div class="confetti-container" id="confettiContainer"></div>
+
+<!-- Exam Ready Overlay -->
+<div class="exam-ready-overlay" id="examReadyOverlay">
+    <h1>🎉 EXAM READY! 🎉</h1>
+    <p>Amazing work Hugo! You've completed all sections!</p>
+    <p>You're going to CRUSH this exam! 💪🔬</p>
+    <button class="btn btn-primary close-btn" onclick="document.getElementById('examReadyOverlay').classList.remove('show')">🎊 Thanks! I'm Ready!</button>
+</div>
+
+<script>
+// ============ GAME STATE ============
+let gameState = {
+    totalCorrect: 0,
+    totalAttempted: 0,
+    streak: 0,
+    maxStreak: 0,
+    sectionsCompleted: {},
+    sectionScores: {}
+};
+
+// ============ AUDIO ============
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playCorrect() {
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.type = 'sine'; o.frequency.setValueAtTime(880, audioCtx.currentTime);
+    g.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+    o.start(); o.stop(audioCtx.currentTime + 0.3);
+}
+function playWrong() {
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.type = 'square'; o.frequency.setValueAtTime(200, audioCtx.currentTime);
+    g.gain.setValueAtTime(0.2, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+    o.start(); o.stop(audioCtx.currentTime + 0.4);
+}
+function playComplete() {
+    [523, 659, 784, 1047].forEach((freq, i) => {
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.connect(g); g.connect(audioCtx.destination);
+        o.type = 'sine'; o.frequency.setValueAtTime(freq, audioCtx.currentTime + i*0.15);
+        g.gain.setValueAtTime(0.3, audioCtx.currentTime + i*0.15);
+        g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + i*0.15 + 0.4);
+        o.start(audioCtx.currentTime + i*0.15); o.stop(audioCtx.currentTime + i*0.15 + 0.4);
+    });
+}
+
+// ============ CONFETTI ============
+function launchConfetti() {
+    const container = document.getElementById('confettiContainer');
+    const colors = ['#ff3864','#f7c948','#00c853','#2196f3','#9c27b0','#ff6b35'];
+    for (let i = 0; i < 80; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + '%';
+        piece.style.background = colors[Math.floor(Math.random()*colors.length)];
+        piece.style.animationDuration = (2 + Math.random()*2) + 's';
+        piece.style.animationDelay = Math.random() * 1 + 's';
+        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        piece.style.width = (5 + Math.random()*10) + 'px';
+        piece.style.height = (5 + Math.random()*10) + 'px';
+        container.appendChild(piece);
+    }
+    setTimeout(() => container.innerHTML = '', 4000);
+}
+
+// ============ UPDATE DASHBOARD ============
+function updateDashboard() {
+    document.getElementById('totalCorrect').textContent = gameState.totalCorrect;
+    document.getElementById('totalAttempted').textContent = gameState.totalAttempted;
+    document.getElementById('streakCount').textContent = gameState.streak;
+
+    const pct = gameState.totalAttempted > 0 ? Math.round((gameState.totalCorrect / gameState.totalAttempted) * 100) : 0;
+    document.getElementById('totalScore').textContent = pct + '%';
+
+    // Stars
+    const stars = Math.min(5, Math.floor(pct / 20));
+    let starStr = '';
+    for (let i = 0; i < 5; i++) starStr += i < stars ? '⭐' : '☆';
+    document.getElementById('starsDisplay').textContent = starStr;
+
+    // Overall progress (total questions ~100)
+    const totalQ = 100;
+    const overallPct = Math.min(100, Math.round((gameState.totalAttempted / totalQ) * 100));
+    const bar = document.getElementById('overallProgress');
+    bar.style.width = overallPct + '%';
+    bar.textContent = overallPct + '%';
+
+    // Streak display
+    const streakEl = document.getElementById('streakDisplay');
+    if (gameState.streak >= 5) {
+        streakEl.className = 'streak-display fire';
+        streakEl.textContent = '🔥🔥🔥 FIRE MODE! ' + gameState.streak + ' in a row! 🔥🔥🔥';
+    } else if (gameState.streak >= 3) {
+        streakEl.className = 'streak-display';
+        streakEl.style.background = '#fff3e0';
+        streakEl.textContent = '⚡ ' + gameState.streak + ' correct in a row! Keep going!';
+    } else {
+        streakEl.className = 'streak-display';
+        streakEl.style.background = 'transparent';
+        streakEl.textContent = '';
+    }
+
+    // Badges
+    Object.keys(gameState.sectionsCompleted).forEach(sec => {
+        if (gameState.sectionsCompleted[sec]) {
+            const badge = document.getElementById('badge-' + sec);
+            if (badge) badge.classList.add('earned');
+        }
+    });
+
+    // Check if all completed
+    const allSections = ['tf','mc','fill','match','sort','diagram','exam'];
+    const allDone = allSections.every(s => gameState.sectionsCompleted[s]);
+    if (allDone) {
+        document.getElementById('examReadyOverlay').classList.add('show');
+        launchConfetti();
+    }
+}
+
+function recordAnswer(correct) {
+    gameState.totalAttempted++;
+    if (correct) {
+        gameState.totalCorrect++;
+        gameState.streak++;
+        if (gameState.streak > gameState.maxStreak) gameState.maxStreak = gameState.streak;
+        playCorrect();
+    } else {
+        gameState.streak = 0;
+        playWrong();
+    }
+    updateDashboard();
+}
+
+// ============ SECTION NAVIGATION ============
+function showSection(id) {
+    document.querySelectorAll('.section-container').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-card').forEach(c => c.classList.remove('active'));
+    document.getElementById('section-' + id).classList.add('active');
+    const navCards = document.querySelectorAll('.nav-card');
+    const idx = ['tf','mc','fill','match','sort','diagram','exam'].indexOf(id);
+    if (idx >= 0) navCards[idx].classList.add('active');
+    window.scrollTo({ top: document.getElementById('section-' + id).offsetTop - 10, behavior: 'smooth' });
+}
+
+// ============ TRUE/FALSE DATA & LOGIC ============
+const tfQuestions = [
+    { q: "Light travels in curved lines.", a: false, explain: "Light travels in STRAIGHT lines!", es: "La luz viaja en líneas curvas." },
+    { q: "Sound waves are vibrations.", a: true, explain: "Yes! Sound is caused by vibrations.", es: "Las ondas sonoras son vibraciones." },
+    { q: "A convex lens spreads light apart.", a: false, explain: "A convex lens CONVERGES (focuses) light.", es: "Una lente convexa dispersa la luz." },
+    { q: "Transparent materials block all light.", a: false, explain: "Transparent materials let ALL light through.", es: "Los materiales transparentes bloquean toda la luz." },
+    { q: "Frequency is measured in Hertz.", a: true, explain: "Correct! Hz = Hertz.", es: "La frecuencia se mide en Hertz." },
+    { q: "An echo is caused by sound bouncing off surfaces.", a: true, explain: "Yes! Sound reflects off surfaces to create echoes.", es: "Un eco es causado por el sonido rebotando en superficies." },
+    { q: "Amplitude determines pitch.", a: false, explain: "Amplitude determines LOUDNESS, not pitch.", es: "La amplitud determina el tono." },
+    { q: "The trough is the highest point of a wave.", a: false, explain: "The trough is the LOWEST point. The crest is the highest.", es: "El valle es el punto más alto de una onda." },
+    { q: "Refraction is light bouncing off a mirror.", a: false, explain: "That's REFLECTION. Refraction is light bending.", es: "La refracción es la luz rebotando en un espejo." },
+    { q: "Timbre is what makes different instruments sound unique.", a: true, explain: "Yes! Timbre = tone quality/colour.", es: "El timbre es lo que hace que los instrumentos suenen diferente." },
+    { q: "Light takes about 8 hours to reach Earth from the Sun.", a: false, explain: "It takes about 8 MINUTES, not hours!", es: "La luz tarda unas 8 horas en llegar del Sol a la Tierra." },
+    { q: "Opaque materials let some light through.", a: false, explain: "Opaque blocks ALL light. Translucent lets some through.", es: "Los materiales opacos dejan pasar algo de luz." },
+    { q: "A concave lens curves inward.", a: true, explain: "Yes! Concave = curves inward like a cave.", es: "Una lente cóncava se curva hacia adentro." },
+    { q: "Sound can travel through a vacuum/empty space.", a: false, explain: "Sound needs a medium (solid, liquid, or gas) to travel.", es: "El sonido puede viajar por el vacío/espacio vacío." },
+    { q: "Noise pollution can affect animals.", a: true, explain: "Yes! It can disturb wildlife migration and communication.", es: "La contaminación acústica puede afectar a los animales." },
+    { q: "A light year measures time.", a: false, explain: "A light year measures DISTANCE, not time!", es: "Un año luz mide el tiempo." },
+    { q: "Translucent materials let some light pass through.", a: true, explain: "Yes! Like frosted glass.", es: "Los materiales translúcidos dejan pasar algo de luz." },
+    { q: "Pitch is determined by frequency.", a: true, explain: "Correct! Higher frequency = higher pitch.", es: "El tono es determinado por la frecuencia." },
+    { q: "Natural light includes light bulbs.", a: false, explain: "Light bulbs are ARTIFICIAL. Natural = sun, stars, lightning.", es: "La luz natural incluye bombillas." },
+    { q: "Photosynthesis is how plants use light to make food.", a: true, explain: "Yes! Plants convert light energy into food.", es: "La fotosíntesis es cómo las plantas usan la luz para hacer alimento." }
+];
+
+let tfAnswered = 0;
+let tfCorrect = 0;
+let tfWrong = [];
+
+function initTF() {
+    const container = document.getElementById('tf-questions');
+    container.innerHTML = '';
+    tfAnswered = 0; tfCorrect = 0; tfWrong = [];
+    tfQuestions.forEach((q, i) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.id = 'tf-q-' + i;
+        card.innerHTML = `
+            <div class="question-text"><span class="question-number">Q${i+1}.</span> ${q.q}<span class="es-hint">${q.es}</span></div>
+            <div class="btn-group">
+                <button class="btn btn-true" onclick="answerTF(${i}, true)">✅ TRUE</button>
+                <button class="btn btn-false" onclick="answerTF(${i}, false)">❌ FALSE</button>
+            </div>
+            <div class="feedback" id="tf-fb-${i}"></div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function answerTF(idx, answer) {
+    const card = document.getElementById('tf-q-' + idx);
+    if (card.classList.contains('correct') || card.classList.contains('incorrect')) return;
+    const correct = answer === tfQuestions[idx].a;
+    const fb = document.getElementById('tf-fb-' + idx);
+    tfAnswered++;
+    if (correct) {
+        tfCorrect++;
+        card.classList.add('correct');
+        fb.className = 'feedback correct show';
+        fb.textContent = '✅ Correct! ' + tfQuestions[idx].explain;
+    } else {
+        card.classList.add('incorrect');
+        fb.className = 'feedback incorrect show';
+        fb.textContent = '❌ Wrong! ' + tfQuestions[idx].explain;
+        tfWrong.push({ q: tfQuestions[idx].q, explain: tfQuestions[idx].explain });
+    }
+    card.querySelectorAll('button').forEach(b => b.disabled = true);
+    recordAnswer(correct);
+    updateSectionProgress('tf', tfAnswered, 20);
+    if (tfAnswered === 20) completeTFSection();
+}
+
+function completeTFSection() {
+    const pct = Math.round((tfCorrect / 20) * 100);
+    gameState.sectionsCompleted.tf = true;
+    gameState.sectionScores.tf = pct;
+    if (pct >= 80) { launchConfetti(); playComplete(); }
+    const results = document.getElementById('tf-results');
+    results.style.display = 'block';
+    results.innerHTML = `<div class="results-card">
+        <h3>Section Complete! 🎉</h3>
+        <p>Score: ${tfCorrect}/20 (${pct}%)</p>
+        ${pct >= 80 ? '<p style="color:#00c853;font-size:1.3em">⭐ AMAZING! ⭐</p>' : '<p style="color:#ff6b35">Keep practising! You can retry.</p>'}
+        ${tfWrong.length > 0 ? '<div class="wrong-answers-list"><h4>Review wrong answers:</h4>' + tfWrong.map(w => `<div class="wrong-answer-item">❌ ${w.q}<br><em>${w.explain}</em></div>`).join('') + '</div>' : ''}
+        <button class="btn btn-secondary" style="margin-top:15px" onclick="initTF()">🔄 Retry Section</button>
+    </div>`;
+    updateDashboard();
+}
+
+// ============ MULTIPLE CHOICE DATA & LOGIC ============
+const mcQuestions = [
+    { q: "What is refraction?", es: "¿Qué es la refracción?", opts: ["Light bouncing off a surface", "Light bending when changing substance", "Light stopping completely", "Light speeding up"], a: 1 },
+    { q: "Which material is translucent?", es: "¿Qué material es translúcido?", opts: ["Clear glass", "Metal wall", "Frosted glass", "Mirror"], a: 2 },
+    { q: "What determines loudness?", es: "¿Qué determina el volumen?", opts: ["Frequency", "Wavelength", "Pitch", "Amplitude"], a: 3 },
+    { q: "A convex lens does what to light?", es: "¿Qué hace una lente convexa con la luz?", opts: ["Blocks it", "Converges/focuses it", "Spreads it apart", "Stops it completely"], a: 1 },
+    { q: "What is the unit for frequency?", es: "¿Cuál es la unidad de la frecuencia?", opts: ["Miles", "Hertz", "Pounds", "Meters"], a: 1 },
+    { q: "Which is an example of natural light?", es: "¿Cuál es un ejemplo de luz natural?", opts: ["Flashlight", "Street lamp", "Lightning", "Christmas lights"], a: 2 },
+    { q: "The crest of a wave is the:", es: "La cresta de una onda es:", opts: ["Bottom/lowest point", "Middle part", "Top/highest point", "Total length"], a: 2 },
+    { q: "What causes an echo?", es: "¿Qué causa un eco?", opts: ["Light reflecting", "Sound being absorbed", "Sound bouncing off surfaces", "Wind blowing"], a: 2 },
+    { q: "Light travels at approximately:", es: "La luz viaja aproximadamente a:", opts: ["186,262 miles/hour", "186,262 miles/second", "1,000 miles/second", "100 miles/second"], a: 1 },
+    { q: "Opaque means:", es: "Opaco significa:", opts: ["All light passes through", "Some light passes through", "No light passes through", "Light bends around it"], a: 2 },
+    { q: "What type of wave is sound?", es: "¿Qué tipo de onda es el sonido?", opts: ["Transverse", "Longitudinal", "Electromagnetic", "Static"], a: 1 },
+    { q: "A concave lens does what?", es: "¿Qué hace una lente cóncava?", opts: ["Focuses light", "Spreads/diverges light", "Blocks light", "Reflects light"], a: 1 },
+    { q: "Which travels faster?", es: "¿Cuál viaja más rápido?", opts: ["Sound", "Light", "They are the same", "It depends on temperature"], a: 1 },
+    { q: "Noise pollution is:", es: "La contaminación acústica es:", opts: ["Loud music you enjoy", "Unwanted sound causing harm", "Any sound at all", "Only factory noise"], a: 1 },
+    { q: "What does a prism do to white light?", es: "¿Qué hace un prisma con la luz blanca?", opts: ["Makes it brighter", "Splits it into colours", "Makes it disappear", "Reflects it back"], a: 1 },
+    { q: "Photosynthesis needs:", es: "La fotosíntesis necesita:", opts: ["Only water", "Only soil", "Light, water, and CO2", "Darkness"], a: 2 },
+    { q: "The wavelength is:", es: "La longitud de onda es:", opts: ["Height of a wave", "Distance between two crests", "Speed of a wave", "Loudness of a wave"], a: 1 },
+    { q: "Which surface reflects light best?", es: "¿Qué superficie refleja mejor la luz?", opts: ["Rough black paper", "Smooth mirror", "Carpet", "Wooden table"], a: 1 },
+    { q: "Sound cannot travel through:", es: "El sonido no puede viajar por:", opts: ["Water", "Air", "Steel", "Vacuum (empty space)"], a: 3 },
+    { q: "A light year is:", es: "Un año luz es:", opts: ["Time light takes in a year", "Distance light travels in a year", "Speed of light", "Brightness of light"], a: 1 }
+];
+
+let mcAnswered = 0;
+let mcCorrect = 0;
+let mcWrong = [];
+
+function initMC() {
+    const container = document.getElementById('mc-questions');
+    container.innerHTML = '';
+    mcAnswered = 0; mcCorrect = 0; mcWrong = [];
+    mcQuestions.forEach((q, i) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.id = 'mc-q-' + i;
+        card.innerHTML = `
+            <div class="question-text"><span class="question-number">Q${i+1}.</span> ${q.q}${q.es ? '<span class="es-hint">'+q.es+'</span>' : ''}</div>
+            <div class="btn-group" style="flex-direction:column">
+                ${q.opts.map((opt, j) => `<button class="btn btn-option" id="mc-${i}-${j}" onclick="answerMC(${i},${j})">${String.fromCharCode(65+j)}) ${opt}</button>`).join('')}
+            </div>
+            <div class="feedback" id="mc-fb-${i}"></div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function answerMC(qIdx, optIdx) {
+    const card = document.getElementById('mc-q-' + qIdx);
+    if (card.classList.contains('correct') || card.classList.contains('incorrect')) return;
+    const correct = optIdx === mcQuestions[qIdx].a;
+    const fb = document.getElementById('mc-fb-' + qIdx);
+    mcAnswered++;
+    document.getElementById('mc-' + qIdx + '-' + optIdx).classList.add(correct ? 'selected-correct' : 'selected-incorrect');
+    if (!correct) document.getElementById('mc-' + qIdx + '-' + mcQuestions[qIdx].a).classList.add('show-correct');
+    if (correct) {
+        mcCorrect++;
+        card.classList.add('correct');
+        fb.className = 'feedback correct show';
+        fb.textContent = '✅ Correct! Well done!';
+    } else {
+        card.classList.add('incorrect');
+        fb.className = 'feedback incorrect show';
+        fb.textContent = '❌ Wrong! The correct answer is: ' + String.fromCharCode(65+mcQuestions[qIdx].a) + ') ' + mcQuestions[qIdx].opts[mcQuestions[qIdx].a];
+        mcWrong.push({ q: mcQuestions[qIdx].q, correct: mcQuestions[qIdx].opts[mcQuestions[qIdx].a] });
+    }
+    card.querySelectorAll('button').forEach(b => b.disabled = true);
+    recordAnswer(correct);
+    updateSectionProgress('mc', mcAnswered, 20);
+    if (mcAnswered === 20) completeMCSection();
+}
+
+function completeMCSection() {
+    const pct = Math.round((mcCorrect / 20) * 100);
+    gameState.sectionsCompleted.mc = true;
+    gameState.sectionScores.mc = pct;
+    if (pct >= 80) { launchConfetti(); playComplete(); }
+    const results = document.getElementById('mc-results');
+    results.style.display = 'block';
+    results.innerHTML = `<div class="results-card">
+        <h3>Section Complete! 🎉</h3>
+        <p>Score: ${mcCorrect}/20 (${pct}%)</p>
+        ${pct >= 80 ? '<p style="color:#00c853;font-size:1.3em">⭐ BRILLIANT! ⭐</p>' : '<p style="color:#ff6b35">Keep going! Try again!</p>'}
+        ${mcWrong.length > 0 ? '<div class="wrong-answers-list"><h4>Review:</h4>' + mcWrong.map(w => `<div class="wrong-answer-item">❌ ${w.q}<br><em>Answer: ${w.correct}</em></div>`).join('') + '</div>' : ''}
+        <button class="btn btn-secondary" style="margin-top:15px" onclick="initMC()">🔄 Retry Section</button>
+    </div>`;
+    updateDashboard();
+}
+
+// ============ FILL IN THE BLANK ============
+const fillQuestions = [
+    { q: "Light bouncing off a surface is called ___.", a: ["reflection"], es: "La luz rebotando en una superficie se llama ___." },
+    { q: "The distance between two wave crests is called ___.", a: ["wavelength"], es: "La distancia entre dos crestas de onda se llama ___." },
+    { q: "___ materials let ALL light pass through.", a: ["transparent"], es: "Los materiales ___ dejan pasar TODA la luz." },
+    { q: "Sound wave height is called ___.", a: ["amplitude"], es: "La altura de una onda sonora se llama ___." },
+    { q: "A ___ lens bulges outward and focuses light.", a: ["convex"], es: "Una lente ___ se curva hacia afuera y enfoca la luz." },
+    { q: "How high or low a sound is = ___.", a: ["pitch"], es: "Qué tan agudo o grave es un sonido = ___." },
+    { q: "___ is unwanted sound that causes harm.", a: ["noise pollution", "noise-pollution"], es: "La ___ es sonido no deseado que causa daño." },
+    { q: "Plants convert light to food through ___.", a: ["photosynthesis"], es: "Las plantas convierten la luz en alimento mediante ___." },
+    { q: "The lowest point of a wave is the ___.", a: ["trough"], es: "El punto más bajo de una onda es el ___." },
+    { q: "___ is the tone quality of a sound.", a: ["timbre"], es: "El ___ es la cualidad tonal de un sonido." },
+    { q: "Light bending through different substances = ___.", a: ["refraction"], es: "La luz doblándose al pasar por diferentes sustancias = ___." },
+    { q: "A ___ lens curves inward and spreads light.", a: ["concave"], es: "Una lente ___ se curva hacia adentro y dispersa la luz." },
+    { q: "Frequency is measured in ___.", a: ["hertz", "hz"], es: "La frecuencia se mide en ___." },
+    { q: "___ materials block ALL light.", a: ["opaque"], es: "Los materiales ___ bloquean TODA la luz." },
+    { q: "Sound bouncing back from a surface creates an ___.", a: ["echo"], es: "El sonido rebotando en una superficie crea un ___." }
+];
+
+let fillAnswered = 0;
+let fillCorrect = 0;
+let fillWrong = [];
+
+function initFill() {
+    const container = document.getElementById('fill-questions');
+    container.innerHTML = '';
+    fillAnswered = 0; fillCorrect = 0; fillWrong = [];
+    fillQuestions.forEach((q, i) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.id = 'fill-q-' + i;
+        card.innerHTML = `
+            <div class="question-text"><span class="question-number">Q${i+1}.</span> ${q.q}${q.es ? '<span class="es-hint">'+q.es+'</span>' : ''}</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <input type="text" class="fill-input" id="fill-input-${i}" placeholder="Type your answer..." onkeypress="if(event.key==='Enter')checkFill(${i})">
+                <button class="btn btn-primary btn-small" onclick="checkFill(${i})">Check ✓</button>
+            </div>
+            <div class="feedback" id="fill-fb-${i}"></div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function checkFill(idx) {
+    const card = document.getElementById('fill-q-' + idx);
+    if (card.classList.contains('correct') || card.classList.contains('incorrect')) return;
+    const input = document.getElementById('fill-input-' + idx);
+    const answer = input.value.trim().toLowerCase();
+    if (!answer) return;
+    const correct = fillQuestions[idx].a.some(a => answer === a.toLowerCase());
+    const fb = document.getElementById('fill-fb-' + idx);
+    fillAnswered++;
+    if (correct) {
+        fillCorrect++;
+        card.classList.add('correct');
+        input.classList.add('correct');
+        fb.className = 'feedback correct show';
+        fb.textContent = '✅ Correct! ' + fillQuestions[idx].a[0];
+    } else {
+        card.classList.add('incorrect');
+        input.classList.add('incorrect');
+        fb.className = 'feedback incorrect show';
+        fb.textContent = '❌ The answer is: ' + fillQuestions[idx].a[0];
+        fillWrong.push({ q: fillQuestions[idx].q, a: fillQuestions[idx].a[0] });
+    }
+    input.disabled = true;
+    card.querySelector('button').disabled = true;
+    recordAnswer(correct);
+    updateSectionProgress('fill', fillAnswered, 15);
+    if (fillAnswered === 15) completeFillSection();
+}
+
+function completeFillSection() {
+    const pct = Math.round((fillCorrect / 15) * 100);
+    gameState.sectionsCompleted.fill = true;
+    gameState.sectionScores.fill = pct;
+    if (pct >= 80) { launchConfetti(); playComplete(); }
+    const results = document.getElementById('fill-results');
+    results.style.display = 'block';
+    results.innerHTML = `<div class="results-card">
+        <h3>Section Complete! 🎉</h3>
+        <p>Score: ${fillCorrect}/15 (${pct}%)</p>
+        ${pct >= 80 ? '<p style="color:#00c853;font-size:1.3em">⭐ FANTASTIC! ⭐</p>' : '<p style="color:#ff6b35">Practice makes perfect!</p>'}
+        ${fillWrong.length > 0 ? '<div class="wrong-answers-list"><h4>Review:</h4>' + fillWrong.map(w => `<div class="wrong-answer-item">❌ ${w.q}<br><em>Answer: ${w.a}</em></div>`).join('') + '</div>' : ''}
+        <button class="btn btn-secondary" style="margin-top:15px" onclick="initFill()">🔄 Retry Section</button>
+    </div>`;
+    updateDashboard();
+}
+
+// ============ MATCHING ============
+const matchSets = [
+    {
+        title: "Set A: Match Term to Definition",
+        terms: ["Reflection", "Refraction", "Transparent", "Opaque", "Translucent", "Convex", "Concave", "Echo", "Pitch", "Amplitude"],
+        defs: ["Light bouncing off a surface", "Light bending when passing into a different substance", "Material that lets all light through", "Material that blocks all light", "Material that lets some light through (blurry)", "Lens that bulges outward and focuses light", "Lens that curves inward and spreads light", "Sound bouncing back from a surface", "How high or low a sound is (determined by frequency)", "The height of a wave (determines loudness)"]
+    },
+    {
+        title: "Set B: Match Example to Category",
+        terms: ["Glass window", "Frosted glass", "Brick wall", "Mirror reflection", "Magnifying glass", "Lightning", "Flashlight", "Guitar vs Flute", "Bat echolocation", "Loud concert near homes"],
+        defs: ["Transparent", "Translucent", "Opaque", "Reflection", "Convex lens", "Natural light", "Artificial light", "Timbre", "Echo/echolocation", "Noise pollution"]
+    }
+];
+
+let matchState = { currentSet: 0, matched: 0, totalMatched: 0, selectedTerm: null, selectedDef: null };
+let matchCorrectCount = 0;
+let matchTotalAttempts = 0;
+
+function initMatch() {
+    matchState = { currentSet: 0, matched: 0, totalMatched: 0, selectedTerm: null, selectedDef: null };
+    matchCorrectCount = 0; matchTotalAttempts = 0;
+    renderMatchSet(0);
+}
+
+function renderMatchSet(setIdx) {
+    const container = document.getElementById('match-exercises');
+    const set = matchSets[setIdx];
+    matchState.currentSet = setIdx;
+    matchState.matched = 0;
+    matchState.selectedTerm = null;
+    matchState.selectedDef = null;
+
+    // Shuffle definitions
+    const shuffledDefs = [...set.defs].sort(() => Math.random() - 0.5);
+    const defMap = shuffledDefs.map(d => set.defs.indexOf(d));
+
+    container.innerHTML = `
+        <h3 style="text-align:center;margin-bottom:15px">${set.title}</h3>
+        <p style="text-align:center;color:#666;margin-bottom:15px">Click a term, then click its matching definition!</p>
+        <div class="matching-container">
+            <div>
+                <h4 style="text-align:center;margin-bottom:8px;color:#1565c0">Terms</h4>
+                ${set.terms.map((t, i) => `<div class="match-item match-term" id="match-term-${setIdx}-${i}" onclick="selectMatchTerm(${setIdx},${i})">${t}</div>`).join('')}
+            </div>
+            <div>
+                <h4 style="text-align:center;margin-bottom:8px;color:#e65100">Definitions</h4>
+                ${shuffledDefs.map((d, i) => `<div class="match-item match-def" id="match-def-${setIdx}-${i}" data-orig="${defMap[i]}" onclick="selectMatchDef(${setIdx},${i},${defMap[i]})">${d}</div>`).join('')}
+            </div>
+        </div>
+    `;
+}
+
+function selectMatchTerm(setIdx, termIdx) {
+    document.querySelectorAll('.match-term').forEach(el => el.classList.remove('selected'));
+    const el = document.getElementById('match-term-' + setIdx + '-' + termIdx);
+    if (el.classList.contains('matched')) return;
+    el.classList.add('selected');
+    matchState.selectedTerm = termIdx;
+    tryMatch(setIdx);
+}
+
+function selectMatchDef(setIdx, defIdx, origIdx) {
+    document.querySelectorAll('.match-def').forEach(el => el.classList.remove('selected'));
+    const el = document.getElementById('match-def-' + setIdx + '-' + defIdx);
+    if (el.classList.contains('matched')) return;
+    el.classList.add('selected');
+    matchState.selectedDef = { displayIdx: defIdx, origIdx: origIdx };
+    tryMatch(setIdx);
+}
+
+function tryMatch(setIdx) {
+    if (matchState.selectedTerm === null || matchState.selectedDef === null) return;
+    const termEl = document.getElementById('match-term-' + setIdx + '-' + matchState.selectedTerm);
+    const defEl = document.getElementById('match-def-' + setIdx + '-' + matchState.selectedDef.displayIdx);
+    matchTotalAttempts++;
+
+    if (matchState.selectedTerm === matchState.selectedDef.origIdx) {
+        // Correct match
+        termEl.classList.add('matched');
+        defEl.classList.add('matched');
+        termEl.classList.remove('selected');
+        defEl.classList.remove('selected');
+        matchState.matched++;
+        matchState.totalMatched++;
+        matchCorrectCount++;
+        recordAnswer(true);
+    } else {
+        // Wrong match
+        termEl.classList.add('wrong');
+        defEl.classList.add('wrong');
+        setTimeout(() => { termEl.classList.remove('wrong','selected'); defEl.classList.remove('wrong','selected'); }, 600);
+        recordAnswer(false);
+    }
+    matchState.selectedTerm = null;
+    matchState.selectedDef = null;
+    updateSectionProgress('match', matchState.totalMatched, 20);
+
+    if (matchState.matched === 10) {
+        if (setIdx === 0) {
+            setTimeout(() => renderMatchSet(1), 1000);
+        } else {
+            completeMatchSection();
+        }
+    }
+}
+
+function completeMatchSection() {
+    const pct = Math.round((matchCorrectCount / 20) * 100);
+    gameState.sectionsCompleted.match = true;
+    gameState.sectionScores.match = pct;
+    if (pct >= 80) { launchConfetti(); playComplete(); }
+    const results = document.getElementById('match-results');
+    results.style.display = 'block';
+    results.innerHTML = `<div class="results-card">
+        <h3>Matching Complete! 🎉</h3>
+        <p>Matched: 20/20 correct pairs</p>
+        <p>Attempts needed: ${matchTotalAttempts}</p>
+        ${matchTotalAttempts <= 24 ? '<p style="color:#00c853;font-size:1.3em">⭐ EXCELLENT MEMORY! ⭐</p>' : '<p style="color:#ff6b35">Good job! Try to get fewer wrong guesses next time.</p>'}
+        <button class="btn btn-secondary" style="margin-top:15px" onclick="initMatch()">🔄 Retry Section</button>
+    </div>`;
+    updateDashboard();
+}
+
+// ============ CATEGORIZE/SORT ============
+const sortExercises = [
+    {
+        title: "Sort: Transparent / Translucent / Opaque",
+        categories: ["Transparent", "Translucent", "Opaque"],
+        items: [
+            { name: "Clear glass", cat: 0 }, { name: "Frosted glass", cat: 1 }, { name: "Wood", cat: 2 },
+            { name: "Clear water", cat: 0 }, { name: "Wax paper", cat: 1 }, { name: "Metal", cat: 2 },
+            { name: "Air", cat: 0 }, { name: "Thin fabric", cat: 1 }, { name: "Brick", cat: 2 }, { name: "Mirror", cat: 2 }
+        ]
+    },
+    {
+        title: "Sort: Natural Light / Artificial Light",
+        categories: ["Natural Light", "Artificial Light"],
+        items: [
+            { name: "Sun", cat: 0 }, { name: "Flashlight", cat: 1 }, { name: "Stars", cat: 0 },
+            { name: "Street lamp", cat: 1 }, { name: "Lightning", cat: 0 }, { name: "Christmas lights", cat: 1 },
+            { name: "Fireflies", cat: 0 }, { name: "Campfire", cat: 0 }, { name: "Lava", cat: 0 }, { name: "Light bulb", cat: 1 }
+        ]
+    },
+    {
+        title: "Match Wave Property to Description",
+        categories: ["Crest", "Trough", "Wavelength", "Amplitude"],
+        items: [
+            { name: "Highest point of a wave", cat: 0 }, { name: "Lowest point of a wave", cat: 1 },
+            { name: "Distance between two peaks", cat: 2 }, { name: "Height of the wave", cat: 3 },
+            { name: "The top where surfers ride", cat: 0 }, { name: "The bottom/valley", cat: 1 },
+            { name: "Measured crest to crest", cat: 2 }, { name: "Determines loudness", cat: 3 }
+        ]
+    }
+];
+
+let sortState = { current: 0, selectedItem: null, scores: [0,0,0], placed: [[], [], []] };
+
+function initSort() {
+    sortState = { current: 0, selectedItem: null, scores: [0,0,0], placed: [[], [], []] };
+    renderSortExercise(0);
+}
+
+function renderSortExercise(idx) {
+    const container = document.getElementById('sort-exercises');
+    const ex = sortExercises[idx];
+    sortState.current = idx;
+    sortState.placed[idx] = [];
+    const shuffled = [...ex.items].sort(() => Math.random() - 0.5);
+
+    container.innerHTML = `
+        <h3 style="text-align:center;margin-bottom:10px">${ex.title}</h3>
+        <p style="text-align:center;color:#666;margin-bottom:15px">Click an item, then click the category it belongs to!</p>
+        <div class="sort-container">
+            <div class="sort-items" id="sort-items-${idx}">
+                ${shuffled.map((item, i) => `<div class="sort-item" id="si-${idx}-${i}" data-cat="${item.cat}" onclick="selectSortItem(${idx},${i})">${item.name}</div>`).join('')}
+            </div>
+            <div class="sort-categories">
+                ${ex.categories.map((cat, ci) => `<div class="sort-category" id="scat-${idx}-${ci}" onclick="placeSortItem(${idx},${ci})"><h4>${cat}</h4><div class="placed-items" id="scat-items-${idx}-${ci}"></div></div>`).join('')}
+            </div>
+        </div>
+        <div style="text-align:center;margin-top:15px">
+            <button class="btn btn-primary btn-small" onclick="checkSort(${idx})">✓ Check Answers</button>
+        </div>
+    `;
+}
+
+function selectSortItem(exIdx, itemIdx) {
+    document.querySelectorAll('.sort-item').forEach(el => el.style.border = '2px solid #667eea');
+    const el = document.getElementById('si-' + exIdx + '-' + itemIdx);
+    if (el.classList.contains('placed')) return;
+    el.style.border = '3px solid #ff3864';
+    sortState.selectedItem = { exIdx, itemIdx, el };
+}
+
+function placeSortItem(exIdx, catIdx) {
+    if (!sortState.selectedItem || sortState.selectedItem.exIdx !== exIdx) return;
+    const item = sortState.selectedItem;
+    item.el.classList.add('placed');
+    const correctCat = parseInt(item.el.dataset.cat);
+    const isCorrect = correctCat === catIdx;
+    const tag = document.createElement('span');
+    tag.className = 'placed-tag' + (isCorrect ? '' : ' wrong-tag');
+    tag.textContent = item.el.textContent;
+    document.getElementById('scat-items-' + exIdx + '-' + catIdx).appendChild(tag);
+    sortState.placed[exIdx].push({ name: item.el.textContent, correct: isCorrect });
+    sortState.selectedItem = null;
+}
+
+function checkSort(exIdx) {
+    const totalItems = sortExercises[exIdx].items.length;
+    const placedItems = sortState.placed[exIdx];
+    if (placedItems.length < totalItems) {
+        alert('Place all items first! ' + placedItems.length + '/' + totalItems + ' placed.');
+        return;
+    }
+    const correctCount = placedItems.filter(p => p.correct).length;
+    sortState.scores[exIdx] = correctCount;
+    placedItems.forEach(p => recordAnswer(p.correct));
+    updateSectionProgress('sort', sortState.scores.filter(s => s > 0).length > 0 ? exIdx + 1 : 0, 3);
+
+    if (exIdx < 2) {
+        setTimeout(() => renderSortExercise(exIdx + 1), 1500);
+    } else {
+        completeSortSection();
+    }
+}
+
+function completeSortSection() {
+    const totalCorrect = sortState.scores.reduce((a,b) => a+b, 0);
+    const totalItems = sortExercises.reduce((a,e) => a + e.items.length, 0);
+    const pct = Math.round((totalCorrect / totalItems) * 100);
+    gameState.sectionsCompleted.sort = true;
+    gameState.sectionScores.sort = pct;
+    if (pct >= 80) { launchConfetti(); playComplete(); }
+    const results = document.getElementById('sort-results');
+    results.style.display = 'block';
+    results.innerHTML = `<div class="results-card">
+        <h3>Categorize Complete! 🎉</h3>
+        <p>Score: ${totalCorrect}/${totalItems} (${pct}%)</p>
+        ${pct >= 80 ? '<p style="color:#00c853;font-size:1.3em">⭐ SUPERB! ⭐</p>' : '<p style="color:#ff6b35">Try again for a better score!</p>'}
+        <button class="btn btn-secondary" style="margin-top:15px" onclick="initSort()">🔄 Retry Section</button>
+    </div>`;
+    updateDashboard();
+}
+
+// ============ DIAGRAM LABELING ============
+let diagramState = { current: 0, labelsPlaced: [0, 0], selectedLabel: null };
+
+function initDiagram() {
+    diagramState = { current: 0, labelsPlaced: [0, 0], selectedLabel: null };
+    renderDiagram(0);
+}
+
+function renderDiagram(idx) {
+    const container = document.getElementById('diagram-exercises');
+    diagramState.current = idx;
+
+    if (idx === 0) {
+        // Sound wave diagram
+        container.innerHTML = `
+            <h3 style="text-align:center;margin-bottom:10px">Label the Sound Wave</h3>
+            <p style="text-align:center;color:#666;margin-bottom:15px">Click a label below, then click the correct spot on the wave!</p>
+            <div class="diagram-container">
+                <svg viewBox="0 0 400 200" width="100%" style="max-width:500px;background:#f8f9fa;border-radius:10px">
+                    <!-- Wave -->
+                    <path d="M 20 100 Q 70 20, 120 100 Q 170 180, 220 100 Q 270 20, 320 100 Q 370 180, 380 130" stroke="#2196f3" stroke-width="3" fill="none"/>
+                    <!-- Center line -->
+                    <line x1="20" y1="100" x2="380" y2="100" stroke="#999" stroke-width="1" stroke-dasharray="5,5"/>
+                    <!-- Hotspots -->
+                    <circle class="hotspot" id="wave-spot-0" cx="120" cy="30" r="15" fill="rgba(255,59,100,0.3)" stroke="#ff3864" stroke-width="2" onclick="placeWaveLabel(0)"/>
+                    <text x="120" y="15" text-anchor="middle" font-size="10" fill="#666" id="wave-label-0">?</text>
+                    <circle class="hotspot" id="wave-spot-1" cx="170" cy="170" r="15" fill="rgba(255,59,100,0.3)" stroke="#ff3864" stroke-width="2" onclick="placeWaveLabel(1)"/>
+                    <text x="170" y="190" text-anchor="middle" font-size="10" fill="#666" id="wave-label-1">?</text>
+                    <circle class="hotspot" id="wave-spot-2" cx="220" cy="100" r="15" fill="rgba(255,59,100,0.3)" stroke="#ff3864" stroke-width="2" onclick="placeWaveLabel(2)"/>
+                    <text x="220" y="88" text-anchor="middle" font-size="10" fill="#666" id="wave-label-2">?</text>
+                    <circle class="hotspot" id="wave-spot-3" cx="70" cy="60" r="15" fill="rgba(255,59,100,0.3)" stroke="#ff3864" stroke-width="2" onclick="placeWaveLabel(3)"/>
+                    <text x="70" y="48" text-anchor="middle" font-size="10" fill="#666" id="wave-label-3">?</text>
+                </svg>
+            </div>
+            <div class="label-options" id="wave-labels">
+                <div class="label-btn" id="wlbl-0" onclick="selectWaveLabel(0)">Crest</div>
+                <div class="label-btn" id="wlbl-1" onclick="selectWaveLabel(1)">Trough</div>
+                <div class="label-btn" id="wlbl-2" onclick="selectWaveLabel(2)">Wavelength</div>
+                <div class="label-btn" id="wlbl-3" onclick="selectWaveLabel(3)">Amplitude</div>
+            </div>
+            <div class="feedback" id="diagram-fb-0"></div>
+        `;
+    } else {
+        // Light interaction diagram
+        container.innerHTML = `
+            <h3 style="text-align:center;margin-bottom:10px">Label Light Interactions</h3>
+            <p style="text-align:center;color:#666;margin-bottom:15px">Click a label, then click where it happens!</p>
+            <div class="diagram-container">
+                <svg viewBox="0 0 400 250" width="100%" style="max-width:500px;background:#f8f9fa;border-radius:10px">
+                    <!-- Mirror (reflection) -->
+                    <rect x="30" y="80" width="10" height="80" fill="#90a4ae"/>
+                    <line x1="80" y1="60" x2="35" y2="120" stroke="#f7c948" stroke-width="2"/>
+                    <line x1="35" y1="120" x2="80" y2="180" stroke="#f7c948" stroke-width="2" stroke-dasharray="4"/>
+                    <circle class="hotspot" id="light-spot-0" cx="55" cy="120" r="15" fill="rgba(255,59,100,0.3)" stroke="#ff3864" stroke-width="2" onclick="placeLightLabel(0)"/>
+                    <text x="55" y="108" text-anchor="middle" font-size="9" fill="#666" id="light-label-0">?</text>
+
+                    <!-- Glass block (refraction) -->
+                    <rect x="150" y="80" width="60" height="100" fill="rgba(100,200,255,0.3)" stroke="#2196f3"/>
+                    <line x1="160" y1="40" x2="180" y2="80" stroke="#f7c948" stroke-width="2"/>
+                    <line x1="180" y1="80" x2="195" y2="180" stroke="#f7c948" stroke-width="2"/>
+                    <circle class="hotspot" id="light-spot-1" cx="180" cy="90" r="15" fill="rgba(255,59,100,0.3)" stroke="#ff3864" stroke-width="2" onclick="placeLightLabel(1)"/>
+                    <text x="180" y="78" text-anchor="middle" font-size="9" fill="#666" id="light-label-1">?</text>
+
+                    <!-- Opaque wall -->
+                    <rect x="280" y="60" width="20" height="120" fill="#795548"/>
+                    <line x1="260" y1="80" x2="280" y2="120" stroke="#f7c948" stroke-width="2"/>
+                    <rect x="300" y="100" width="40" height="40" fill="#424242" opacity="0.3"/>
+                    <text x="320" y="125" font-size="8" fill="#666">shadow</text>
+                    <circle class="hotspot" id="light-spot-2" cx="290" cy="120" r="15" fill="rgba(255,59,100,0.3)" stroke="#ff3864" stroke-width="2" onclick="placeLightLabel(2)"/>
+                    <text x="290" y="108" text-anchor="middle" font-size="9" fill="#666" id="light-label-2">?</text>
+
+                    <!-- Clear window (transparent) -->
+                    <rect x="130" y="200" width="60" height="5" fill="rgba(100,200,255,0.5)" stroke="#2196f3"/>
+                    <line x1="150" y1="190" x2="160" y2="200" stroke="#f7c948" stroke-width="2"/>
+                    <line x1="160" y1="200" x2="170" y2="240" stroke="#f7c948" stroke-width="2"/>
+                    <text x="160" y="250" text-anchor="middle" font-size="8" fill="#666">clear glass</text>
+                    <circle class="hotspot" id="light-spot-3" cx="160" cy="215" r="15" fill="rgba(255,59,100,0.3)" stroke="#ff3864" stroke-width="2" onclick="placeLightLabel(3)"/>
+                    <text x="160" y="228" text-anchor="middle" font-size="9" fill="#666" id="light-label-3">?</text>
+                </svg>
+            </div>
+            <div class="label-options" id="light-labels">
+                <div class="label-btn" id="llbl-0" onclick="selectLightLabel(0)">Reflection</div>
+                <div class="label-btn" id="llbl-1" onclick="selectLightLabel(1)">Refraction</div>
+                <div class="label-btn" id="llbl-2" onclick="selectLightLabel(2)">Opaque (blocks light)</div>
+                <div class="label-btn" id="llbl-3" onclick="selectLightLabel(3)">Transparent (passes through)</div>
+            </div>
+            <div class="feedback" id="diagram-fb-1"></div>
+        `;
+    }
+}
+
+let waveSelectedLabel = null;
+const waveCorrectMap = { 0: 0, 1: 1, 2: 2, 3: 3 }; // spot index -> label index
+let wavePlaced = 0;
+
+function selectWaveLabel(idx) {
+    document.querySelectorAll('#wave-labels .label-btn').forEach(el => el.style.border = '2px solid #2196f3');
+    document.getElementById('wlbl-' + idx).style.border = '3px solid #ff3864';
+    waveSelectedLabel = idx;
+}
+
+function placeWaveLabel(spotIdx) {
+    if (waveSelectedLabel === null) return;
+    const correct = spotIdx === waveSelectedLabel;
+    const labelText = ['Crest','Trough','Wavelength','Amplitude'][waveSelectedLabel];
+    if (correct) {
+        document.getElementById('wave-label-' + spotIdx).textContent = labelText;
+        document.getElementById('wave-spot-' + spotIdx).setAttribute('fill', 'rgba(0,200,83,0.3)');
+        document.getElementById('wave-spot-' + spotIdx).setAttribute('stroke', '#00c853');
+        document.getElementById('wlbl-' + waveSelectedLabel).classList.add('used');
+        wavePlaced++;
+        recordAnswer(true);
+        if (wavePlaced === 4) {
+            setTimeout(() => {
+                diagramState.labelsPlaced[0] = 4;
+                updateSectionProgress('diagram', 1, 2);
+                renderDiagram(1);
+            }, 1000);
+        }
+    } else {
+        recordAnswer(false);
+        const fb = document.getElementById('diagram-fb-0');
+        fb.className = 'feedback incorrect show';
+        fb.textContent = '❌ Try again! Think about what goes where.';
+        setTimeout(() => fb.classList.remove('show'), 1500);
+    }
+    waveSelectedLabel = null;
+}
+
+let lightSelectedLabel = null;
+let lightPlaced = 0;
+
+function selectLightLabel(idx) {
+    document.querySelectorAll('#light-labels .label-btn').forEach(el => el.style.border = '2px solid #2196f3');
+    document.getElementById('llbl-' + idx).style.border = '3px solid #ff3864';
+    lightSelectedLabel = idx;
+}
+
+function placeLightLabel(spotIdx) {
+    if (lightSelectedLabel === null) return;
+    const correct = spotIdx === lightSelectedLabel;
+    const labelText = ['Reflection','Refraction','Opaque','Transparent'][lightSelectedLabel];
+    if (correct) {
+        document.getElementById('light-label-' + spotIdx).textContent = labelText;
+        document.getElementById('light-spot-' + spotIdx).setAttribute('fill', 'rgba(0,200,83,0.3)');
+        document.getElementById('light-spot-' + spotIdx).setAttribute('stroke', '#00c853');
+        document.getElementById('llbl-' + lightSelectedLabel).classList.add('used');
+        lightPlaced++;
+        recordAnswer(true);
+        if (lightPlaced === 4) {
+            completeDiagramSection();
+        }
+    } else {
+        recordAnswer(false);
+        const fb = document.getElementById('diagram-fb-1');
+        fb.className = 'feedback incorrect show';
+        fb.textContent = '❌ Not quite! Look at the diagram carefully.';
+        setTimeout(() => fb.classList.remove('show'), 1500);
+    }
+    lightSelectedLabel = null;
+}
+
+function completeDiagramSection() {
+    updateSectionProgress('diagram', 2, 2);
+    gameState.sectionsCompleted.diagram = true;
+    gameState.sectionScores.diagram = 100;
+    launchConfetti(); playComplete();
+    const results = document.getElementById('diagram-results');
+    results.style.display = 'block';
+    results.innerHTML = `<div class="results-card">
+        <h3>Diagrams Complete! 🎉</h3>
+        <p>You correctly labeled all parts!</p>
+        <p style="color:#00c853;font-size:1.3em">⭐ PERFECT! ⭐</p>
+        <button class="btn btn-secondary" style="margin-top:15px" onclick="wavePlaced=0;lightPlaced=0;initDiagram()">🔄 Retry Section</button>
+    </div>`;
+    updateDashboard();
+}
+
+// ============ MINI EXAM ============
+const examPool = [
+    // True/False type (displayed as MC with True/False options)
+    { type: 'tf', q: "Sound can travel through outer space.", a: false, explain: "Sound needs a medium - it cannot travel through a vacuum.", es: "El sonido puede viajar por el espacio exterior." },
+    { type: 'tf', q: "A convex lens is used in magnifying glasses.", a: true, explain: "Convex lenses focus light and magnify objects.", es: "Una lente convexa se usa en lupas." },
+    { type: 'tf', q: "The amplitude of a wave determines its pitch.", a: false, explain: "Amplitude determines loudness. Frequency determines pitch.", es: "La amplitud de una onda determina su tono." },
+    { type: 'tf', q: "Reflection happens when light bounces off a surface.", a: true, explain: "Yes! Like a mirror.", es: "La reflexión ocurre cuando la luz rebota en una superficie." },
+    { type: 'tf', q: "Translucent materials block all light.", a: false, explain: "Translucent lets SOME light through.", es: "Los materiales translúcidos bloquean toda la luz." },
+    // Multiple choice
+    { type: 'mc', q: "What happens to light when it passes from air into water?", opts: ["It speeds up","It bends (refracts)","It stops","It reflects"], a: 1, es: "¿Qué pasa con la luz al pasar del aire al agua?" },
+    { type: 'mc', q: "Which unit measures frequency?", opts: ["Meters","Seconds","Hertz","Decibels"], a: 2, es: "¿Qué unidad mide la frecuencia?" },
+    { type: 'mc', q: "A concave lens makes light:", opts: ["Focus to a point","Spread apart","Stop completely","Change colour"], a: 1, es: "Una lente cóncava hace que la luz:" },
+    { type: 'mc', q: "The lowest part of a wave is called the:", opts: ["Crest","Amplitude","Trough","Wavelength"], a: 2, es: "La parte más baja de una onda se llama:" },
+    { type: 'mc', q: "Which is NOT a property of sound?", opts: ["Pitch","Amplitude","Colour","Timbre"], a: 2, es: "¿Cuál NO es una propiedad del sonido?" },
+    { type: 'mc', q: "Plants use light for:", opts: ["Breathing","Photosynthesis","Growing roots","Sleeping"], a: 1, es: "Las plantas usan la luz para:" },
+    { type: 'mc', q: "An echo happens because sound:", opts: ["Disappears","Bounces off surfaces","Gets louder","Changes colour"], a: 1, es: "Un eco ocurre porque el sonido:" },
+    { type: 'mc', q: "Which material is opaque?", opts: ["Clear glass","Water","Brick wall","Air"], a: 2, es: "¿Qué material es opaco?" },
+    // Fill type (displayed as text input)
+    { type: 'fill', q: "Light travels in ___ lines.", a: ["straight"], es: "La luz viaja en líneas ___." },
+    { type: 'fill', q: "The speed of light is faster than the speed of ___.", a: ["sound"], es: "La velocidad de la luz es más rápida que la del ___." },
+    { type: 'fill', q: "A ___ is a piece of glass that splits white light into colours.", a: ["prism"], es: "Un ___ es un vidrio que divide la luz blanca en colores." },
+    { type: 'fill', q: "Frequency determines the ___ of a sound.", a: ["pitch"], es: "La frecuencia determina el ___ de un sonido." },
+    { type: 'fill', q: "___ materials let all light pass through them.", a: ["transparent"], es: "Los materiales ___ dejan pasar toda la luz." },
+    { type: 'mc', q: "What is noise pollution?", opts: ["Any sound","Music","Unwanted harmful sound","Echoes"], a: 2, es: "¿Qué es la contaminación acústica?" },
+    { type: 'mc', q: "Light from the sun is:", opts: ["Artificial","Natural","Invisible","Silent"], a: 1, es: "La luz del sol es:" },
+];
+
+let examQuestions = [];
+let examAnswers = {};
+let examTimer = null;
+let examTimeLeft = 900; // 15 minutes in seconds
+
+function startExam() {
+    document.getElementById('exam-start-screen').style.display = 'none';
+    document.getElementById('exam-content').style.display = 'block';
+    document.getElementById('exam-results').style.display = 'none';
+
+    // Pick 15 random questions
+    const shuffled = [...examPool].sort(() => Math.random() - 0.5);
+    examQuestions = shuffled.slice(0, 15);
+    examAnswers = {};
+    examTimeLeft = 900;
+
+    renderExamQuestions();
+    startExamTimer();
+}
+
+function renderExamQuestions() {
+    const container = document.getElementById('exam-questions');
+    container.innerHTML = '';
+    examQuestions.forEach((q, i) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        const esHint = q.es ? '<span class="es-hint">'+q.es+'</span>' : '';
+        if (q.type === 'tf') {
+            card.innerHTML = `
+                <div class="question-text"><span class="question-number">Q${i+1}.</span> True or False: ${q.q}${esHint}</div>
+                <div class="btn-group">
+                    <button class="btn btn-true btn-small" onclick="examAnswer(${i},'true')">TRUE</button>
+                    <button class="btn btn-false btn-small" onclick="examAnswer(${i},'false')">FALSE</button>
+                </div>
+                <div id="exam-selected-${i}" style="margin-top:5px;font-size:0.85em;color:#667eea"></div>
+            `;
+        } else if (q.type === 'mc') {
+            card.innerHTML = `
+                <div class="question-text"><span class="question-number">Q${i+1}.</span> ${q.q}${esHint}</div>
+                <div class="btn-group" style="flex-direction:column">
+                    ${q.opts.map((opt, j) => `<button class="btn btn-option" id="exam-opt-${i}-${j}" onclick="examAnswer(${i},${j})">${String.fromCharCode(65+j)}) ${opt}</button>`).join('')}
+                </div>
+            `;
+        } else {
+            card.innerHTML = `
+                <div class="question-text"><span class="question-number">Q${i+1}.</span> ${q.q}${esHint}</div>
+                <input type="text" class="fill-input" id="exam-fill-${i}" placeholder="Type answer..." oninput="examAnswerFill(${i})">
+            `;
+        }
+        container.appendChild(card);
+    });
+}
+
+function examAnswer(qIdx, answer) {
+    examAnswers[qIdx] = answer;
+    if (examQuestions[qIdx].type === 'tf') {
+        document.getElementById('exam-selected-' + qIdx).textContent = 'Selected: ' + (answer === 'true' ? 'TRUE' : 'FALSE');
+    } else if (examQuestions[qIdx].type === 'mc') {
+        // Highlight selected
+        examQuestions[qIdx].opts.forEach((_, j) => {
+            document.getElementById('exam-opt-' + qIdx + '-' + j).style.border = j === answer ? '3px solid #667eea' : '2px solid #ddd';
+        });
+    }
+}
+
+function examAnswerFill(qIdx) {
+    const val = document.getElementById('exam-fill-' + qIdx).value;
+    examAnswers[qIdx] = val;
+}
+
+function startExamTimer() {
+    updateTimerDisplay();
+    examTimer = setInterval(() => {
+        examTimeLeft--;
+        updateTimerDisplay();
+        if (examTimeLeft <= 0) {
+            clearInterval(examTimer);
+            submitExam();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const mins = Math.floor(examTimeLeft / 60);
+    const secs = examTimeLeft % 60;
+    document.getElementById('examTimer').textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+    const pct = (examTimeLeft / 900) * 100;
+    document.getElementById('examTimerBar').style.width = pct + '%';
+}
+
+function submitExam() {
+    clearInterval(examTimer);
+    let correct = 0;
+    let results = [];
+
+    examQuestions.forEach((q, i) => {
+        const userAnswer = examAnswers[i];
+        let isCorrect = false;
+        let correctText = '';
+
+        if (q.type === 'tf') {
+            isCorrect = (userAnswer === 'true') === q.a;
+            correctText = q.a ? 'TRUE' : 'FALSE';
+        } else if (q.type === 'mc') {
+            isCorrect = userAnswer === q.a;
+            correctText = q.opts[q.a];
+        } else {
+            const ans = (userAnswer || '').trim().toLowerCase();
+            isCorrect = q.a.some(a => ans === a.toLowerCase());
+            correctText = q.a[0];
+        }
+
+        if (isCorrect) correct++;
+        results.push({ q: q.q, correct: isCorrect, correctAnswer: correctText, explain: q.explain || '' });
+    });
+
+    const pct = Math.round((correct / 15) * 100);
+    let grade = 'F';
+    let gradeClass = 'grade-f';
+    if (pct >= 90) { grade = 'A'; gradeClass = 'grade-a'; }
+    else if (pct >= 80) { grade = 'B'; gradeClass = 'grade-b'; }
+    else if (pct >= 70) { grade = 'C'; gradeClass = 'grade-c'; }
+    else if (pct >= 60) { grade = 'D'; gradeClass = 'grade-d'; }
+
+    // Record all answers
+    results.forEach(r => recordAnswer(r.correct));
+
+    gameState.sectionsCompleted.exam = true;
+    gameState.sectionScores.exam = pct;
+    if (pct >= 80) { launchConfetti(); playComplete(); }
+
+    document.getElementById('exam-content').style.display = 'none';
+    const resultsEl = document.getElementById('exam-results');
+    resultsEl.style.display = 'block';
+    resultsEl.innerHTML = `
+        <div class="results-card">
+            <h3>📋 Exam Results</h3>
+            <div class="results-grade ${gradeClass}">${grade}</div>
+            <p style="font-size:1.3em">${correct}/15 correct (${pct}%)</p>
+            ${pct >= 80 ? '<p style="color:#00c853;font-size:1.2em">🌟 You PASSED! Great job! 🌟</p>' : '<p style="color:#ff6b35">Keep studying and try again!</p>'}
+            <div class="wrong-answers-list" style="margin-top:20px">
+                <h4>Full Review:</h4>
+                ${results.map((r, i) => `<div class="wrong-answer-item" style="background:${r.correct ? '#e8f5e9' : '#fff3e0'}">
+                    ${r.correct ? '✅' : '❌'} Q${i+1}: ${r.q}<br>
+                    ${!r.correct ? '<em>Correct: ' + r.correctAnswer + (r.explain ? ' - ' + r.explain : '') + '</em>' : ''}
+                </div>`).join('')}
+            </div>
+            <button class="btn btn-secondary" style="margin-top:20px" onclick="resetExam()">🔄 Try Another Exam</button>
+        </div>
+    `;
+    document.getElementById('nav-exam-progress').textContent = grade + ' (' + pct + '%)';
+    updateDashboard();
+}
+
+function resetExam() {
+    document.getElementById('exam-results').style.display = 'none';
+    document.getElementById('exam-start-screen').style.display = 'block';
+}
+
+// ============ UTILITY ============
+function updateSectionProgress(section, current, total) {
+    const navEl = document.getElementById('nav-' + section + '-progress');
+    if (navEl) navEl.textContent = current + '/' + total;
+    const bar = document.getElementById(section + '-progress-bar');
+    if (bar) bar.style.width = Math.round((current / total) * 100) + '%';
+}
+
+// ============ INITIALIZATION ============
+function init() {
+    initTF();
+    initMC();
+    initFill();
+    initMatch();
+    initSort();
+    initDiagram();
+    updateDashboard();
+}
+
+init();
+</script>
+</body>
+</html>
