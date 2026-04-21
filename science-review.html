@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Light &amp; Sound Review - Hugo's Science Exam</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --ch1: #ff6b6b; --ch2: #ffa502; --ch3: #2ed573; --ch4: #1e90ff;
+    --ch5: #a855f7; --ch6: #ff6348; --ch7: #ff4757; --ch8: #3742fa;
+  }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: #f0f0f0;
+    min-height: 100vh;
+    font-size: 18px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  /* ---- Animated SVG wave header ---- */
+  .wave-header {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    background: linear-gradient(90deg, #00b4db, #0083b0, #00b894);
+  }
+  .wave-header svg {
+    position: absolute;
+    bottom: 0;
+    width: 200%;
+    height: 80px;
+    animation: waveSlide 6s linear infinite;
+  }
+  @keyframes waveSlide {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .wave-header h1 {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding-top: 30px;
+    font-size: 2.2rem;
+    text-shadow: 2px 3px 6px rgba(0,0,0,.4);
+  }
+  .wave-header p {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    font-size: 1.1rem;
+    opacity: .9;
+  }
+
+  /* ---- Progress bar ---- */
+  .progress-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(15,12,41,.92);
+    backdrop-filter: blur(8px);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 2px solid rgba(255,255,255,.1);
+  }
+  .progress-wrap span { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+  .progress-bar-bg {
+    flex: 1;
+    height: 18px;
+    background: rgba(255,255,255,.15);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #00b894, #00cec9, #6c5ce7);
+    border-radius: 12px;
+    transition: width .6s ease;
+  }
+  .progress-pct { min-width: 48px; text-align: right; font-weight: 700; }
+
+  /* ---- Chapter dots nav ---- */
+  .chapter-dots {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px 10px 6px;
+  }
+  .chapter-dots button {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,.3);
+    background: rgba(255,255,255,.1);
+    color: #fff;
+    font-weight: 700;
+    font-size: .9rem;
+    cursor: pointer;
+    transition: .3s;
+    position: relative;
+  }
+  .chapter-dots button.done {
+    border-color: #2ed573;
+    background: #2ed573;
+    color: #000;
+  }
+  .chapter-dots button.done::after {
+    content: ''; position: absolute; top: -2px; right: -2px;
+    font-size: .7rem;
+  }
+
+  /* ---- Brain Break button ---- */
+  .brain-break-btn {
+    display: block;
+    margin: 16px auto;
+    padding: 12px 28px;
+    background: linear-gradient(135deg, #f9ca24, #f0932b);
+    color: #000;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(249,202,36,.4);
+    transition: transform .2s;
+  }
+  .brain-break-btn:hover { transform: scale(1.06); }
+
+  /* ---- Modal ---- */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.7);
+    z-index: 200;
+    justify-content: center;
+    align-items: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal-box {
+    background: linear-gradient(135deg, #2d3436, #636e72);
+    padding: 32px 28px;
+    border-radius: 20px;
+    max-width: 440px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 8px 40px rgba(0,0,0,.5);
+    animation: popIn .35s ease;
+  }
+  @keyframes popIn { 0%{transform:scale(.7);opacity:0} 100%{transform:scale(1);opacity:1} }
+  .modal-box h3 { font-size: 1.4rem; margin-bottom: 14px; }
+  .modal-box p { font-size: 1.1rem; margin-bottom: 20px; }
+  .modal-box button {
+    padding: 10px 30px;
+    border: none;
+    border-radius: 20px;
+    background: #6c5ce7;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  /* ---- Chapters ---- */
+  .chapters { max-width: 860px; margin: 0 auto; padding: 10px 16px 60px; }
+
+  .chapter-card {
+    margin-bottom: 22px;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 6px 25px rgba(0,0,0,.35);
+    transition: box-shadow .3s;
+  }
+  .chapter-card:hover { box-shadow: 0 8px 35px rgba(0,0,0,.5); }
+
+  .chapter-header {
+    padding: 18px 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    user-select: none;
+    transition: .3s;
+    position: relative;
+  }
+  .chapter-header:hover { filter: brightness(1.08); }
+  .ch-emoji { font-size: 2rem; }
+  .ch-title { flex: 1; font-size: 1.25rem; font-weight: 700; }
+  .ch-toggle {
+    font-size: 1.6rem;
+    transition: transform .4s;
+  }
+  .chapter-card.open .ch-toggle { transform: rotate(180deg); }
+  .ch-check {
+    font-size: 1.4rem;
+    display: none;
+  }
+  .chapter-card.completed .ch-check { display: inline; }
+
+  .chapter-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .5s ease;
+    background: rgba(0,0,0,.25);
+  }
+  .chapter-card.open .chapter-body {
+    max-height: 8000px;
+  }
+  .chapter-content {
+    padding: 22px 22px 10px;
+  }
+  .chapter-content h3 {
+    font-size: 1.15rem;
+    margin: 18px 0 8px;
+    color: #ffeaa7;
+  }
+  .chapter-content ul {
+    padding-left: 22px;
+    margin-bottom: 10px;
+  }
+  .chapter-content li {
+    margin-bottom: 6px;
+  }
+
+  /* Did-you-know boxes */
+  .dyk {
+    background: linear-gradient(135deg, rgba(108,92,231,.25), rgba(0,206,201,.25));
+    border-left: 4px solid #6c5ce7;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 14px 0;
+    cursor: pointer;
+    position: relative;
+  }
+  .dyk-label {
+    font-weight: 700;
+    color: #a29bfe;
+  }
+  .dyk-text { display: none; margin-top: 8px; }
+  .dyk.open .dyk-text { display: block; animation: fadeIn .4s; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ---- Diagrams ---- */
+  .diagram-wrap {
+    background: rgba(255,255,255,.07);
+    border-radius: 14px;
+    padding: 18px;
+    margin: 16px 0;
+    text-align: center;
+    overflow-x: auto;
+  }
+  .diagram-wrap svg { max-width: 100%; height: auto; }
+  .diagram-caption {
+    font-size: .95rem;
+    color: #dfe6e9;
+    margin-top: 8px;
+    font-style: italic;
+  }
+
+  /* Wave animation */
+  .wave-anim-line {
+    animation: drawWave 2s ease-in-out infinite alternate;
+  }
+  @keyframes drawWave {
+    0% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: 40; }
+  }
+
+  /* ---- Quiz section ---- */
+  .quiz-section {
+    background: rgba(255,255,255,.08);
+    border-radius: 14px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+  .quiz-section h3 {
+    color: #fdcb6e;
+    margin-bottom: 14px;
+    font-size: 1.15rem;
+  }
+  .quiz-q {
+    margin-bottom: 18px;
+  }
+  .quiz-q p {
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .quiz-q label {
+    display: block;
+    padding: 10px 14px;
+    margin: 4px 0;
+    border-radius: 10px;
+    background: rgba(255,255,255,.08);
+    cursor: pointer;
+    transition: .25s;
+    border: 2px solid transparent;
+  }
+  .quiz-q label:hover { background: rgba(255,255,255,.15); }
+  .quiz-q label.correct {
+    background: rgba(46,213,115,.3);
+    border-color: #2ed573;
+  }
+  .quiz-q label.wrong {
+    background: rgba(255,71,87,.25);
+    border-color: #ff4757;
+  }
+  .quiz-q input[type=radio] { display: none; }
+  .quiz-result {
+    font-weight: 700;
+    margin-top: 10px;
+    min-height: 28px;
+  }
+  .quiz-result.pass { color: #2ed573; }
+  .quiz-result.fail { color: #ff6b6b; }
+
+  .quiz-check-btn {
+    padding: 10px 26px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: transform .2s;
+  }
+  .quiz-check-btn:hover { transform: scale(1.04); }
+
+  /* ---- Confetti ---- */
+  .confetti-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 300;
+    overflow: hidden;
+  }
+  .confetti-piece {
+    position: absolute;
+    width: 10px; height: 10px;
+    top: -20px;
+    animation: confettiFall 2.5s ease-in forwards;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* ---- Summary section ---- */
+  .summary-section {
+    max-width: 860px;
+    margin: 30px auto;
+    padding: 0 16px 80px;
+  }
+  .summary-section h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, #f9ca24, #f0932b, #eb4d4b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+  }
+  .summary-card {
+    background: rgba(255,255,255,.1);
+    border-radius: 14px;
+    padding: 16px 18px;
+    border-left: 4px solid;
+    transition: transform .2s;
+  }
+  .summary-card:hover { transform: translateY(-3px); }
+  .summary-card h4 { font-size: 1rem; margin-bottom: 6px; }
+  .summary-card p { font-size: .95rem; color: #dfe6e9; }
+  .es { display: block; font-size: 0.78rem; color: #a0a0b0; font-style: italic; margin-top: 3px; line-height: 1.4; }
+  .es::before { content: "🇪🇸 "; }
+  .chapter-content li .es { margin-top: 1px; margin-bottom: 4px; }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 600px) {
+    .wave-header h1 { font-size: 1.5rem; padding-top: 24px; }
+    .chapter-header { padding: 14px 16px; }
+    .ch-title { font-size: 1.1rem; }
+    .chapter-content { padding: 16px; }
+    body { font-size: 16px; }
+    .summary-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== WAVE HEADER ===== -->
+<div class="wave-header">
+  <h1>&#127919; Hugo's Light &amp; Sound Review &#127919;</h1>
+  <p>Your interactive study guide - let's ace this exam!</p>
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+    <path fill="rgba(15,12,41,.95)" d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,20 1440,40 L1440,80 L0,80 Z
+      M1440,40 C1800,80 2160,0 2520,40 C2700,60 2820,20 2880,40 L2880,80 L1440,80 Z"/>
+  </svg>
+</div>
+
+<!-- ===== PROGRESS BAR ===== -->
+<div class="progress-wrap">
+  <span>&#128218; Progress:</span>
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+  <span class="progress-pct" id="progressPct">0%</span>
+</div>
+
+<!-- ===== CHAPTER DOTS ===== -->
+<div class="chapter-dots" id="chapterDots"></div>
+
+<!-- ===== BRAIN BREAK ===== -->
+<button class="brain-break-btn" onclick="showBrainBreak()">&#129504; Brain Break!</button>
+
+<!-- ===== MODAL ===== -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <h3 id="modalTitle"></h3>
+    <p id="modalText"></p>
+    <button onclick="closeModal()">Got it!</button>
+  </div>
+</div>
+
+<!-- ===== CONFETTI CONTAINER ===== -->
+<div class="confetti-container" id="confettiBox"></div>
+
+<!-- ===== CHAPTERS ===== -->
+<div class="chapters" id="chaptersContainer"></div>
+
+<!-- ===== SUMMARY ===== -->
+<div class="summary-section">
+  <h2>&#9889; Quick-Review Summary Cards &#9889;</h2>
+  <div class="summary-grid" id="summaryGrid"></div>
+</div>
+
+<script>
+/* ============================================================
+   DATA
+   ============================================================ */
+const chapters = [
+  {
+    id: 1, emoji: "&#9728;&#65039;", title: "Light as Energy",
+    color: "#ff6b6b",
+    content: `
+      <h3>What is Light?</h3>
+      <ul>
+        <li><strong>Light is energy</strong> - it is nature's way of transferring energy from one place to another.<span class="es">La luz es energía – es la forma en que la naturaleza transfiere energía de un lugar a otro.</span></li>
+        <li>Light travels insanely fast: <strong>186,262 miles per second!</strong><span class="es">La luz viaja súper rápido: ¡186.262 millas por segundo!</span></li>
+        <li>A <strong>light year</strong> is the distance light travels in one whole year = <strong>5.8 trillion miles</strong>.<span class="es">Un año luz es la distancia que la luz recorre en un año = 5.8 billones de millas.</span></li>
+        <li>Sunlight takes about <strong>8 minutes</strong> to reach Earth from the Sun.<span class="es">La luz del sol tarda unos 8 minutos en llegar a la Tierra.</span></li>
+      </ul>
+      <h3>How Does Light Behave?</h3>
+      <ul>
+        <li>Light always travels in <strong>straight lines</strong>.<span class="es">La luz siempre viaja en líneas rectas.</span></li>
+        <li>Plants use light for <strong>photosynthesis</strong> - they convert light energy into food!<span class="es">Las plantas usan la luz para la fotosíntesis – convierten la energía luminosa en alimento.</span></li>
+        <li>You can do three things with light: <strong>block it</strong>, <strong>reflect it</strong>, or <strong>refract it</strong> (bend it).<span class="es">Puedes hacer tres cosas con la luz: bloquearla, reflejarla o refractarla (doblarla).</span></li>
+      </ul>
+    `,
+    dyk: { label: "&#128161; Did You Know?", text: "If you could travel at the speed of light, you could go around the Earth 7.5 times in just ONE second!" },
+    diagram: `
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 400 140" width="400">
+          <defs>
+            <marker id="arrowY" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#ffeaa7"/></marker>
+          </defs>
+          <line x1="30" y1="70" x2="370" y2="70" stroke="#ffeaa7" stroke-width="3" marker-end="url(#arrowY)" stroke-dasharray="12 6"/>
+          <text x="200" y="60" fill="#ffeaa7" font-size="14" text-anchor="middle" font-weight="bold">Light travels in a straight line</text>
+          <circle cx="20" cy="70" r="14" fill="#f9ca24"/>
+          <text x="20" y="75" fill="#000" font-size="12" text-anchor="middle">&#9728;</text>
+          <rect x="260" y="40" width="8" height="60" rx="2" fill="#636e72"/>
+          <text x="264" y="120" fill="#b2bec3" font-size="11" text-anchor="middle">Block</text>
+          <rect x="310" y="40" width="8" height="60" rx="2" fill="#74b9ff" opacity=".5"/>
+          <text x="314" y="120" fill="#b2bec3" font-size="11" text-anchor="middle">Refract</text>
+          <rect x="360" y="45" width="5" height="50" rx="2" fill="#dfe6e9"/>
+          <line x1="362" y1="50" x2="395" y2="30" stroke="#ffeaa7" stroke-width="2"/>
+          <text x="372" y="120" fill="#b2bec3" font-size="11" text-anchor="middle">Reflect</text>
+        </svg>
+        <p class="diagram-caption">Light travels in straight lines and can be blocked, refracted, or reflected.</p>
+      </div>
+    `,
+    quiz: [
+      { q: "How fast does light travel?", opts: ["186,262 miles per hour", "186,262 miles per second", "186,262 miles per minute"], ans: 1 },
+      { q: "How long does sunlight take to reach Earth?", opts: ["8 seconds", "8 hours", "About 8 minutes"], ans: 2 },
+      { q: "What do plants use light for?", opts: ["Photosynthesis", "Breathing", "Sleeping"], ans: 0 }
+    ]
+  },
+  {
+    id: 2, emoji: "&#129668;", title: "Reflection & Refraction",
+    color: "#ffa502",
+    content: `
+      <h3>Reflection</h3>
+      <ul>
+        <li><strong>Reflection</strong> = light <strong>bouncing off</strong> a surface (like a mirror).<span class="es">Reflexión = la luz rebota en una superficie (como un espejo).</span></li>
+        <li>When you look in a mirror, light bounces from <strong>your face &#10132; mirror &#10132; back to your eyes</strong>.<span class="es">Cuando te miras en un espejo, la luz rebota de tu cara al espejo y vuelve a tus ojos.</span></li>
+        <li>Smooth, shiny surfaces reflect light the best!<span class="es">Las superficies lisas y brillantes reflejan mejor la luz.</span></li>
+      </ul>
+      <h3>Refraction</h3>
+      <ul>
+        <li><strong>Refraction</strong> = light <strong>bending</strong> when it passes from one substance to another.<span class="es">Refracción = la luz se dobla cuando pasa de una sustancia a otra.</span></li>
+        <li>Example: a <strong>straw in a glass of water</strong> looks bent - that is refraction!<span class="es">Ejemplo: una pajita en un vaso de agua se ve doblada – ¡eso es refracción!</span></li>
+        <li>Light changes <strong>speed</strong> when moving between materials (like from air to water), and that speed change causes the bending.<span class="es">La luz cambia de velocidad al moverse entre materiales, y ese cambio causa que se doble.</span></li>
+      </ul>
+    `,
+    dyk: { label: "&#128161; Did You Know?", text: "Ambulances have the word 'AMBULANCE' written backwards on the front so drivers can read it correctly in their rear-view mirrors - that is reflection at work!" },
+    diagram: `
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 440 180" width="440">
+          <!-- Reflection side -->
+          <text x="110" y="18" fill="#ffeaa7" font-size="13" text-anchor="middle" font-weight="bold">REFLECTION</text>
+          <rect x="80" y="110" width="60" height="6" rx="2" fill="#b2bec3"/>
+          <line x1="60" y1="30" x2="110" y2="110" stroke="#f9ca24" stroke-width="2.5"/>
+          <line x1="110" y1="110" x2="160" y2="30" stroke="#f9ca24" stroke-width="2.5" stroke-dasharray="6 3"/>
+          <line x1="110" y1="110" x2="110" y2="50" stroke="#dfe6e9" stroke-width="1" stroke-dasharray="4 3"/>
+          <text x="50" y="28" fill="#dfe6e9" font-size="11">incoming</text>
+          <text x="140" y="28" fill="#dfe6e9" font-size="11">reflected</text>
+          <text x="90" y="132" fill="#b2bec3" font-size="11">mirror</text>
+          <!-- Refraction side -->
+          <text x="330" y="18" fill="#74b9ff" font-size="13" text-anchor="middle" font-weight="bold">REFRACTION</text>
+          <rect x="260" y="85" width="140" height="70" rx="4" fill="rgba(116,185,255,.2)" stroke="#74b9ff" stroke-width="1.5"/>
+          <text x="330" y="170" fill="#74b9ff" font-size="11" text-anchor="middle">water</text>
+          <text x="330" y="78" fill="#dfe6e9" font-size="11" text-anchor="middle">air</text>
+          <line x1="290" y1="30" x2="330" y2="85" stroke="#f9ca24" stroke-width="2.5"/>
+          <line x1="330" y1="85" x2="350" y2="150" stroke="#f9ca24" stroke-width="2.5" stroke-dasharray="6 3"/>
+          <line x1="330" y1="60" x2="330" y2="120" stroke="#dfe6e9" stroke-width="1" stroke-dasharray="4 3"/>
+          <text x="365" y="140" fill="#dfe6e9" font-size="10">bent ray</text>
+        </svg>
+        <p class="diagram-caption">Reflection bounces light off surfaces. Refraction bends light when it changes material.</p>
+      </div>
+    `,
+    quiz: [
+      { q: "What is reflection?", opts: ["Light bending through water", "Light bouncing off a surface", "Light being absorbed"], ans: 1 },
+      { q: "Why does a straw look bent in water?", opts: ["The straw actually bends", "Refraction - light bends between air and water", "The glass is curved"], ans: 1 }
+    ]
+  },
+  {
+    id: 3, emoji: "&#128269;", title: "Lenses",
+    color: "#2ed573",
+    content: `
+      <h3>Convex Lens (Bulges Out)</h3>
+      <ul>
+        <li>A <strong>convex lens</strong> bulges <strong>outward</strong> (thicker in the middle).<span class="es">Una lente convexa se curva hacia afuera (más gruesa en el medio).</span></li>
+        <li>It <strong>converges</strong> (focuses) light to a single point.<span class="es">Concentra (enfoca) la luz en un solo punto.</span></li>
+        <li>Used in: <strong>magnifying glasses, cameras, and your eyes!</strong><span class="es">Se usa en: lupas, cámaras y ¡tus ojos!</span></li>
+      </ul>
+      <h3>Concave Lens (Curves In)</h3>
+      <ul>
+        <li>A <strong>concave lens</strong> curves <strong>inward</strong> (thinner in the middle).<span class="es">Una lente cóncava se curva hacia adentro (más fina en el medio).</span></li>
+        <li>It <strong>diverges</strong> (spreads out) light rays.<span class="es">Dispersa (separa) los rayos de luz.</span></li>
+        <li>Used in: <strong>glasses for nearsighted people and peepholes</strong> in doors.<span class="es">Se usa en: gafas para miopes y mirillas de puertas.</span></li>
+      </ul>
+      <h3>Key Connection</h3>
+      <ul>
+        <li>Both types of lenses work because of <strong>refraction</strong> - they bend light!<span class="es">Ambos tipos de lentes funcionan por la refracción – ¡doblan la luz!</span></li>
+      </ul>
+    `,
+    dyk: { label: "&#128161; Did You Know?", text: "Your eye has a natural convex lens! It focuses light onto the retina at the back of your eye so you can see clearly. Glasses help when that lens is not quite the right shape." },
+    diagram: `
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 460 160" width="460">
+          <!-- Convex -->
+          <text x="115" y="18" fill="#2ed573" font-size="13" text-anchor="middle" font-weight="bold">CONVEX (bulges out)</text>
+          <ellipse cx="115" cy="80" rx="18" ry="50" fill="rgba(46,213,115,.15)" stroke="#2ed573" stroke-width="2"/>
+          <line x1="20" y1="50" x2="97" y2="72" stroke="#f9ca24" stroke-width="2"/>
+          <line x1="20" y1="80" x2="97" y2="80" stroke="#f9ca24" stroke-width="2"/>
+          <line x1="20" y1="110" x2="97" y2="88" stroke="#f9ca24" stroke-width="2"/>
+          <line x1="133" y1="72" x2="200" y2="80" stroke="#f9ca24" stroke-width="2" stroke-dasharray="5 3"/>
+          <line x1="133" y1="80" x2="200" y2="80" stroke="#f9ca24" stroke-width="2" stroke-dasharray="5 3"/>
+          <line x1="133" y1="88" x2="200" y2="80" stroke="#f9ca24" stroke-width="2" stroke-dasharray="5 3"/>
+          <circle cx="200" cy="80" r="5" fill="#f9ca24"/>
+          <text x="200" y="105" fill="#dfe6e9" font-size="10" text-anchor="middle">focal point</text>
+          <text x="115" y="148" fill="#b2bec3" font-size="11" text-anchor="middle">Focuses light together</text>
+          <!-- Concave -->
+          <text x="345" y="18" fill="#a29bfe" font-size="13" text-anchor="middle" font-weight="bold">CONCAVE (curves in)</text>
+          <path d="M330,30 Q348,80 330,130" fill="none" stroke="#a29bfe" stroke-width="2"/>
+          <path d="M360,30 Q342,80 360,130" fill="none" stroke="#a29bfe" stroke-width="2"/>
+          <line x1="250" y1="55" x2="330" y2="72" stroke="#f9ca24" stroke-width="2"/>
+          <line x1="250" y1="80" x2="330" y2="80" stroke="#f9ca24" stroke-width="2"/>
+          <line x1="250" y1="105" x2="330" y2="88" stroke="#f9ca24" stroke-width="2"/>
+          <line x1="360" y1="72" x2="440" y2="45" stroke="#f9ca24" stroke-width="2" stroke-dasharray="5 3"/>
+          <line x1="360" y1="80" x2="440" y2="80" stroke="#f9ca24" stroke-width="2" stroke-dasharray="5 3"/>
+          <line x1="360" y1="88" x2="440" y2="115" stroke="#f9ca24" stroke-width="2" stroke-dasharray="5 3"/>
+          <text x="345" y="148" fill="#b2bec3" font-size="11" text-anchor="middle">Spreads light apart</text>
+        </svg>
+        <p class="diagram-caption">Convex lenses converge light to a point. Concave lenses diverge (spread) light.</p>
+      </div>
+    `,
+    quiz: [
+      { q: "A convex lens does what to light?", opts: ["Spreads it apart", "Focuses it to a point", "Blocks it completely"], ans: 1 },
+      { q: "Which type of lens is used in glasses for nearsighted people?", opts: ["Convex", "Concave", "Flat"], ans: 1 },
+      { q: "Both lens types work because of what?", opts: ["Reflection", "Refraction", "Absorption"], ans: 1 }
+    ]
+  },
+  {
+    id: 4, emoji: "&#127774;", title: "Natural & Artificial Light",
+    color: "#1e90ff",
+    content: `
+      <h3>Natural Light Sources</h3>
+      <ul>
+        <li><strong>Natural light</strong> comes from sources found in <strong>nature</strong>.<span class="es">La luz natural proviene de fuentes encontradas en la naturaleza.</span></li>
+        <li>Examples: &#9728;&#65039; <strong>Sun</strong>, &#11088; <strong>stars</strong>, &#9889; <strong>lightning</strong>, &#129440; <strong>fireflies</strong>, &#129724; <strong>jellyfish</strong>, &#127755; <strong>lava</strong><span class="es">Ejemplos: sol, estrellas, relámpagos, luciérnagas, medusas, lava.</span></li>
+      </ul>
+      <h3>Artificial Light Sources</h3>
+      <ul>
+        <li><strong>Artificial light</strong> is <strong>human-made</strong>.<span class="es">La luz artificial es creada por los humanos.</span></li>
+        <li>Examples: &#128161; <strong>Light bulbs</strong>, &#128294; <strong>flashlights</strong>, &#127747; <strong>street lights</strong>, &#127876; <strong>Christmas lights</strong>, &#127878; <strong>fireworks</strong>, &#127926; <strong>concert lights</strong>, &#128293; <strong>campfire</strong><span class="es">Ejemplos: bombillas, linternas, farolas, luces de Navidad, fuegos artificiales, fogata.</span></li>
+      </ul>
+      <h3>The Key Difference</h3>
+      <ul>
+        <li><strong>Natural</strong> = occurs in nature without human help.<span class="es">Natural = ocurre en la naturaleza sin ayuda humana.</span></li>
+        <li><strong>Artificial</strong> = created or controlled by humans.<span class="es">Artificial = creada o controlada por humanos.</span></li>
+      </ul>
+    `,
+    dyk: { label: "&#128161; Did You Know?", text: "Some deep-sea creatures make their own light called bioluminescence! The anglerfish has a glowing lure on its head to attract prey in the pitch-black ocean." },
+    diagram: null,
+    quiz: [
+      { q: "Which of these is a NATURAL light source?", opts: ["Flashlight", "Firefly", "Street light"], ans: 1 },
+      { q: "Is a campfire natural or artificial light?", opts: ["Natural", "Artificial", "Both"], ans: 1 }
+    ]
+  },
+  {
+    id: 5, emoji: "&#128065;", title: "Transparency",
+    color: "#a855f7",
+    content: `
+      <h3>Three Types of Materials</h3>
+      <ul>
+        <li>&#129347; <strong>Transparent</strong> = <strong>ALL</strong> light passes through. You can see clearly through it.<span class="es">Transparente = TODA la luz pasa. Puedes ver claramente a través.</span></li>
+        <li>Examples: glass, clear water, air<span class="es">Ejemplos: vidrio, agua clara, aire.</span></li>
+      </ul>
+      <ul>
+        <li>&#127787;&#65039; <strong>Translucent</strong> = <strong>SOME</strong> light passes through. You see shapes but not details.<span class="es">Translúcido = ALGO de luz pasa. Ves formas pero no detalles.</span></li>
+        <li>Examples: frosted glass, wax paper, thin fabric<span class="es">Ejemplos: vidrio esmerilado, papel encerado, tela fina.</span></li>
+      </ul>
+      <ul>
+        <li>&#9724;&#65039; <strong>Opaque</strong> = <strong>NO</strong> light passes through. You cannot see through it at all.<span class="es">Opaco = NO pasa luz. No puedes ver nada a través.</span></li>
+        <li>Examples: wood, metal, brick, your body<span class="es">Ejemplos: madera, metal, ladrillo, tu cuerpo.</span></li>
+      </ul>
+      <h3>Easy Way to Remember</h3>
+      <ul>
+        <li><strong>Trans</strong>parent = <strong>Trans</strong>fer ALL light<span class="es">Transparente = Transfiere TODA la luz.</span></li>
+        <li><strong>Trans</strong>lucent = <strong>Trans</strong>fer SOME light<span class="es">Translúcido = Transfiere ALGO de luz.</span></li>
+        <li><strong>O</strong>paque = <strong>O</strong> (zero) light gets through!<span class="es">Opaco = O (cero) luz pasa.</span></li>
+      </ul>
+    `,
+    dyk: { label: "&#128161; Did You Know?", text: "Your skin is actually slightly translucent! If you hold a bright flashlight against your fingers in a dark room, you can see a red glow - that is light passing through your skin and blood." },
+    diagram: `
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 460 140" width="460">
+          <!-- Transparent -->
+          <rect x="20" y="30" width="110" height="80" rx="10" fill="rgba(116,185,255,.1)" stroke="#74b9ff" stroke-width="2"/>
+          <text x="75" y="22" fill="#74b9ff" font-size="12" text-anchor="middle" font-weight="bold">Transparent</text>
+          <line x1="5" y1="55" x2="40" y2="55" stroke="#f9ca24" stroke-width="2.5"/>
+          <line x1="40" y1="55" x2="110" y2="55" stroke="#f9ca24" stroke-width="2.5" opacity=".9"/>
+          <line x1="110" y1="55" x2="145" y2="55" stroke="#f9ca24" stroke-width="2.5" marker-end="url(#arrowY)"/>
+          <line x1="5" y1="75" x2="40" y2="75" stroke="#f9ca24" stroke-width="2.5"/>
+          <line x1="40" y1="75" x2="110" y2="75" stroke="#f9ca24" stroke-width="2.5" opacity=".9"/>
+          <line x1="110" y1="75" x2="145" y2="75" stroke="#f9ca24" stroke-width="2.5"/>
+          <text x="75" y="126" fill="#dfe6e9" font-size="10" text-anchor="middle">ALL light through</text>
+          <!-- Translucent -->
+          <rect x="175" y="30" width="110" height="80" rx="10" fill="rgba(162,155,254,.18)" stroke="#a29bfe" stroke-width="2"/>
+          <text x="230" y="22" fill="#a29bfe" font-size="12" text-anchor="middle" font-weight="bold">Translucent</text>
+          <line x1="160" y1="55" x2="195" y2="55" stroke="#f9ca24" stroke-width="2.5"/>
+          <line x1="195" y1="55" x2="265" y2="55" stroke="#f9ca24" stroke-width="2.5" opacity=".35"/>
+          <line x1="265" y1="55" x2="300" y2="55" stroke="#f9ca24" stroke-width="2.5" opacity=".35"/>
+          <line x1="160" y1="75" x2="195" y2="75" stroke="#f9ca24" stroke-width="2.5"/>
+          <line x1="195" y1="75" x2="265" y2="75" stroke="#f9ca24" stroke-width="2.5" opacity=".35"/>
+          <text x="230" y="126" fill="#dfe6e9" font-size="10" text-anchor="middle">SOME light through</text>
+          <!-- Opaque -->
+          <rect x="330" y="30" width="110" height="80" rx="10" fill="rgba(99,110,114,.4)" stroke="#636e72" stroke-width="2"/>
+          <text x="385" y="22" fill="#b2bec3" font-size="12" text-anchor="middle" font-weight="bold">Opaque</text>
+          <line x1="315" y1="55" x2="348" y2="55" stroke="#f9ca24" stroke-width="2.5"/>
+          <line x1="315" y1="75" x2="348" y2="75" stroke="#f9ca24" stroke-width="2.5"/>
+          <text x="370" y="75" fill="#ff6b6b" font-size="20" text-anchor="middle">&#10060;</text>
+          <text x="385" y="126" fill="#dfe6e9" font-size="10" text-anchor="middle">NO light through</text>
+        </svg>
+        <p class="diagram-caption">Transparent lets ALL light through, translucent lets SOME, opaque lets NONE.</p>
+      </div>
+    `,
+    quiz: [
+      { q: "Frosted glass is an example of:", opts: ["Transparent", "Translucent", "Opaque"], ans: 1 },
+      { q: "Which word means NO light passes through?", opts: ["Transparent", "Translucent", "Opaque"], ans: 2 }
+    ]
+  },
+  {
+    id: 6, emoji: "&#127925;", title: "Sound as Energy",
+    color: "#ff6348",
+    content: `
+      <h3>What Causes Sound?</h3>
+      <ul>
+        <li>Sound is caused by <strong>vibrations</strong>!<span class="es">El sonido es causado por vibraciones.</span></li>
+        <li>When something vibrates, it pushes air molecules together and apart, creating <strong>sound waves</strong>.<span class="es">Cuando algo vibra, empuja las moléculas de aire creando ondas sonoras.</span></li>
+        <li>Sound waves travel through the air by <strong>compressing</strong> (squishing) air molecules.<span class="es">Las ondas sonoras viajan por el aire comprimiendo las moléculas.</span></li>
+      </ul>
+      <h3>Parts of a Sound Wave</h3>
+      <ul>
+        <li><strong>Crest</strong> = the TOP of a wave (highest point)<span class="es">Cresta = la parte más ALTA de la onda.</span></li>
+        <li><strong>Trough</strong> = the BOTTOM of a wave (lowest point)<span class="es">Valle = la parte más BAJA de la onda.</span></li>
+        <li><strong>Wavelength</strong> = the distance from one crest to the next crest<span class="es">Longitud de onda = distancia de una cresta a la siguiente.</span></li>
+        <li><strong>Amplitude</strong> = the HEIGHT of the wave (from middle to crest)<span class="es">Amplitud = la ALTURA de la onda (del medio a la cresta).</span></li>
+      </ul>
+      <h3>Frequency</h3>
+      <ul>
+        <li><strong>Frequency</strong> = the number of waves that pass a point per second.<span class="es">Frecuencia = número de ondas que pasan por un punto por segundo.</span></li>
+        <li>Measured in <strong>Hertz (Hz)</strong>.<span class="es">Se mide en Hertz (Hz).</span></li>
+        <li>More waves per second = higher frequency!<span class="es">Más ondas por segundo = mayor frecuencia.</span></li>
+      </ul>
+    `,
+    dyk: { label: "&#128161; Did You Know?", text: "Sound cannot travel through outer space! There is no air in space, so there are no molecules to vibrate. In space, no one can hear you scream!" },
+    diagram: `
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 460 200" width="460">
+          <!-- Axis -->
+          <line x1="40" y1="100" x2="440" y2="100" stroke="#636e72" stroke-width="1" stroke-dasharray="4 3"/>
+          <!-- Wave -->
+          <path d="M40,100 Q100,20 160,100 Q220,180 280,100 Q340,20 400,100" fill="none" stroke="#00cec9" stroke-width="3" class="wave-anim-line" stroke-dasharray="20 20"/>
+          <!-- Labels -->
+          <line x1="100" y1="38" x2="100" y2="100" stroke="#ffeaa7" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <text x="100" y="28" fill="#ffeaa7" font-size="12" text-anchor="middle" font-weight="bold">Crest</text>
+          <circle cx="100" cy="38" r="4" fill="#ffeaa7"/>
+          <line x1="220" y1="162" x2="220" y2="100" stroke="#ff6b6b" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <text x="220" y="188" fill="#ff6b6b" font-size="12" text-anchor="middle" font-weight="bold">Trough</text>
+          <circle cx="220" cy="162" r="4" fill="#ff6b6b"/>
+          <!-- Wavelength -->
+          <line x1="100" y1="15" x2="340" y2="15" stroke="#2ed573" stroke-width="2"/>
+          <line x1="100" y1="10" x2="100" y2="20" stroke="#2ed573" stroke-width="2"/>
+          <line x1="340" y1="10" x2="340" y2="20" stroke="#2ed573" stroke-width="2"/>
+          <text x="220" y="12" fill="#2ed573" font-size="11" text-anchor="middle" font-weight="bold">Wavelength</text>
+          <!-- Amplitude -->
+          <line x1="55" y1="38" x2="55" y2="100" stroke="#a29bfe" stroke-width="2"/>
+          <line x1="50" y1="38" x2="60" y2="38" stroke="#a29bfe" stroke-width="2"/>
+          <line x1="50" y1="100" x2="60" y2="100" stroke="#a29bfe" stroke-width="2"/>
+          <text x="48" y="72" fill="#a29bfe" font-size="10" text-anchor="end" font-weight="bold">Amplitude</text>
+        </svg>
+        <p class="diagram-caption">A sound wave with labeled crest, trough, wavelength, and amplitude.</p>
+      </div>
+    `,
+    quiz: [
+      { q: "Sound is caused by:", opts: ["Light rays", "Vibrations", "Gravity"], ans: 1 },
+      { q: "What is the top of a wave called?", opts: ["Trough", "Amplitude", "Crest"], ans: 2 },
+      { q: "Frequency is measured in:", opts: ["Miles", "Hertz (Hz)", "Degrees"], ans: 1 }
+    ]
+  },
+  {
+    id: 7, emoji: "&#127928;", title: "Elements of Sound",
+    color: "#ff4757",
+    content: `
+      <h3>Pitch</h3>
+      <ul>
+        <li><strong>Pitch</strong> = how <strong>high or low</strong> a sound is.<span class="es">Tono = qué tan agudo o grave es un sonido.</span></li>
+        <li>Determined by <strong>frequency</strong>: more waves per second = <strong>higher pitch</strong>.<span class="es">Determinado por la frecuencia: más ondas = tono más agudo.</span></li>
+        <li>Think: a whistle has HIGH pitch, thunder has LOW pitch.<span class="es">Piensa: un silbato tiene tono AGUDO, un trueno tiene tono GRAVE.</span></li>
+      </ul>
+      <h3>Loudness (Volume)</h3>
+      <ul>
+        <li><strong>Loudness</strong> = how <strong>strong or quiet</strong> a sound is.<span class="es">Volumen = qué tan fuerte o suave es un sonido.</span></li>
+        <li>Determined by <strong>amplitude</strong>: taller wave = <strong>louder</strong> sound.<span class="es">Determinado por la amplitud: onda más alta = sonido más fuerte.</span></li>
+        <li>Think: whispering = small amplitude, shouting = big amplitude.<span class="es">Piensa: susurrar = amplitud pequeña, gritar = amplitud grande.</span></li>
+      </ul>
+      <h3>Timbre (Tone Quality)</h3>
+      <ul>
+        <li><strong>Timbre</strong> (pronounced "TAM-ber") = the <strong>quality</strong> or <strong>character</strong> of a sound.<span class="es">Timbre (se pronuncia "TAM-ber") = la cualidad o carácter de un sonido.</span></li>
+        <li>It is why a <strong>guitar and a piano</strong> playing the <strong>same note</strong> sound <strong>different</strong>.<span class="es">Es la razón por la que una guitarra y un piano tocando la misma nota suenan diferente.</span></li>
+        <li>Every instrument and voice has its own unique timbre!<span class="es">Cada instrumento y voz tiene su propio timbre único.</span></li>
+      </ul>
+    `,
+    dyk: { label: "&#128161; Did You Know?", text: "Dogs can hear sounds with frequencies up to 65,000 Hz, while humans can only hear up to about 20,000 Hz. That is why dog whistles work - they are too high-pitched for us to hear!" },
+    diagram: null,
+    quiz: [
+      { q: "What determines pitch?", opts: ["Amplitude", "Frequency", "Timbre"], ans: 1 },
+      { q: "A louder sound has a:", opts: ["Shorter wavelength", "Taller amplitude", "Lower frequency"], ans: 1 },
+      { q: "Why do a guitar and piano sound different on the same note?", opts: ["Different pitch", "Different loudness", "Different timbre"], ans: 2 }
+    ]
+  },
+  {
+    id: 8, emoji: "&#128266;", title: "Echo & Noise Pollution",
+    color: "#3742fa",
+    content: `
+      <h3>Echo</h3>
+      <ul>
+        <li>An <strong>echo</strong> is sound <strong>bouncing off</strong> hard surfaces and coming back to your ears.<span class="es">Un eco es el sonido rebotando en superficies duras y volviendo a tus oídos.</span></li>
+        <li><strong>Bats and dolphins</strong> use echoes to navigate - this is called <strong>echolocation</strong>!<span class="es">Los murciélagos y delfines usan ecos para navegar – se llama ecolocalización.</span></li>
+        <li>They send out sounds and listen for the echo to figure out where things are.<span class="es">Emiten sonidos y escuchan el eco para saber dónde están las cosas.</span></li>
+      </ul>
+      <h3>Pleasant Sound vs. Noise</h3>
+      <ul>
+        <li><strong>Pleasant sound</strong> = regular, repeating wave pattern (music, singing).<span class="es">Sonido agradable = patrón de onda regular y repetitivo (música, canto).</span></li>
+        <li><strong>Noise</strong> = irregular, messy wave pattern (construction, traffic).<span class="es">Ruido = patrón de onda irregular y desordenado (construcción, tráfico).</span></li>
+      </ul>
+      <h3>Noise Pollution</h3>
+      <ul>
+        <li><strong>Noise pollution</strong> = unwanted, harmful sounds in the environment.<span class="es">Contaminación acústica = sonidos no deseados y dañinos en el ambiente.</span></li>
+        <li>Causes in humans: <strong>hearing damage</strong>, <strong>stress</strong>, <strong>sleep problems</strong>.<span class="es">Causa en humanos: daño auditivo, estrés, problemas de sueño.</span></li>
+        <li>Affects animals too: <strong>whales</strong> get confused by ship noise, <strong>birds</strong> struggle to communicate in noisy cities.<span class="es">Afecta a los animales también: las ballenas se confunden con el ruido de barcos.</span></li>
+      </ul>
+    `,
+    dyk: { label: "&#128161; Did You Know?", text: "Bats can eat up to 1,000 mosquitoes in a single hour using echolocation to find every single one in total darkness!" },
+    diagram: null,
+    quiz: [
+      { q: "What is an echo?", opts: ["Sound being absorbed", "Sound bouncing off hard surfaces", "Sound getting louder"], ans: 1 },
+      { q: "What is echolocation used by?", opts: ["Cats and dogs", "Bats and dolphins", "Birds and fish"], ans: 1 },
+      { q: "Noise pollution can cause:", opts: ["Better hearing", "Hearing damage and stress", "Faster sleep"], ans: 1 }
+    ]
+  }
+];
+
+const brainBreaks = [
+  { title: "&#129300; Science Joke!", text: "Why can't you trust atoms? Because they make up everything!" },
+  { title: "&#128024; Cool Fact!", text: "A bolt of lightning is 5 times hotter than the surface of the Sun!" },
+  { title: "&#129300; Science Joke!", text: "What did the light wave say to the sound wave? You're too slow for me!" },
+  { title: "&#128024; Cool Fact!", text: "Honey never spoils. Archaeologists found 3,000-year-old honey in Egyptian tombs that was still perfectly edible!" },
+  { title: "&#129300; Science Joke!", text: "Why did the sound wave go to the doctor? Because it had a bad frequency!" },
+  { title: "&#128024; Cool Fact!", text: "Octopuses have three hearts and blue blood!" },
+  { title: "&#129300; Science Joke!", text: "What do you call a fake noodle? An impasta! (Okay, not science... here's one:) What kind of music do planets like? Neptunes!" },
+  { title: "&#128024; Cool Fact!", text: "The human body contains enough carbon to make about 9,000 pencils!" },
+  { title: "&#129300; Science Joke!", text: "Why is light the fastest thing? Because by the time it wakes up, it's already at the speed of light!" },
+  { title: "&#128024; Cool Fact!", text: "A group of flamingos is called a 'flamboyance'!" }
+];
+
+const summaryFacts = [
+  { title: "Light = Energy", text: "Light transfers energy; travels at 186,262 mi/s in straight lines.", es: "Luz = energía; viaja a 186.262 mi/s en línea recta.", color: "#ff6b6b" },
+  { title: "Light Year", text: "Distance light travels in 1 year = 5.8 trillion miles.", es: "Año luz = distancia que la luz recorre en 1 año.", color: "#ff6b6b" },
+  { title: "Sunlight", text: "Takes about 8 minutes to reach Earth from the Sun.", es: "Tarda unos 8 minutos en llegar del Sol a la Tierra.", color: "#ff6b6b" },
+  { title: "Reflection", text: "Light bouncing off a surface (mirrors).", es: "Reflexión – La luz rebota en una superficie.", color: "#ffa502" },
+  { title: "Refraction", text: "Light bending when passing between materials (straw in water).", es: "Refracción – La luz se dobla al cambiar de material.", color: "#ffa502" },
+  { title: "Convex Lens", text: "Bulges out, focuses (converges) light. Used in magnifying glasses.", es: "Lente convexa – Se curva hacia afuera, concentra la luz.", color: "#2ed573" },
+  { title: "Concave Lens", text: "Curves in, spreads (diverges) light. Used for nearsightedness.", es: "Lente cóncava – Se curva hacia adentro, dispersa la luz.", color: "#2ed573" },
+  { title: "Natural Light", text: "Sun, stars, lightning, fireflies, jellyfish, lava.", es: "Luz natural – Sol, estrellas, relámpagos, luciérnagas.", color: "#1e90ff" },
+  { title: "Artificial Light", text: "Light bulbs, flashlights, street lights, fireworks.", es: "Luz artificial – Bombillas, linternas, farolas.", color: "#1e90ff" },
+  { title: "Transparent", text: "ALL light through (glass, clear water, air).", es: "Transparente – TODA la luz pasa.", color: "#a855f7" },
+  { title: "Translucent", text: "SOME light through (frosted glass, wax paper).", es: "Translúcido – ALGO de luz pasa.", color: "#a855f7" },
+  { title: "Opaque", text: "NO light through (wood, metal, brick).", es: "Opaco – NO pasa luz.", color: "#a855f7" },
+  { title: "Sound = Vibrations", text: "Sound is caused by vibrations compressing air molecules.", es: "Sonido = vibraciones que comprimen moléculas de aire.", color: "#ff6348" },
+  { title: "Wave Parts", text: "Crest (top), trough (bottom), wavelength, amplitude.", es: "Partes: cresta (arriba), valle (abajo), longitud de onda, amplitud.", color: "#ff6348" },
+  { title: "Frequency", text: "Waves per second, measured in Hertz (Hz).", es: "Frecuencia – Ondas por segundo, en Hertz (Hz).", color: "#ff6348" },
+  { title: "Pitch", text: "High or low sound; determined by frequency.", es: "Tono – Agudo o grave; determinado por la frecuencia.", color: "#ff4757" },
+  { title: "Loudness", text: "How strong; determined by amplitude (wave height).", es: "Volumen – Qué tan fuerte; determinado por la amplitud.", color: "#ff4757" },
+  { title: "Timbre", text: "Tone quality - why guitar and piano sound different on same note.", es: "Timbre – Cualidad del sonido; por qué guitarra y piano suenan diferente.", color: "#ff4757" },
+  { title: "Echo", text: "Sound bouncing off hard surfaces. Used in echolocation (bats, dolphins).", es: "Eco – Sonido rebotando en superficies duras. Ecolocalización.", color: "#3742fa" },
+  { title: "Noise Pollution", text: "Harmful sounds causing hearing damage, stress, sleep problems.", es: "Contaminación acústica – Sonidos dañinos que causan daño auditivo y estrés.", color: "#3742fa" },
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const completedChapters = new Set();
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function renderChapterDots() {
+  const wrap = document.getElementById('chapterDots');
+  wrap.innerHTML = chapters.map(ch =>
+    `<button id="dot${ch.id}" onclick="scrollToChapter(${ch.id})" title="Chapter ${ch.id}: ${ch.title}">${ch.id}</button>`
+  ).join('');
+}
+
+function renderChapters() {
+  const container = document.getElementById('chaptersContainer');
+  container.innerHTML = chapters.map(ch => {
+    let quizHTML = '';
+    if (ch.quiz && ch.quiz.length) {
+      quizHTML = `<div class="quiz-section">
+        <h3>&#127919; Quick Quiz - Check Yourself!</h3>
+        ${ch.quiz.map((q, qi) => `
+          <div class="quiz-q" data-ch="${ch.id}" data-qi="${qi}" data-ans="${q.ans}">
+            <p>${qi + 1}. ${q.q}</p>
+            ${q.opts.map((o, oi) => `
+              <label data-oi="${oi}" onclick="selectAnswer(this, ${ch.id}, ${qi}, ${oi})">
+                <input type="radio" name="ch${ch.id}q${qi}" value="${oi}"> ${o}
+              </label>
+            `).join('')}
+          </div>
+        `).join('')}
+        <button class="quiz-check-btn" onclick="checkQuiz(${ch.id})">Check My Answers!</button>
+        <div class="quiz-result" id="quizResult${ch.id}"></div>
+      </div>`;
+    }
+    return `
+    <div class="chapter-card" id="chapter${ch.id}">
+      <div class="chapter-header" style="background:linear-gradient(135deg, ${ch.color}, ${ch.color}99)" onclick="toggleChapter(${ch.id})">
+        <span class="ch-emoji">${ch.emoji}</span>
+        <span class="ch-title">Chapter ${ch.id}: ${ch.title}</span>
+        <span class="ch-check">&#9989;</span>
+        <span class="ch-toggle">&#9660;</span>
+      </div>
+      <div class="chapter-body">
+        <div class="chapter-content">
+          ${ch.content}
+          ${ch.dyk ? `
+            <div class="dyk" onclick="this.classList.toggle('open')">
+              <span class="dyk-label">${ch.dyk.label} (tap to reveal)</span>
+              <div class="dyk-text">${ch.dyk.text}</div>
+            </div>
+          ` : ''}
+          ${ch.diagram || ''}
+          ${quizHTML}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderSummary() {
+  const grid = document.getElementById('summaryGrid');
+  grid.innerHTML = summaryFacts.map(f =>
+    `<div class="summary-card" style="border-left-color:${f.color}"><h4>${f.title}</h4><p>${f.text}<span class="es">${f.es}</span></p></div>`
+  ).join('');
+}
+
+/* ============================================================
+   INTERACTIONS
+   ============================================================ */
+function toggleChapter(id) {
+  const card = document.getElementById('chapter' + id);
+  const isOpen = card.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.chapter-card').forEach(c => c.classList.remove('open'));
+  if (!isOpen) {
+    card.classList.add('open');
+    setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  }
+}
+
+function scrollToChapter(id) {
+  const card = document.getElementById('chapter' + id);
+  card.classList.add('open');
+  card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function selectAnswer(label, chId, qi, oi) {
+  // Clear previous selection styling in this question
+  const qDiv = label.closest('.quiz-q');
+  qDiv.querySelectorAll('label').forEach(l => { l.classList.remove('correct','wrong'); });
+}
+
+function checkQuiz(chId) {
+  const ch = chapters.find(c => c.id === chId);
+  let correct = 0;
+  ch.quiz.forEach((q, qi) => {
+    const qDiv = document.querySelector(`.quiz-q[data-ch="${chId}"][data-qi="${qi}"]`);
+    const selected = qDiv.querySelector('input:checked');
+    qDiv.querySelectorAll('label').forEach(l => l.classList.remove('correct','wrong'));
+    // Always show the correct answer
+    const correctLabel = qDiv.querySelector(`label[data-oi="${q.ans}"]`);
+    correctLabel.classList.add('correct');
+    if (selected) {
+      const val = parseInt(selected.value);
+      if (val === q.ans) {
+        correct++;
+      } else {
+        selected.closest('label').classList.add('wrong');
+      }
+    }
+  });
+  const result = document.getElementById('quizResult' + chId);
+  const total = ch.quiz.length;
+  if (correct === total) {
+    result.className = 'quiz-result pass';
+    result.innerHTML = `&#127881; Perfect! ${correct}/${total} - You nailed it!`;
+    markComplete(chId);
+  } else {
+    result.className = 'quiz-result fail';
+    result.innerHTML = `${correct}/${total} correct. Review the green answers and try again!`;
+  }
+}
+
+function markComplete(chId) {
+  if (completedChapters.has(chId)) return;
+  completedChapters.add(chId);
+  const card = document.getElementById('chapter' + chId);
+  card.classList.add('completed');
+  const dot = document.getElementById('dot' + chId);
+  if (dot) dot.classList.add('done');
+  updateProgress();
+  launchConfetti();
+}
+
+function updateProgress() {
+  const pct = Math.round((completedChapters.size / chapters.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  if (pct === 100) {
+    setTimeout(() => {
+      openModal("&#127942; YOU DID IT! &#127942;", "Hugo, you reviewed ALL 8 chapters! You are ready to crush that exam! Go get that A+!");
+      launchConfetti(); launchConfetti();
+    }, 600);
+  }
+}
+
+/* ---- Brain Break ---- */
+let bbIndex = 0;
+function showBrainBreak() {
+  const bb = brainBreaks[bbIndex % brainBreaks.length];
+  bbIndex++;
+  openModal(bb.title, bb.text);
+}
+
+/* ---- Modal ---- */
+function openModal(title, text) {
+  document.getElementById('modalTitle').innerHTML = title;
+  document.getElementById('modalText').innerHTML = text;
+  document.getElementById('modal').classList.add('show');
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+}
+
+/* ---- Confetti ---- */
+function launchConfetti() {
+  const box = document.getElementById('confettiBox');
+  const colors = ['#ff6b6b','#ffa502','#2ed573','#1e90ff','#a855f7','#f9ca24','#ff4757','#00cec9'];
+  for (let i = 0; i < 50; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.width = (Math.random() * 8 + 6) + 'px';
+    piece.style.height = (Math.random() * 8 + 6) + 'px';
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    piece.style.animationDuration = (Math.random() * 1.5 + 1.5) + 's';
+    piece.style.animationDelay = (Math.random() * 0.5) + 's';
+    box.appendChild(piece);
+    setTimeout(() => piece.remove(), 3000);
+  }
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+renderChapterDots();
+renderChapters();
+renderSummary();
+</script>
+</body>
+</html>
