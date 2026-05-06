@@ -228,11 +228,62 @@ canvas {
   display: none;
 }
 .explanation.show { display: block; }
+
+/* Practice Games */
+.game-selector { display:flex; flex-wrap:wrap; gap:8px; margin:15px 0; justify-content:center; }
+.game-tab { background:rgba(102,126,234,0.15); border:2px solid #667eea; color:#667eea; padding:10px 18px; border-radius:25px; cursor:pointer; font-family:'Nunito',sans-serif; font-weight:700; font-size:0.9em; transition:all 0.3s; }
+.game-tab:hover { background:rgba(102,126,234,0.25); }
+.game-tab.active { background:#667eea; color:white; }
+.memory-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; max-width:500px; margin:15px auto; }
+.memory-card { aspect-ratio:1; background:linear-gradient(135deg,#667eea,#764ba2); border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1.8em; color:white; transition:all 0.3s; user-select:none; word-break:break-word; padding:6px; text-align:center; }
+.memory-card:hover { transform:scale(1.05); }
+.memory-card.flipped { background:white; color:#333; font-size:0.8em; border:2px solid #667eea; font-weight:600; }
+.memory-card.matched { background:#e8f5e9; border:2px solid #4caf50; color:#2e7d32; font-size:0.8em; font-weight:600; pointer-events:none; }
+.speed-display { text-align:center; margin:20px 0; }
+.speed-timer { font-size:3em; font-weight:800; color:#764ba2; font-family:'Baloo 2',cursive; }
+.speed-timer.warning { color:#f44336; animation:pulse 0.5s infinite; }
+@keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.1);} }
+.speed-score { font-size:1.3em; color:#667eea; font-weight:700; }
+.speed-q-text { font-size:1.2em; font-weight:700; margin:15px 0; min-height:50px; }
+.speed-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+.speed-btn { padding:14px 32px; border:none; border-radius:15px; font-family:'Nunito',sans-serif; font-weight:700; font-size:1.1em; cursor:pointer; transition:all 0.2s; color:white; min-width:120px; }
+.speed-btn:hover { transform:scale(1.05); }
+.speed-btn:active { transform:scale(0.95); }
+.speed-btn.btn-true { background:linear-gradient(135deg,#4caf50,#2e7d32); }
+.speed-btn.btn-false { background:linear-gradient(135deg,#f44336,#c62828); }
+.speed-btn.flash-correct { background:#4caf50 !important; box-shadow:0 0 20px rgba(76,175,80,0.6); }
+.speed-btn.flash-wrong { background:#f44336 !important; box-shadow:0 0 20px rgba(244,67,54,0.6); }
+.scramble-word { font-size:2.2em; font-weight:800; color:#764ba2; text-align:center; letter-spacing:8px; margin:20px 0; font-family:'Baloo 2',cursive; }
+.scramble-hint { text-align:center; color:#888; font-style:italic; margin-bottom:15px; font-size:0.95em; }
+.scramble-input { display:block; margin:0 auto; border:3px solid #764ba2; border-radius:12px; padding:12px 20px; font-size:1.2em; font-family:'Nunito',sans-serif; text-align:center; width:260px; }
+.scramble-input:focus { outline:none; border-color:#667eea; box-shadow:0 0 12px rgba(102,126,234,0.3); }
+.sort-zones { display:flex; gap:15px; margin:15px 0; flex-wrap:wrap; justify-content:center; }
+.sort-zone { flex:1; min-width:200px; min-height:130px; border:3px dashed #ccc; border-radius:16px; padding:15px; text-align:center; cursor:pointer; transition:all 0.3s; }
+.sort-zone:hover { box-shadow:0 4px 15px rgba(0,0,0,0.1); }
+.sort-zone.zone-yes { border-color:#4caf50; background:rgba(76,175,80,0.05); }
+.sort-zone.zone-no { border-color:#f44336; background:rgba(244,67,54,0.05); }
+.sort-zone.highlight { box-shadow:0 0 15px rgba(102,126,234,0.5); transform:scale(1.02); }
+.sort-items { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:15px 0; }
+.sort-item { background:white; border:2px solid #667eea; border-radius:20px; padding:8px 16px; cursor:pointer; font-weight:600; transition:all 0.2s; user-select:none; font-size:0.95em; }
+.sort-item:hover { transform:scale(1.08); box-shadow:0 3px 10px rgba(0,0,0,0.15); }
+.sort-item.active { border-color:#ff9800; background:#fff3e0; box-shadow:0 0 12px rgba(255,152,0,0.4); }
+.sort-item.placed { opacity:0.3; pointer-events:none; }
+.sorted-item { display:inline-block; border-radius:15px; padding:4px 10px; margin:3px; font-size:0.82em; font-weight:600; }
+.sorted-item.correct { background:#e8f5e9; border:2px solid #4caf50; color:#2e7d32; }
+.sorted-item.wrong { background:#ffebee; border:2px solid #f44336; color:#c62828; }
+.game-stats { display:flex; gap:15px; justify-content:center; flex-wrap:wrap; margin:15px 0; }
+.stat-box { background:linear-gradient(135deg,#f5f7fa,#c3cfe2); border-radius:12px; padding:12px 20px; text-align:center; min-width:90px; }
+.stat-box .stat-num { font-size:1.6em; font-weight:800; color:#764ba2; font-family:'Baloo 2',cursive; }
+.stat-box .stat-label { font-size:0.78em; color:#666; }
+
 @media (max-width: 600px) {
   .header h1 { font-size: 1.6em; }
   .tab-btn { padding: 6px 10px; font-size: 0.75em; }
   .card { padding: 18px; }
   .object-grid { grid-template-columns: repeat(2, 1fr); }
+  .memory-grid { grid-template-columns: repeat(3, 1fr); }
+  .sort-zones { flex-direction: column; }
+  .speed-btn { min-width: 100px; padding: 12px 24px; }
 }
 </style>
 </head>
@@ -249,7 +300,8 @@ canvas {
   <button class="tab-btn" onclick="showTab(2)">⚡ Magnetization</button>
   <button class="tab-btn" onclick="showTab(3)">🌍 Earth</button>
   <button class="tab-btn" onclick="showTab(4)">💡 Technology</button>
-  <button class="tab-btn" onclick="showTab(5)">📝 Final Exam</button>
+  <button class="tab-btn" onclick="showTab(5)">🎮 Practice</button>
+  <button class="tab-btn" onclick="showTab(6)">📝 Final Exam</button>
 </div>
 
 <!-- TAB 1: MAGNETS BASICS -->
@@ -477,8 +529,95 @@ canvas {
   </div>
 </div>
 
-<!-- TAB 6: FINAL EXAM -->
+<!-- TAB 6: PRACTICE GAMES -->
 <div class="tab-content" id="tab5">
+  <div class="card">
+    <h2>🎮 Practice Games & Exercises</h2>
+    <p>Choose a game to sharpen your skills before the exam!</p>
+    <div class="game-selector">
+      <button class="game-tab active" onclick="showGame('memory',this)">🃏 Memory Match</button>
+      <button class="game-tab" onclick="showGame('speed',this)">⚡ Speed Quiz</button>
+      <button class="game-tab" onclick="showGame('scramble',this)">🔤 Word Scramble</button>
+      <button class="game-tab" onclick="showGame('sort',this)">📦 Sort It!</button>
+    </div>
+  </div>
+
+  <div class="card game-panel" id="game-memory">
+    <h3>🃏 Memory Match</h3>
+    <p>Flip cards and find matching pairs! Match each magnet term with its definition.</p>
+    <div class="game-stats">
+      <div class="stat-box"><div class="stat-num" id="mem-moves">0</div><div class="stat-label">Moves</div></div>
+      <div class="stat-box"><div class="stat-num" id="mem-time">0s</div><div class="stat-label">Time</div></div>
+      <div class="stat-box"><div class="stat-num" id="mem-pairs">0/8</div><div class="stat-label">Pairs</div></div>
+    </div>
+    <div class="memory-grid" id="memory-grid"></div>
+    <div class="feedback success" id="memory-result" style="display:none"></div>
+    <div style="text-align:center;"><button class="btn" onclick="initMemory()">🔄 New Game</button></div>
+  </div>
+
+  <div class="card game-panel" id="game-speed" style="display:none">
+    <h3>⚡ Speed Challenge</h3>
+    <p>Answer as many questions as you can in 60 seconds! True or False?</p>
+    <div class="speed-display">
+      <div class="speed-timer" id="speed-timer">60</div>
+      <div class="speed-score">Correct: <span id="speed-correct">0</span> | Streak: <span id="speed-streak">0</span> 🔥</div>
+    </div>
+    <div id="speed-question" style="text-align:center;">
+      <p class="speed-q-text">Press START to begin the challenge!</p>
+    </div>
+    <div id="speed-buttons" style="text-align:center;">
+      <button class="btn" id="speed-start-btn" onclick="startSpeed()">🚀 START!</button>
+    </div>
+    <div class="feedback" id="speed-result" style="display:none"></div>
+  </div>
+
+  <div class="card game-panel" id="game-scramble" style="display:none">
+    <h3>🔤 Word Scramble</h3>
+    <p>Unscramble the letters to discover the science word!</p>
+    <div class="game-stats">
+      <div class="stat-box"><div class="stat-num" id="scr-score">0</div><div class="stat-label">Correct</div></div>
+      <div class="stat-box"><div class="stat-num" id="scr-current">1/10</div><div class="stat-label">Word</div></div>
+      <div class="stat-box"><div class="stat-num" id="scr-best">-</div><div class="stat-label">Best</div></div>
+    </div>
+    <div class="scramble-word" id="scramble-display"></div>
+    <div class="scramble-hint" id="scramble-hint"></div>
+    <input type="text" class="scramble-input" id="scramble-input" placeholder="Type your answer..." autocomplete="off" onkeydown="if(event.key==='Enter')checkScramble()">
+    <div style="text-align:center; margin-top:15px;">
+      <button class="btn" onclick="checkScramble()">Check ✅</button>
+      <button class="btn" style="background:linear-gradient(135deg,#ffa726,#ff7043);" onclick="revealScrambleHint()">💡 Hint</button>
+      <button class="btn" style="background:linear-gradient(135deg,#78909c,#546e7a);" onclick="skipScramble()">⏭️ Skip</button>
+    </div>
+    <div class="feedback" id="scramble-feedback" style="display:none"></div>
+  </div>
+
+  <div class="card game-panel" id="game-sort" style="display:none">
+    <h3>📦 Sort It Out!</h3>
+    <p>Click an item below, then click the correct box to sort it. Magnetic or Non-magnetic?</p>
+    <div class="game-stats">
+      <div class="stat-box"><div class="stat-num" id="sort-correct">0</div><div class="stat-label">Correct</div></div>
+      <div class="stat-box"><div class="stat-num" id="sort-wrong">0</div><div class="stat-label">Wrong</div></div>
+      <div class="stat-box"><div class="stat-num" id="sort-left">14</div><div class="stat-label">Left</div></div>
+    </div>
+    <div class="sort-items" id="sort-items"></div>
+    <div class="sort-zones">
+      <div class="sort-zone zone-yes" id="zone-yes" onclick="placeInZone(true)">
+        <h4>🧲 Magnetic</h4>
+        <p style="font-size:0.8em;color:#666;">Attracted to magnets</p>
+        <div id="zone-yes-items"></div>
+      </div>
+      <div class="sort-zone zone-no" id="zone-no" onclick="placeInZone(false)">
+        <h4>🚫 Non-Magnetic</h4>
+        <p style="font-size:0.8em;color:#666;">NOT attracted to magnets</p>
+        <div id="zone-no-items"></div>
+      </div>
+    </div>
+    <div class="feedback" id="sort-feedback" style="display:none"></div>
+    <div style="text-align:center;"><button class="btn" onclick="initSort()">🔄 Play Again</button></div>
+  </div>
+</div>
+
+<!-- TAB 7: FINAL EXAM -->
+<div class="tab-content" id="tab6">
   <div class="card">
     <h2>📝 Final Exam Practice</h2>
     <p>15 questions covering everything! Good luck Hugo! 🍀</p>
@@ -1022,7 +1161,7 @@ function answerTF(index, answer) {
     const scoreEl = document.getElementById('tf-score');
     scoreEl.style.display = 'block';
     const pct = Math.round(tfScore/tfQuestions.length*100);
-    const emoji = pct === 100 ? '🏆' : pct >= 80 ? '🌟' : pct >= 60 ? '👍' : '📞';
+    const emoji = pct === 100 ? '🏆' : pct >= 80 ? '🌟' : pct >= 60 ? '👍' : '📚';
     scoreEl.innerHTML = `${emoji} Score: ${tfScore}/${tfQuestions.length} (${pct}%)`;
   }
 }
@@ -1337,6 +1476,313 @@ function restartExam() {
   buildExam();
 }
 
+// === PRACTICE GAMES ===
+function showGame(game, btn) {
+  document.querySelectorAll('.game-panel').forEach(p => p.style.display='none');
+  document.getElementById('game-'+game).style.display='block';
+  document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  if(game==='memory' && !document.querySelector('.memory-card')) initMemory();
+  if(game==='sort' && !document.querySelector('.sort-item')) initSort();
+  if(game==='scramble' && !document.getElementById('scramble-display').textContent) initScramble();
+}
+
+// --- MEMORY GAME ---
+const memPairs=[
+  {term:'🧲 North Pole',def:'Red, north-seeking'},
+  {term:'🔵 South Pole',def:'Blue, south-seeking'},
+  {term:'⚡ Ferromagnetic',def:'Iron, nickel, cobalt'},
+  {term:'🌍 Magnetosphere',def:"Earth's magnetic shield"},
+  {term:'🧭 Compass',def:'Points to magnetic N'},
+  {term:'🌀 Field Lines',def:'Go from N to S'},
+  {term:'🔨 Magnetization',def:'Making it magnetic'},
+  {term:'🛡️ Protection',def:'Blocks Sun particles'}
+];
+let memCards=[],memFlipped=[],memMatched=0,memMoves=0,memTmr=null,memSec=0;
+
+function initMemory(){
+  memMatched=0;memMoves=0;memSec=0;memFlipped=[];
+  clearInterval(memTmr);
+  document.getElementById('memory-result').style.display='none';
+  memCards=[];
+  memPairs.forEach((p,i)=>{memCards.push({text:p.term,pid:i});memCards.push({text:p.def,pid:i});});
+  for(let i=memCards.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[memCards[i],memCards[j]]=[memCards[j],memCards[i]];}
+  const g=document.getElementById('memory-grid');
+  g.innerHTML=memCards.map((_,i)=>`<div class="memory-card" onclick="flipMem(this,${i})">?</div>`).join('');
+  memTmr=setInterval(()=>{memSec++;updMem();},1000);
+  updMem();
+}
+
+function flipMem(el,idx){
+  if(memFlipped.length>=2||el.classList.contains('flipped')||el.classList.contains('matched'))return;
+  el.classList.add('flipped');el.textContent=memCards[idx].text;
+  memFlipped.push({el,idx});
+  if(memFlipped.length===2){
+    memMoves++;updMem();
+    const[a,b]=memFlipped;
+    if(memCards[a.idx].pid===memCards[b.idx].pid && a.idx!==b.idx){
+      setTimeout(()=>{
+        a.el.classList.add('matched');b.el.classList.add('matched');
+        memMatched++;memFlipped=[];updMem();
+        if(memMatched===memPairs.length){
+          clearInterval(memTmr);
+          const r=document.getElementById('memory-result');
+          r.style.display='block';r.className='feedback show success';
+          r.innerHTML=`🏆 All ${memPairs.length} pairs in ${memMoves} moves & ${memSec}s! `+(memMoves<=12?'🌟 Amazing memory!':memMoves<=18?'👍 Great job!':'💪 Try to beat your score!');
+        }
+      },500);
+    }else{
+      setTimeout(()=>{
+        a.el.classList.remove('flipped');b.el.classList.remove('flipped');
+        a.el.textContent='?';b.el.textContent='?';memFlipped=[];
+      },900);
+    }
+  }
+}
+
+function updMem(){
+  document.getElementById('mem-moves').textContent=memMoves;
+  document.getElementById('mem-time').textContent=memSec+'s';
+  document.getElementById('mem-pairs').textContent=memMatched+'/'+memPairs.length;
+}
+
+// --- SPEED QUIZ ---
+const speedQs=[
+  {q:'Magnetic field lines go from North to South.',a:true},
+  {q:'Wood is a ferromagnetic material.',a:false},
+  {q:'Like poles attract each other.',a:false},
+  {q:'A compass uses Earth\'s magnetic field.',a:true},
+  {q:'Breaking a magnet gives you one N piece and one S piece.',a:false},
+  {q:'The magnetosphere protects us from the Sun\'s particles.',a:true},
+  {q:'Iron is a ferromagnetic material.',a:true},
+  {q:'The magnetic field is strongest in the middle of the magnet.',a:false},
+  {q:'Earth\'s magnetic axis is tilted about 11.5 degrees.',a:true},
+  {q:'Plastic is attracted to magnets.',a:false},
+  {q:'Rubbing iron with a magnet can magnetize it.',a:true},
+  {q:'The Geographic North Pole and Magnetic North Pole are the same.',a:false},
+  {q:'Opposite poles repel each other.',a:false},
+  {q:'Nickel is a ferromagnetic material.',a:true},
+  {q:'Earth\'s outer core is solid.',a:false},
+  {q:'Wi-Fi routers use radio waves.',a:true},
+  {q:'You can see magnetic field lines with your eyes.',a:false},
+  {q:'Cobalt is a ferromagnetic material.',a:true},
+  {q:'Robots have been used in factories since the 1960s.',a:true},
+  {q:'Electromagnetism is used in touchscreens.',a:true},
+  {q:'A paper clip is attracted to a magnet.',a:true},
+  {q:'The inner core of Earth is liquid.',a:false},
+  {q:'Magnets can attract glass.',a:false},
+  {q:'Every magnet has exactly two poles.',a:true},
+  {q:'Lasers are used in barcode readers.',a:true},
+  {q:'Magnetization means destroying a magnet.',a:false},
+  {q:'Earth acts like a giant magnet.',a:true},
+  {q:'An eraser is magnetic.',a:false},
+  {q:'Magnetic field lines are closest together near the poles.',a:true},
+  {q:'Gold is a ferromagnetic material.',a:false}
+];
+let spTmr=null,spSec=60,spScore=0,spStreak=0,spBest=0,spIdx=0,spUsed=[];
+
+function startSpeed(){
+  spSec=60;spScore=0;spStreak=0;spIdx=0;
+  spUsed=[];
+  for(let i=speedQs.length-1;i>=0;i--) spUsed.push(i);
+  for(let i=spUsed.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[spUsed[i],spUsed[j]]=[spUsed[j],spUsed[i]];}
+  document.getElementById('speed-result').style.display='none';
+  document.getElementById('speed-timer').className='speed-timer';
+  document.getElementById('speed-buttons').innerHTML=`
+    <button class="speed-btn btn-true" id="sp-true" onclick="answerSpeed(true)">✅ TRUE</button>
+    <button class="speed-btn btn-false" id="sp-false" onclick="answerSpeed(false)">❌ FALSE</button>`;
+  showSpeedQ();
+  clearInterval(spTmr);
+  spTmr=setInterval(()=>{
+    spSec--;
+    document.getElementById('speed-timer').textContent=spSec;
+    if(spSec<=10) document.getElementById('speed-timer').classList.add('warning');
+    if(spSec<=0){clearInterval(spTmr);endSpeed();}
+  },1000);
+}
+
+function showSpeedQ(){
+  if(spIdx>=spUsed.length) spIdx=0;
+  const q=speedQs[spUsed[spIdx]];
+  document.getElementById('speed-question').innerHTML=`<p class="speed-q-text">${q.q}</p>`;
+  document.getElementById('speed-correct').textContent=spScore;
+  document.getElementById('speed-streak').textContent=spStreak;
+}
+
+function answerSpeed(ans){
+  if(spSec<=0)return;
+  const q=speedQs[spUsed[spIdx]];
+  const correct=q.a===ans;
+  if(correct){spScore++;spStreak++;if(spStreak>spBest)spBest=spStreak;}
+  else{spStreak=0;}
+  const btnId=ans?'sp-true':'sp-false';
+  const btn=document.getElementById(btnId);
+  btn.classList.add(correct?'flash-correct':'flash-wrong');
+  setTimeout(()=>btn.classList.remove('flash-correct','flash-wrong'),300);
+  spIdx++;
+  document.getElementById('speed-correct').textContent=spScore;
+  document.getElementById('speed-streak').textContent=spStreak;
+  setTimeout(showSpeedQ,350);
+}
+
+function endSpeed(){
+  const r=document.getElementById('speed-result');r.style.display='block';
+  r.className='feedback show success';
+  let msg='';
+  if(spScore>=25) msg='🏆 INCREDIBLE! You\'re a magnet genius!';
+  else if(spScore>=18) msg='🌟 Excellent speed & knowledge!';
+  else if(spScore>=12) msg='👍 Good job! Practice more to go faster!';
+  else msg='📚 Keep studying and try again!';
+  r.innerHTML=`${msg}<br>Final score: <strong>${spScore}</strong> correct | Best streak: <strong>${spBest}</strong> 🔥`;
+  document.getElementById('speed-question').innerHTML=`<p class="speed-q-text">Time's up! Press START to try again.</p>`;
+  document.getElementById('speed-buttons').innerHTML=`<button class="btn" onclick="startSpeed()">🚀 Try Again!</button>`;
+  document.getElementById('speed-timer').className='speed-timer';
+}
+
+// --- WORD SCRAMBLE ---
+const scrWords=[
+  {word:'MAGNET',hint:'Object that attracts iron (imán)'},
+  {word:'POLES',hint:'North and South are called... (polos)'},
+  {word:'ATTRACT',hint:'Opposite poles do this (atraer)'},
+  {word:'REPEL',hint:'Like poles do this (repeler)'},
+  {word:'IRON',hint:'A ferromagnetic metal (hierro)'},
+  {word:'COBALT',hint:'Ferromagnetic element, starts with C (cobalto)'},
+  {word:'NICKEL',hint:'Ferromagnetic element, starts with N (níquel)'},
+  {word:'COMPASS',hint:'Tool that finds North (brújula)'},
+  {word:'FIELD',hint:'Magnetic ___ surrounds every magnet (campo)'},
+  {word:'MAGNETIZE',hint:'To make something magnetic (magnetizar)'}
+];
+let scrIdx=0,scrScore2=0,scrHinted=false;
+
+function initScramble(){
+  scrIdx=0;scrScore2=0;scrHinted=false;
+  showScrambleWord();
+}
+
+function scrambleLetters(w){
+  const arr=w.split('');
+  for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
+  const result=arr.join('');
+  return result===w?scrambleLetters(w):result;
+}
+
+function showScrambleWord(){
+  if(scrIdx>=scrWords.length){endScramble();return;}
+  const w=scrWords[scrIdx];
+  document.getElementById('scramble-display').textContent=scrambleLetters(w.word);
+  document.getElementById('scramble-hint').textContent='';
+  document.getElementById('scramble-input').value='';
+  document.getElementById('scramble-input').focus();
+  document.getElementById('scramble-feedback').style.display='none';
+  document.getElementById('scr-current').textContent=(scrIdx+1)+'/'+scrWords.length;
+  document.getElementById('scr-score').textContent=scrScore2;
+  scrHinted=false;
+}
+
+function checkScramble(){
+  const input=document.getElementById('scramble-input').value.trim().toUpperCase();
+  const correct=scrWords[scrIdx].word;
+  const fb=document.getElementById('scramble-feedback');
+  if(input===correct){
+    scrScore2++;
+    fb.className='feedback show success';fb.style.display='block';
+    fb.innerHTML='🎉 Correct! The word is <strong>'+correct+'</strong>!';
+    scrIdx++;
+    setTimeout(showScrambleWord,1200);
+  }else{
+    fb.className='feedback show error';fb.style.display='block';
+    fb.innerHTML='❌ Not quite! Try again or use the hint.';
+  }
+  document.getElementById('scr-score').textContent=scrScore2;
+}
+
+function revealScrambleHint(){
+  document.getElementById('scramble-hint').textContent='💡 '+scrWords[scrIdx].hint;
+  scrHinted=true;
+}
+
+function skipScramble(){
+  const fb=document.getElementById('scramble-feedback');
+  fb.className='feedback show error';fb.style.display='block';
+  fb.innerHTML='The answer was: <strong>'+scrWords[scrIdx].word+'</strong>';
+  scrIdx++;
+  setTimeout(showScrambleWord,1500);
+}
+
+function endScramble(){
+  document.getElementById('scramble-display').textContent='🎉';
+  document.getElementById('scramble-hint').textContent='';
+  const fb=document.getElementById('scramble-feedback');
+  fb.style.display='block';
+  const pct=Math.round(scrScore2/scrWords.length*100);
+  fb.className='feedback show success';
+  fb.innerHTML=`Game Over! You got <strong>${scrScore2}/${scrWords.length}</strong> (${pct}%) `+(pct===100?'🏆 Perfect!':pct>=70?'🌟 Great!':'📚 Keep practicing!')+'<br><button class="btn" style="margin-top:10px;" onclick="initScramble()">🔄 Play Again</button>';
+  document.getElementById('scr-best').textContent=scrScore2+'/'+scrWords.length;
+}
+
+// --- SORT GAME ---
+const sortItems=[
+  {name:'📎 Paper clip',mag:true},{name:'🔩 Iron nail',mag:true},{name:'🔑 Steel key',mag:true},
+  {name:'📌 Staples',mag:true},{name:'🪙 Nickel coin',mag:true},{name:'🧲 Iron filings',mag:true},
+  {name:'⛓️ Steel chain',mag:true},
+  {name:'🧽 Sponge',mag:false},{name:'🪵 Wood block',mag:false},{name:'🥤 Plastic cup',mag:false},
+  {name:'📄 Paper',mag:false},{name:'🪨 Stone',mag:false},{name:'🧶 Wool',mag:false},
+  {name:'🥇 Gold ring',mag:false}
+];
+let sortActive=null,sortCorrect2=0,sortWrong2=0,sortPlaced=0;
+
+function initSort(){
+  sortActive=null;sortCorrect2=0;sortWrong2=0;sortPlaced=0;
+  document.getElementById('zone-yes-items').innerHTML='';
+  document.getElementById('zone-no-items').innerHTML='';
+  document.getElementById('sort-feedback').style.display='none';
+  const shuffled=[...sortItems];
+  for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];}
+  document.getElementById('sort-items').innerHTML=shuffled.map((item,i)=>
+    `<div class="sort-item" data-name="${item.name}" data-mag="${item.mag}" onclick="selectSortItem(this)">${item.name}</div>`
+  ).join('');
+  updSort();
+}
+
+function selectSortItem(el){
+  document.querySelectorAll('.sort-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  sortActive=el;
+  document.querySelectorAll('.sort-zone').forEach(z=>z.classList.add('highlight'));
+}
+
+function placeInZone(isMagnetic){
+  if(!sortActive)return;
+  const itemMag=sortActive.dataset.mag==='true';
+  const correct=itemMag===isMagnetic;
+  const zoneId=isMagnetic?'zone-yes-items':'zone-no-items';
+  const span=document.createElement('span');
+  span.className='sorted-item '+(correct?'correct':'wrong');
+  span.textContent=sortActive.dataset.name;
+  document.getElementById(zoneId).appendChild(span);
+  if(correct)sortCorrect2++;else sortWrong2++;
+  sortPlaced++;
+  sortActive.classList.remove('active');
+  sortActive.classList.add('placed');
+  sortActive=null;
+  document.querySelectorAll('.sort-zone').forEach(z=>z.classList.remove('highlight'));
+  updSort();
+  if(sortPlaced===sortItems.length){
+    const fb=document.getElementById('sort-feedback');
+    fb.style.display='block';
+    const pct=Math.round(sortCorrect2/sortItems.length*100);
+    fb.className='feedback show '+(pct>=80?'success':'error');
+    fb.innerHTML=`Done! <strong>${sortCorrect2}/${sortItems.length}</strong> correct (${pct}%) `+
+      (pct===100?'🏆 Perfect sorting!':pct>=80?'🌟 Great job!':'📚 Review which materials are ferromagnetic!');
+  }
+}
+
+function updSort(){
+  document.getElementById('sort-correct').textContent=sortCorrect2;
+  document.getElementById('sort-wrong').textContent=sortWrong2;
+  document.getElementById('sort-left').textContent=sortItems.length-sortPlaced;
+}
+
 // === INIT ===
 window.addEventListener('load', () => {
   drawBasics();
@@ -1345,6 +1791,9 @@ window.addEventListener('load', () => {
   drawEarth();
   buildTFQuiz();
   buildExam();
+  initMemory();
+  initSort();
+  initScramble();
 });
 
 // Redraw canvases on resize
