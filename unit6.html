@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hugo's Adventure & Grammar - Unit 6 🎒</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family:'Nunito',sans-serif;
+  background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+  min-height:100vh; padding:10px; color:#333;
+}
+h1,h2,h3 { font-family:'Baloo 2',cursive; }
+.header { text-align:center; padding:20px 10px; color:white; text-shadow:2px 2px 4px rgba(0,0,0,0.3); }
+.header h1 { font-size:2.2em; margin-bottom:5px; }
+.header p { font-size:1.1em; opacity:0.9; }
+.home-link { position:fixed; top:15px; right:15px; background:rgba(255,255,255,0.2); border:2px solid rgba(255,255,255,0.5); padding:8px 14px; border-radius:20px; color:white; text-decoration:none; font-weight:700; font-size:0.85em; backdrop-filter:blur(10px); z-index:100; transition:all 0.3s; }
+.home-link:hover { background:rgba(255,255,255,0.35); transform:scale(1.05); }
+.tab-nav { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin:15px auto; max-width:900px; }
+.tab-btn { background:rgba(255,255,255,0.25); border:2px solid rgba(255,255,255,0.5); color:white; padding:8px 14px; border-radius:25px; cursor:pointer; font-family:'Nunito',sans-serif; font-weight:700; font-size:0.85em; transition:all 0.3s; }
+.tab-btn:hover { background:rgba(255,255,255,0.4); transform:scale(1.05); }
+.tab-btn.active { background:white; color:#764ba2; border-color:white; transform:scale(1.08); box-shadow:0 4px 15px rgba(0,0,0,0.2); }
+.tab-content { display:none; max-width:900px; margin:0 auto; animation:fadeIn 0.4s ease; }
+.tab-content.active { display:block; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+.card { background:white; border-radius:20px; padding:25px; margin-bottom:20px; box-shadow:0 8px 32px rgba(0,0,0,0.1); }
+.card h2 { color:#764ba2; margin-bottom:15px; font-size:1.6em; }
+.card h3 { color:#667eea; margin:15px 0 10px; font-size:1.2em; }
+.theory-point { background:linear-gradient(135deg,#f5f7fa 0%,#c3cfe2 100%); border-left:4px solid #764ba2; padding:12px 16px; margin:10px 0; border-radius:0 12px 12px 0; font-size:0.95em; line-height:1.6; }
+.spanish { color:#e91e63; font-style:italic; font-size:0.9em; }
+.example-box { background:#fff3e0; border:2px solid #ffb74d; border-radius:12px; padding:12px 16px; margin:10px 0; }
+.example-box .ex-en { color:#333; font-weight:600; }
+.example-box .ex-es { color:#e91e63; font-style:italic; font-size:0.9em; margin-top:4px; display:block; }
+.highlight-blue { color:#1976d2; font-weight:700; }
+.highlight-pink { color:#e91e63; font-weight:700; }
+.highlight-green { color:#2e7d32; font-weight:700; }
+.highlight-orange { color:#e65100; font-weight:700; }
+.highlight-purple { color:#7b1fa2; font-weight:700; }
+.btn { background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:white; border:none; padding:12px 28px; border-radius:25px; font-family:'Nunito',sans-serif; font-weight:700; font-size:1em; cursor:pointer; transition:all 0.3s; margin:10px 5px; }
+.btn:hover { transform:scale(1.05); box-shadow:0 4px 15px rgba(102,126,234,0.4); }
+.btn:active { transform:scale(0.98); }
+.btn-orange { background:linear-gradient(135deg,#ff9800,#f57c00); }
+.btn-green { background:linear-gradient(135deg,#4caf50,#2e7d32); }
+.btn-pink { background:linear-gradient(135deg,#e91e63,#c2185b); }
+.feedback { padding:12px 18px; border-radius:12px; margin:10px 0; font-weight:600; display:none; }
+.feedback.show { display:block; animation:fadeIn 0.3s ease; }
+.feedback.success { background:#e8f5e9; color:#2e7d32; border:2px solid #4caf50; }
+.feedback.error { background:#ffebee; color:#c62828; border:2px solid #f44336; }
+.exercise-area { background:linear-gradient(135deg,#ffecd2 0%,#fcb69f 100%); border-radius:16px; padding:20px; margin-top:20px; }
+.exercise-area h3 { color:#e65100; }
+.quiz-option { background:white; border:2px solid #e0e0e0; border-radius:12px; padding:12px 18px; margin:8px 0; cursor:pointer; transition:all 0.2s; font-size:0.95em; }
+.quiz-option:hover { border-color:#667eea; background:#f3f0ff; }
+.quiz-option.selected { border-color:#2196f3; background:#e3f2fd; }
+.quiz-option.correct-answer { border-color:#4caf50; background:#e8f5e9; }
+.quiz-option.wrong-answer { border-color:#f44336; background:#ffebee; }
+.quiz-option.disabled { pointer-events:none; opacity:0.8; }
+.progress-bar { width:100%; height:12px; background:#e0e0e0; border-radius:6px; overflow:hidden; margin:15px 0; }
+.progress-fill { height:100%; background:linear-gradient(90deg,#667eea,#764ba2); border-radius:6px; transition:width 0.5s ease; }
+.score-display { text-align:center; font-size:1.3em; font-weight:700; color:#764ba2; margin:10px 0; }
+.fill-blank-input { border:2px dashed #764ba2; border-radius:8px; padding:6px 12px; font-family:'Nunito',sans-serif; font-size:0.95em; width:140px; text-align:center; margin:0 5px; transition:all 0.3s; }
+.fill-blank-input:focus { outline:none; border-color:#667eea; box-shadow:0 0 8px rgba(102,126,234,0.3); }
+.fill-blank-input.correct { border-color:#4caf50; background:#e8f5e9; }
+.fill-blank-input.incorrect { border-color:#f44336; background:#ffebee; }
+.question-counter { font-size:0.85em; color:#666; margin-bottom:8px; }
+.explanation { background:#e8eaf6; border-radius:10px; padding:10px 15px; margin-top:10px; font-size:0.9em; color:#283593; display:none; }
+.explanation.show { display:block; }
+
+/* Vocab cards */
+.vocab-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin:15px 0; }
+.vocab-card { background:linear-gradient(135deg,#fff,#f3e5f5); border:2px solid #ce93d8; border-radius:14px; padding:14px; text-align:center; cursor:pointer; transition:all 0.3s; }
+.vocab-card:hover { transform:translateY(-4px); box-shadow:0 6px 20px rgba(123,31,162,0.3); }
+.vocab-card .vc-emoji { font-size:2em; display:block; margin-bottom:5px; }
+.vocab-card .vc-word { font-size:1.15em; font-weight:800; color:#7b1fa2; }
+.vocab-card .vc-trans { font-size:0.85em; color:#e91e63; font-style:italic; margin-top:3px; }
+.vocab-card .vc-example { font-size:0.78em; color:#555; margin-top:8px; padding-top:8px; border-top:1px dashed #ce93d8; line-height:1.3; }
+
+/* Sentence type cards */
+.sentence-type-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin:15px 0; }
+.st-card { border-radius:14px; padding:15px; text-align:center; }
+.st-card h4 { font-family:'Baloo 2',cursive; font-size:1.2em; margin-bottom:8px; }
+.st-card p { font-size:0.85em; line-height:1.4; }
+.st-declarative { background:#e8f5e9; border:2px solid #4caf50; }
+.st-declarative h4 { color:#2e7d32; }
+.st-interrogative { background:#e3f2fd; border:2px solid #2196f3; }
+.st-interrogative h4 { color:#1565c0; }
+.st-exclamatory { background:#fce4ec; border:2px solid #e91e63; }
+.st-exclamatory h4 { color:#c2185b; }
+.st-imperative { background:#f3e5f5; border:2px solid #9c27b0; }
+.st-imperative h4 { color:#6a1b9a; }
+
+/* Comparatives table */
+.comp-table { width:100%; border-collapse:collapse; margin:15px 0; background:white; border-radius:12px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.08); }
+.comp-table th { background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:10px 8px; font-size:0.85em; font-weight:700; }
+.comp-table td { padding:10px 8px; border-top:1px solid #eee; font-size:0.9em; }
+.comp-table tr:nth-child(even) td { background:#f9f9fb; }
+.comp-table .adj { font-weight:700; color:#764ba2; }
+.comp-table .es { color:#e91e63; font-style:italic; font-size:0.82em; }
+
+/* Pyramid */
+.pyramid-row { display:flex; flex-wrap:wrap; gap:18px; justify-content:center; margin:20px 0; }
+.pyramid { background:linear-gradient(180deg,#fff,#fff8e1); border:3px solid #ffb74d; border-radius:14px 14px 8px 8px; padding:14px 10px; min-width:150px; text-align:center; box-shadow:0 4px 12px rgba(255,152,0,0.2); }
+.pyramid-title { font-weight:800; color:#e65100; margin-bottom:8px; font-size:1em; }
+.pyramid-line { font-family:'Baloo 2',cursive; font-size:0.95em; color:#333; padding:2px 0; border-bottom:1px solid #ffe0b2; letter-spacing:1px; }
+
+/* Synonyms */
+.syn-row { background:white; border:2px solid #ce93d8; border-radius:12px; padding:12px 15px; margin:8px 0; display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+.syn-given { font-weight:700; color:#7b1fa2; min-width:200px; }
+.syn-arrow { color:#888; font-size:1.2em; }
+.syn-answer { background:#e8f5e9; color:#2e7d32; padding:4px 10px; border-radius:8px; font-weight:700; }
+
+/* Game tabs */
+.game-selector { display:flex; flex-wrap:wrap; gap:8px; margin:15px 0; justify-content:center; }
+.game-tab { background:rgba(102,126,234,0.15); border:2px solid #667eea; color:#667eea; padding:10px 18px; border-radius:25px; cursor:pointer; font-family:'Nunito',sans-serif; font-weight:700; font-size:0.9em; transition:all 0.3s; }
+.game-tab:hover { background:rgba(102,126,234,0.25); }
+.game-tab.active { background:#667eea; color:white; }
+
+/* Memory game */
+.memory-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; max-width:520px; margin:15px auto; }
+.memory-card { aspect-ratio:1; background:linear-gradient(135deg,#667eea,#764ba2); border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1.5em; color:white; transition:all 0.3s; user-select:none; word-break:break-word; padding:6px; text-align:center; }
+.memory-card:hover { transform:scale(1.05); }
+.memory-card.flipped { background:white; color:#333; font-size:0.78em; border:2px solid #667eea; font-weight:600; }
+.memory-card.matched { background:#e8f5e9; border:2px solid #4caf50; color:#2e7d32; font-size:0.78em; font-weight:600; pointer-events:none; }
+
+/* Speed quiz */
+.speed-display { text-align:center; margin:20px 0; }
+.speed-timer { font-size:3em; font-weight:800; color:#764ba2; font-family:'Baloo 2',cursive; }
+.speed-timer.warning { color:#f44336; animation:pulse 0.5s infinite; }
+@keyframes pulse { 0%,100% {transform:scale(1);} 50% {transform:scale(1.1);} }
+.speed-score { font-size:1.3em; color:#667eea; font-weight:700; }
+.speed-q-text { font-size:1.2em; font-weight:700; margin:15px 0; min-height:50px; }
+.speed-btns { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+.speed-btn { padding:12px 22px; border:none; border-radius:14px; font-family:'Nunito',sans-serif; font-weight:700; font-size:1em; cursor:pointer; transition:all 0.2s; color:white; min-width:110px; }
+.speed-btn:hover { transform:scale(1.05); }
+.speed-btn:active { transform:scale(0.95); }
+.speed-btn.declarative { background:linear-gradient(135deg,#4caf50,#2e7d32); }
+.speed-btn.interrogative { background:linear-gradient(135deg,#2196f3,#1565c0); }
+.speed-btn.exclamatory { background:linear-gradient(135deg,#e91e63,#c2185b); }
+.speed-btn.imperative { background:linear-gradient(135deg,#9c27b0,#6a1b9a); }
+.speed-btn.flash-correct { background:#4caf50 !important; box-shadow:0 0 20px rgba(76,175,80,0.6); }
+.speed-btn.flash-wrong { background:#f44336 !important; box-shadow:0 0 20px rgba(244,67,54,0.6); }
+
+/* Scramble */
+.scramble-word { font-size:2.2em; font-weight:800; color:#764ba2; text-align:center; letter-spacing:8px; margin:20px 0; font-family:'Baloo 2',cursive; }
+.scramble-hint { text-align:center; color:#888; font-style:italic; margin-bottom:15px; font-size:0.95em; }
+.scramble-input { display:block; margin:0 auto; border:3px solid #764ba2; border-radius:12px; padding:12px 20px; font-size:1.2em; font-family:'Nunito',sans-serif; text-align:center; width:260px; }
+.scramble-input:focus { outline:none; border-color:#667eea; box-shadow:0 0 12px rgba(102,126,234,0.3); }
+
+/* Builder */
+.builder-images { display:flex; gap:15px; justify-content:center; margin:15px 0; flex-wrap:wrap; }
+.builder-img { background:white; border:3px solid #667eea; border-radius:14px; padding:12px; text-align:center; min-width:140px; }
+.builder-img .b-emoji { font-size:3em; display:block; }
+.builder-img .b-label { font-weight:700; color:#764ba2; margin-top:5px; }
+.builder-img .b-attr { color:#666; font-size:0.85em; margin-top:3px; }
+.builder-prompt { background:#fff3e0; border:2px solid #ffb74d; border-radius:12px; padding:12px; text-align:center; margin:15px 0; font-weight:600; }
+.builder-input-row { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; align-items:center; margin:15px 0; }
+
+/* Game stats */
+.game-stats { display:flex; gap:15px; justify-content:center; flex-wrap:wrap; margin:15px 0; }
+.stat-box { background:linear-gradient(135deg,#f5f7fa,#c3cfe2); border-radius:12px; padding:12px 20px; text-align:center; min-width:90px; }
+.stat-box .stat-num { font-size:1.6em; font-weight:800; color:#764ba2; font-family:'Baloo 2',cursive; }
+.stat-box .stat-label { font-size:0.78em; color:#666; }
+
+/* Sort game */
+.sort-zones { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:15px 0; }
+.sort-zone { min-height:100px; border:3px dashed #ccc; border-radius:14px; padding:12px; text-align:center; cursor:pointer; transition:all 0.3s; }
+.sort-zone.zone-decl { border-color:#4caf50; background:rgba(76,175,80,0.05); }
+.sort-zone.zone-int { border-color:#2196f3; background:rgba(33,150,243,0.05); }
+.sort-zone.zone-exc { border-color:#e91e63; background:rgba(233,30,99,0.05); }
+.sort-zone.zone-imp { border-color:#9c27b0; background:rgba(156,39,176,0.05); }
+.sort-zone.highlight { box-shadow:0 0 15px rgba(102,126,234,0.5); transform:scale(1.02); }
+.sort-zone h4 { font-size:0.95em; margin-bottom:6px; }
+.sort-current { background:#fff8e1; border:2px solid #ffb74d; border-radius:12px; padding:14px; margin:15px 0; font-size:1.05em; font-weight:600; text-align:center; min-height:60px; }
+
+@media (max-width:600px) {
+  .header h1 { font-size:1.6em; }
+  .tab-btn { padding:6px 10px; font-size:0.75em; }
+  .card { padding:18px; }
+  .vocab-grid { grid-template-columns:repeat(2,1fr); }
+  .memory-grid { grid-template-columns:repeat(3,1fr); }
+  .sort-zones { grid-template-columns:1fr; }
+  .speed-btn { min-width:90px; padding:10px 14px; font-size:0.9em; }
+}
+</style>
+</head>
+<body>
+
+<a href="index.html" class="home-link">🏠 Home</a>
+
+<div class="header">
+  <h1>🎒 Adventure & Grammar 🎒</h1>
+  <p>Unit 6 — Comparatives, Sentences, Vocabulary &amp; Games!</p>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="showTab(0)">📚 Comparatives</button>
+  <button class="tab-btn" onclick="showTab(1)">💬 Sentences</button>
+  <button class="tab-btn" onclick="showTab(2)">🌟 Vocabulary</button>
+  <button class="tab-btn" onclick="showTab(3)">🔗 Synonyms</button>
+  <button class="tab-btn" onclick="showTab(4)">🔺 Pyramids</button>
+  <button class="tab-btn" onclick="showTab(5)">🎮 Practice</button>
+  <button class="tab-btn" onclick="showTab(6)">📝 Final Exam</button>
+</div>
+
+<!-- TAB 0: COMPARATIVES & SUPERLATIVES -->
+<div class="tab-content active" id="tab0">
+  <div class="card">
+    <h2>📚 Comparatives &amp; Superlatives</h2>
+
+    <div class="theory-point">
+      <strong>📖 Story:</strong> Mrs. Brown has two sons, Peter and Paul. Peter thinks he is <span class="highlight-blue">smarter than</span> Paul, but he's not. Peter thinks he is <span class="highlight-blue">more handsome than</span> Paul, but he's not. Both of them think they are <span class="highlight-blue">better than</span> the other. Mrs. Brown has to remind her sons that she is <span class="highlight-pink">the most intelligent</span> person in the family. Even though she is <span class="highlight-pink">the shortest</span> person, she is <span class="highlight-pink">the cutest</span>.
+    </div>
+
+    <h3>🔵 Comparatives <span class="spanish">(comparativos — comparan 2 cosas)</span></h3>
+    <div class="theory-point">
+      <strong>Short adjectives (1 syllable):</strong> add <span class="highlight-blue">-er + than</span><br>
+      tall → <span class="highlight-blue">taller than</span> &nbsp; | &nbsp; short → <span class="highlight-blue">shorter than</span> &nbsp; | &nbsp; fast → <span class="highlight-blue">faster than</span>
+    </div>
+    <div class="theory-point">
+      <strong>Long adjectives (2+ syllables):</strong> use <span class="highlight-blue">more + adjective + than</span><br>
+      handsome → <span class="highlight-blue">more handsome than</span> &nbsp; | &nbsp; expensive → <span class="highlight-blue">more expensive than</span>
+    </div>
+    <div class="theory-point">
+      <strong>Adjectives ending in -y:</strong> change y → i + er<br>
+      happy → <span class="highlight-blue">happier than</span> &nbsp; | &nbsp; pretty → <span class="highlight-blue">prettier than</span> &nbsp; | &nbsp; easy → <span class="highlight-blue">easier than</span>
+    </div>
+
+    <h3>🌟 Superlatives <span class="spanish">(superlativos — el / la / los más de todos)</span></h3>
+    <div class="theory-point">
+      <strong>Short adjectives:</strong> use <span class="highlight-pink">the + adjective + -est</span><br>
+      tall → <span class="highlight-pink">the tallest</span> &nbsp; | &nbsp; short → <span class="highlight-pink">the shortest</span>
+    </div>
+    <div class="theory-point">
+      <strong>Long adjectives:</strong> use <span class="highlight-pink">the most + adjective</span><br>
+      intelligent → <span class="highlight-pink">the most intelligent</span> &nbsp; | &nbsp; beautiful → <span class="highlight-pink">the most beautiful</span>
+    </div>
+
+    <h3>⚠️ Irregulars <span class="spanish">(irregulares — apréndelos de memoria)</span></h3>
+    <table class="comp-table">
+      <tr><th>Adjective</th><th>Comparative</th><th>Superlative</th></tr>
+      <tr><td class="adj">good <span class="es">(bueno)</span></td><td>better than</td><td>the best</td></tr>
+      <tr><td class="adj">bad <span class="es">(malo)</span></td><td>worse than</td><td>the worst</td></tr>
+      <tr><td class="adj">far <span class="es">(lejos)</span></td><td>farther than</td><td>the farthest</td></tr>
+      <tr><td class="adj">little <span class="es">(poco)</span></td><td>less than</td><td>the least</td></tr>
+      <tr><td class="adj">much/many <span class="es">(mucho)</span></td><td>more than</td><td>the most</td></tr>
+    </table>
+
+    <div class="exercise-area">
+      <h3>✍️ Practice — fill the blank</h3>
+      <p style="margin-bottom:10px; font-size:0.9em; color:#555;">Type the comparative or superlative form. Click ✅ Check.</p>
+      <div id="compFillArea"></div>
+      <button class="btn btn-orange" onclick="checkCompFill()">✅ Check answers</button>
+      <button class="btn btn-green" onclick="newCompFill()">🔄 New questions</button>
+      <div class="feedback" id="compFillFeedback"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 1: TYPE OF SENTENCES -->
+<div class="tab-content" id="tab1">
+  <div class="card">
+    <h2>💬 Type of Sentences</h2>
+    <p style="margin-bottom:10px;">There are <strong>4 types</strong> of sentences in English. Each one ends with a different punctuation mark!</p>
+
+    <div class="sentence-type-grid">
+      <div class="st-card st-declarative">
+        <h4>🟢 Declarative</h4>
+        <p>Make a <strong>statement</strong>. End in a <strong>period (.)</strong></p>
+        <p style="margin-top:8px;"><em>"I like to go rafting."</em></p>
+        <p class="spanish" style="margin-top:4px;">enunciativas — afirman</p>
+      </div>
+      <div class="st-card st-interrogative">
+        <h4>🔵 Interrogative</h4>
+        <p>Ask a <strong>question</strong>. End in a <strong>question mark (?)</strong></p>
+        <p style="margin-top:8px;"><em>"Where are you going?"</em></p>
+        <p class="spanish" style="margin-top:4px;">interrogativas — preguntan</p>
+      </div>
+      <div class="st-card st-exclamatory">
+        <h4>🔴 Exclamatory</h4>
+        <p>Show <strong>strong emotion</strong>. End in <strong>exclamation point (!)</strong></p>
+        <p style="margin-top:8px;"><em>"That's amazing!"</em></p>
+        <p class="spanish" style="margin-top:4px;">exclamativas — emoción</p>
+      </div>
+      <div class="st-card st-imperative">
+        <h4>🟣 Imperative</h4>
+        <p>Give a <strong>command</strong> or <strong>request</strong>. End in . or !</p>
+        <p style="margin-top:8px;"><em>"Sit down, please."</em></p>
+        <p class="spanish" style="margin-top:4px;">imperativas — órdenes</p>
+      </div>
+    </div>
+
+    <div class="theory-point">
+      <strong>🧠 Trick to remember:</strong><br>
+      • Ends with . → could be <span class="highlight-green">declarative</span> or <span class="highlight-purple">imperative</span> (ask: is it a command?)<br>
+      • Ends with ? → always <span class="highlight-blue">interrogative</span><br>
+      • Ends with ! → could be <span class="highlight-pink">exclamatory</span> (emotion) or <span class="highlight-purple">imperative</span> (command shouted)
+    </div>
+
+    <div class="exercise-area">
+      <h3>✍️ Practice — classify the sentence</h3>
+      <p style="margin-bottom:10px; font-size:0.9em; color:#555;">Read the sentence and click the right type.</p>
+      <div id="sentenceQuizArea"></div>
+      <button class="btn btn-green" onclick="newSentenceQuiz()">🔄 New question</button>
+      <div class="feedback" id="sentenceFeedback"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: VOCABULARY -->
+<div class="tab-content" id="tab2">
+  <div class="card">
+    <h2>🌟 Vocabulary &amp; Pronunciation Lab</h2>
+    <p style="margin-bottom:10px;">Click any card to see an example sentence!</p>
+    <div class="vocab-grid" id="vocabGrid"></div>
+
+    <div class="exercise-area">
+      <h3>✍️ Complete the sentence</h3>
+      <p style="margin-bottom:10px; font-size:0.9em; color:#555;">Pick the right word for each sentence.</p>
+      <div id="vocabFillArea"></div>
+      <button class="btn btn-green" onclick="newVocabFill()">🔄 New questions</button>
+      <div class="feedback" id="vocabFeedback"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: SYNONYMS -->
+<div class="tab-content" id="tab3">
+  <div class="card">
+    <h2>🔗 Related Words &amp; Synonyms</h2>
+    <p style="margin-bottom:10px;">Synonyms are words with similar meanings. Add the missing one!</p>
+
+    <h3>📋 Examples:</h3>
+    <div id="synonymsList"></div>
+
+    <div class="exercise-area">
+      <h3>✍️ Find the missing synonym</h3>
+      <p style="margin-bottom:10px; font-size:0.9em; color:#555;">Type the word from Unit 6 that completes each group.</p>
+      <div id="synFillArea"></div>
+      <button class="btn btn-orange" onclick="checkSynFill()">✅ Check answers</button>
+      <button class="btn btn-green" onclick="newSynFill()">🔄 New questions</button>
+      <div class="feedback" id="synFeedback"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: WORD PYRAMIDS -->
+<div class="tab-content" id="tab4">
+  <div class="card">
+    <h2>🔺 Word Pyramids</h2>
+    <p style="margin-bottom:10px;">Build the word letter by letter. Great for spelling practice!</p>
+
+    <div class="theory-point">
+      <strong>How it works:</strong> Write the first letter at the top, then add letters one by one until the full word is at the bottom.
+    </div>
+
+    <div class="pyramid-row" id="pyramidRow"></div>
+
+    <div class="exercise-area">
+      <h3>✍️ Build a pyramid yourself</h3>
+      <p style="margin-bottom:10px; font-size:0.9em; color:#555;">Type the missing letters to complete the pyramid.</p>
+      <div id="pyramidQuizArea"></div>
+      <button class="btn btn-orange" onclick="checkPyramidQuiz()">✅ Check</button>
+      <button class="btn btn-green" onclick="newPyramidQuiz()">🔄 New word</button>
+      <div class="feedback" id="pyramidFeedback"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: PRACTICE GAMES -->
+<div class="tab-content" id="tab5">
+  <div class="card">
+    <h2>🎮 Practice Games &amp; Exercises</h2>
+    <p>Choose a game to sharpen your skills before the exam!</p>
+
+    <div class="game-selector">
+      <button class="game-tab active" onclick="showGame('memory')">🃏 Memory Match</button>
+      <button class="game-tab" onclick="showGame('speed')">⚡ Speed Quiz</button>
+      <button class="game-tab" onclick="showGame('scramble')">🔤 Word Scramble</button>
+      <button class="game-tab" onclick="showGame('builder')">🏗️ Comparatives Builder</button>
+      <button class="game-tab" onclick="showGame('sort')">📦 Sentence Sort</button>
+    </div>
+  </div>
+
+  <!-- Memory Match -->
+  <div class="card" id="game-memory">
+    <h2>🃏 Memory Match</h2>
+    <p>Flip cards and find matching pairs! Match each English word with its Spanish translation.</p>
+    <div class="game-stats">
+      <div class="stat-box"><div class="stat-num" id="memMoves">0</div><div class="stat-label">Moves</div></div>
+      <div class="stat-box"><div class="stat-num" id="memTime">0s</div><div class="stat-label">Time</div></div>
+      <div class="stat-box"><div class="stat-num" id="memPairs">0/8</div><div class="stat-label">Pairs</div></div>
+    </div>
+    <div class="memory-grid" id="memoryGrid"></div>
+    <div style="text-align:center;">
+      <button class="btn" onclick="initMemory()">🔄 New Game</button>
+    </div>
+    <div class="feedback" id="memoryFeedback"></div>
+  </div>
+
+  <!-- Speed Quiz -->
+  <div class="card" id="game-speed" style="display:none;">
+    <h2>⚡ Speed Quiz — Sentence Types</h2>
+    <p>Pick the right sentence type as fast as you can! 30 seconds.</p>
+    <div class="speed-display">
+      <div class="speed-timer" id="speedTimer">30s</div>
+      <div class="speed-score">Score: <span id="speedScore">0</span> | Streak: <span id="speedStreak">0</span></div>
+    </div>
+    <div class="speed-q-text" id="speedQText">Click START to begin!</div>
+    <div class="speed-btns" id="speedBtns">
+      <button class="speed-btn declarative" onclick="speedAnswer('declarative')">📗 Declarative</button>
+      <button class="speed-btn interrogative" onclick="speedAnswer('interrogative')">📘 Interrogative</button>
+      <button class="speed-btn exclamatory" onclick="speedAnswer('exclamatory')">📕 Exclamatory</button>
+      <button class="speed-btn imperative" onclick="speedAnswer('imperative')">📙 Imperative</button>
+    </div>
+    <div style="text-align:center; margin-top:15px;">
+      <button class="btn btn-orange" onclick="startSpeed()">🚀 START / Reset</button>
+    </div>
+    <div class="feedback" id="speedFeedback"></div>
+  </div>
+
+  <!-- Word Scramble -->
+  <div class="card" id="game-scramble" style="display:none;">
+    <h2>🔤 Word Scramble</h2>
+    <p>Unscramble the Unit 6 vocabulary word!</p>
+    <div class="game-stats">
+      <div class="stat-box"><div class="stat-num" id="scrScore">0</div><div class="stat-label">Score</div></div>
+      <div class="stat-box"><div class="stat-num" id="scrStreak">0</div><div class="stat-label">Streak</div></div>
+    </div>
+    <div class="scramble-word" id="scrWord">- - -</div>
+    <div class="scramble-hint" id="scrHint">Click NEW WORD to start!</div>
+    <input type="text" class="scramble-input" id="scrInput" placeholder="type the word..." onkeydown="if(event.key==='Enter')checkScramble()">
+    <div style="text-align:center; margin-top:15px;">
+      <button class="btn btn-orange" onclick="checkScramble()">✅ Check</button>
+      <button class="btn btn-green" onclick="newScramble()">🔄 New Word</button>
+      <button class="btn btn-pink" onclick="revealScramble()">💡 Hint</button>
+    </div>
+    <div class="feedback" id="scrFeedback"></div>
+  </div>
+
+  <!-- Comparatives Builder -->
+  <div class="card" id="game-builder" style="display:none;">
+    <h2>🏗️ Comparatives Builder</h2>
+    <p>Look at the two items and build a comparative or superlative sentence!</p>
+    <div class="game-stats">
+      <div class="stat-box"><div class="stat-num" id="bldScore">0</div><div class="stat-label">Score</div></div>
+      <div class="stat-box"><div class="stat-num" id="bldStreak">0</div><div class="stat-label">Streak</div></div>
+    </div>
+    <div id="builderArea"></div>
+    <div style="text-align:center; margin-top:15px;">
+      <button class="btn btn-orange" onclick="checkBuilder()">✅ Check</button>
+      <button class="btn btn-green" onclick="newBuilder()">🔄 New question</button>
+    </div>
+    <div class="feedback" id="bldFeedback"></div>
+  </div>
+
+  <!-- Sentence Sort -->
+  <div class="card" id="game-sort" style="display:none;">
+    <h2>📦 Sentence Sort</h2>
+    <p>Click the sentence, then click the right type box. Sort all 8 to win!</p>
+    <div class="game-stats">
+      <div class="stat-box"><div class="stat-num" id="sortCorrect">0</div><div class="stat-label">Correct</div></div>
+      <div class="stat-box"><div class="stat-num" id="sortRemaining">8</div><div class="stat-label">Left</div></div>
+    </div>
+    <div class="sort-current" id="sortCurrent">Click NEW GAME to start!</div>
+    <div class="sort-zones">
+      <div class="sort-zone zone-decl" onclick="sortPlace('declarative')"><h4>🟢 Declarative</h4><p style="font-size:0.8em">.</p></div>
+      <div class="sort-zone zone-int" onclick="sortPlace('interrogative')"><h4>🔵 Interrogative</h4><p style="font-size:0.8em">?</p></div>
+      <div class="sort-zone zone-exc" onclick="sortPlace('exclamatory')"><h4>🔴 Exclamatory</h4><p style="font-size:0.8em">!</p></div>
+      <div class="sort-zone zone-imp" onclick="sortPlace('imperative')"><h4>🟣 Imperative</h4><p style="font-size:0.8em">. or !</p></div>
+    </div>
+    <div style="text-align:center; margin-top:15px;">
+      <button class="btn btn-orange" onclick="initSort()">🔄 New Game</button>
+    </div>
+    <div class="feedback" id="sortFeedback"></div>
+  </div>
+</div>
+
+<!-- TAB 6: FINAL EXAM -->
+<div class="tab-content" id="tab6">
+  <div class="card">
+    <h2>📝 Final Exam — Unit 6</h2>
+    <p>20 random questions covering everything! Pass with 16/20 to ace it. 🌟</p>
+    <div id="examIntro" style="text-align:center; margin:20px 0;">
+      <button class="btn btn-orange" onclick="startExam()">🚀 START EXAM</button>
+    </div>
+    <div id="examArea" style="display:none;">
+      <div class="question-counter" id="examCounter"></div>
+      <div class="progress-bar"><div class="progress-fill" id="examProgress"></div></div>
+      <div id="examQuestion"></div>
+      <div class="feedback" id="examFeedback"></div>
+    </div>
+    <div id="examResult" style="display:none; text-align:center;"></div>
+  </div>
+</div>
+
+<script>
+// ============== UTILS ==============
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function pick(arr, n) { return shuffle(arr).slice(0, n); }
+function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function showTab(idx) {
+  document.querySelectorAll('.tab-content').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ============== DATA ==============
+const VOCAB = [
+  {en:'freezing', es:'helado/congelado', emoji:'🧊', ex:'The weather is freezing over there.'},
+  {en:'adventure', es:'aventura', emoji:'🏞️', ex:'We want to have a great adventure while on vacation.'},
+  {en:'gear', es:'equipo (de aventura)', emoji:'🎒', ex:'You need to buy special clothes and climbing gear.'},
+  {en:'yearly', es:'anual', emoji:'📅', ex:"We're planning our yearly trip."},
+  {en:'huge', es:'enorme', emoji:'🗻', ex:"It's a huge mountain in the Swiss Alps."},
+  {en:'woods', es:'bosque', emoji:'🌲', ex:'The woods look really pretty.'},
+  {en:'humid', es:'húmedo', emoji:'💧', ex:'The weather is hot and humid.'},
+  {en:'climbing', es:'escalar/escalada', emoji:'🧗', ex:'We can go mountain climbing.'},
+  {en:'rafting', es:'rafting', emoji:'🛶', ex:'I like to go rafting in the rapids.'},
+  {en:'hiking', es:'senderismo', emoji:'🥾', ex:'Do you like to go hiking on trails?'},
+  {en:'kayaking', es:'kayak', emoji:'🚣', ex:'Kayaking on the lake is fun.'},
+  {en:'mountain', es:'montaña', emoji:'⛰️', ex:'That mountain is the tallest one.'},
+  {en:'vacation', es:'vacaciones', emoji:'🏖️', ex:'Come with me on vacation.'},
+  {en:'trail', es:'sendero', emoji:'🛤️', ex:'The trail goes through the woods.'},
+  {en:'forest', es:'bosque', emoji:'🌳', ex:'The forest is full of trees.'},
+  {en:'weather', es:'tiempo (clima)', emoji:'🌤️', ex:'The weather is nicer than in the Alps.'}
+];
+
+const SENTENCES = [
+  {text:'I like to go rafting in the rapids.', type:'declarative', es:'afirma → punto'},
+  {text:'Do you like to go hiking on trails?', type:'interrogative', es:'pregunta → ?'},
+  {text:'Come with me on vacation.', type:'imperative', es:'orden/invitación'},
+  {text:'Buying new climbing gear is the best!', type:'exclamatory', es:'emoción → !'},
+  {text:'Did you pack enough food for the trip?', type:'interrogative', es:'pregunta → ?'},
+  {text:'Put everything in the trunk of the car.', type:'imperative', es:'orden'},
+  {text:'I bought the plane tickets for the trip.', type:'declarative', es:'afirma → punto'},
+  {text:"We're having some coffee and planning our yearly trip.", type:'declarative'},
+  {text:'Sit down, please.', type:'imperative'},
+  {text:'Open the door!', type:'imperative'},
+  {text:'The weather is nicer than in the Alps for sure!', type:'exclamatory'},
+  {text:'Where are you planning to go?', type:'interrogative'},
+  {text:'What an amazing view!', type:'exclamatory'},
+  {text:'The mountain is huge.', type:'declarative'},
+  {text:'How tall is that tree?', type:'interrogative'},
+  {text:'Be careful with the climbing gear.', type:'imperative'},
+  {text:'I love this adventure!', type:'exclamatory'},
+  {text:'My brother is taller than me.', type:'declarative'},
+  {text:'Have you seen the woods?', type:'interrogative'},
+  {text:'Bring your jacket.', type:'imperative'},
+  {text:'The river is freezing!', type:'exclamatory'},
+  {text:'Hiking is my favorite activity.', type:'declarative'},
+  {text:'Tell me about your trip.', type:'imperative'},
+  {text:'How humid the air is today!', type:'exclamatory'}
+];
+
+const COMP_ITEMS = [
+  {adj:'tall', comp:'taller than', sup:'the tallest', es:'alto'},
+  {adj:'short', comp:'shorter than', sup:'the shortest', es:'bajo'},
+  {adj:'big', comp:'bigger than', sup:'the biggest', es:'grande'},
+  {adj:'small', comp:'smaller than', sup:'the smallest', es:'pequeño'},
+  {adj:'fast', comp:'faster than', sup:'the fastest', es:'rápido'},
+  {adj:'slow', comp:'slower than', sup:'the slowest', es:'lento'},
+  {adj:'old', comp:'older than', sup:'the oldest', es:'viejo'},
+  {adj:'young', comp:'younger than', sup:'the youngest', es:'joven'},
+  {adj:'cold', comp:'colder than', sup:'the coldest', es:'frío'},
+  {adj:'hot', comp:'hotter than', sup:'the hottest', es:'caliente'},
+  {adj:'happy', comp:'happier than', sup:'the happiest', es:'feliz'},
+  {adj:'pretty', comp:'prettier than', sup:'the prettiest', es:'bonito'},
+  {adj:'easy', comp:'easier than', sup:'the easiest', es:'fácil'},
+  {adj:'funny', comp:'funnier than', sup:'the funniest', es:'gracioso'},
+  {adj:'cute', comp:'cuter than', sup:'the cutest', es:'mono/lindo'},
+  {adj:'handsome', comp:'more handsome than', sup:'the most handsome', es:'guapo'},
+  {adj:'beautiful', comp:'more beautiful than', sup:'the most beautiful', es:'bello'},
+  {adj:'intelligent', comp:'more intelligent than', sup:'the most intelligent', es:'inteligente'},
+  {adj:'expensive', comp:'more expensive than', sup:'the most expensive', es:'caro'},
+  {adj:'difficult', comp:'more difficult than', sup:'the most difficult', es:'difícil'},
+  {adj:'good', comp:'better than', sup:'the best', es:'bueno', irregular:true},
+  {adj:'bad', comp:'worse than', sup:'the worst', es:'malo', irregular:true},
+  {adj:'far', comp:'farther than', sup:'the farthest', es:'lejos', irregular:true}
+];
+
+const SYNONYMS = [
+  {given:['water','wet','rain'], answer:'humid', clue:'(weather word from Unit 6)'},
+  {given:['forest','trees','leaves'], answer:'woods', clue:'(another word for forest)'},
+  {given:['big','large','enormous'], answer:'huge', clue:'(biggest of all)'},
+  {given:['annually','every year'], answer:'yearly', clue:'(once a year)'},
+  {given:['rafting','hiking','kayaking'], answer:'climbing', clue:'(activity going up)'},
+  {given:['equipment','supplies','accessories'], answer:'gear', clue:'(stuff you bring)'},
+  {given:['frosty','chilly','icy'], answer:'freezing', clue:'(super cold!)'},
+  {given:['experience','occurrence','venture'], answer:'adventure', clue:'(an exciting trip)'}
+];
+
+const PYRAMID_WORDS = ['adventure','climbing','vacation','mountain','freezing','holiday'];
+
+const BUILDER_PAIRS = [
+  {a:{emoji:'🐘',label:'Elephant',attr:'5,000 kg'}, b:{emoji:'🐭',label:'Mouse',attr:'25 g'}, adj:'big', mode:'comp', answer:'bigger than', sentence:'The elephant is _____ the mouse.'},
+  {a:{emoji:'🚀',label:'Rocket',attr:'40,000 km/h'}, b:{emoji:'🚗',label:'Car',attr:'120 km/h'}, adj:'fast', mode:'comp', answer:'faster than', sentence:'The rocket is _____ the car.'},
+  {a:{emoji:'🏔️',label:'Everest',attr:'8,849 m'}, b:{emoji:'⛰️',label:'Hill',attr:'200 m'}, adj:'tall', mode:'sup', answer:'the tallest', sentence:'Everest is _____ mountain in the world.'},
+  {a:{emoji:'🐢',label:'Turtle',attr:'1 km/h'}, b:{emoji:'🐌',label:'Snail',attr:'0.05 km/h'}, adj:'slow', mode:'comp', answer:'slower than', sentence:'The snail is _____ the turtle.'},
+  {a:{emoji:'☀️',label:'Sun',attr:'5,500 °C'}, b:{emoji:'🔥',label:'Fire',attr:'1,000 °C'}, adj:'hot', mode:'sup', answer:'the hottest', sentence:'The Sun is _____ thing in our solar system.'},
+  {a:{emoji:'🐘',label:'Elephant'}, b:{emoji:'🐭',label:'Mouse'}, adj:'small', mode:'comp', answer:'smaller than', sentence:'The mouse is _____ the elephant.'},
+  {a:{emoji:'👵',label:'Grandma',attr:'80 years'}, b:{emoji:'👶',label:'Baby',attr:'1 year'}, adj:'old', mode:'comp', answer:'older than', sentence:'Grandma is _____ the baby.'},
+  {a:{emoji:'🦒',label:'Giraffe'}, b:{emoji:'🐶',label:'Dog'}, adj:'tall', mode:'comp', answer:'taller than', sentence:'The giraffe is _____ the dog.'},
+  {a:{emoji:'💎',label:'Diamond',attr:'$10,000'}, b:{emoji:'🪨',label:'Rock',attr:'$0.10'}, adj:'expensive', mode:'comp', answer:'more expensive than', sentence:'A diamond is _____ a rock.'},
+  {a:{emoji:'🐆',label:'Cheetah',attr:'120 km/h'}, b:{emoji:'🐢',label:'Turtle'}, adj:'fast', mode:'sup', answer:'the fastest', sentence:'The cheetah is _____ land animal.'},
+  {a:{emoji:'🍫',label:'Chocolate'}, b:{emoji:'🥦',label:'Broccoli'}, adj:'good', mode:'comp', answer:'better than', sentence:'For Hugo, chocolate is _____ broccoli.'},
+  {a:{emoji:'😀',label:'Hugo',attr:'happy!'}, b:{emoji:'😢',label:'Sad kid'}, adj:'happy', mode:'comp', answer:'happier than', sentence:'Hugo is _____ the sad kid.'}
+];
+
+// ============== TAB 0: COMPARATIVES FILL ==============
+let compFillQs = [];
+function newCompFill() {
+  compFillQs = pick(COMP_ITEMS, 5).map(it => {
+    const useSup = Math.random() < 0.5;
+    return {adj: it.adj, es: it.es, useSup, expected: useSup ? it.sup : it.comp};
+  });
+  renderCompFill();
+  document.getElementById('compFillFeedback').classList.remove('show');
+}
+function renderCompFill() {
+  const html = compFillQs.map((q,i) =>
+    `<div style="margin:10px 0;">
+      <strong>${i+1}.</strong> ${q.adj} <span class="spanish">(${q.es})</span> →
+      <span class="${q.useSup?'highlight-pink':'highlight-blue'}">${q.useSup?'superlative':'comparative'}:</span>
+      <input type="text" class="fill-blank-input" id="cf${i}" style="width:200px;" placeholder="${q.useSup?'the _____':'_____ than'}">
+    </div>`
+  ).join('');
+  document.getElementById('compFillArea').innerHTML = html;
+}
+function checkCompFill() {
+  let correct = 0;
+  compFillQs.forEach((q,i) => {
+    const inp = document.getElementById('cf'+i);
+    const v = inp.value.trim().toLowerCase();
+    if (v === q.expected.toLowerCase()) {
+      inp.classList.add('correct'); inp.classList.remove('incorrect');
+      correct++;
+    } else {
+      inp.classList.add('incorrect'); inp.classList.remove('correct');
+      inp.title = 'Correct: ' + q.expected;
+    }
+  });
+  const fb = document.getElementById('compFillFeedback');
+  fb.className = 'feedback show ' + (correct===compFillQs.length?'success':'error');
+  fb.innerHTML = correct===compFillQs.length
+    ? `🌟 Perfect! ${correct}/${compFillQs.length} correct!`
+    : `📚 You got ${correct}/${compFillQs.length}. Hover the red boxes to see the right answer!`;
+}
+
+// ============== TAB 1: SENTENCE QUIZ ==============
+let curSentence;
+function newSentenceQuiz() {
+  curSentence = rand(SENTENCES);
+  document.getElementById('sentenceFeedback').classList.remove('show');
+  const html = `
+    <div class="example-box" style="font-size:1.1em; margin:15px 0;">
+      <span class="ex-en">"${curSentence.text}"</span>
+    </div>
+    <div class="speed-btns">
+      <button class="speed-btn declarative" onclick="checkSentenceType('declarative')">📗 Declarative</button>
+      <button class="speed-btn interrogative" onclick="checkSentenceType('interrogative')">📘 Interrogative</button>
+      <button class="speed-btn exclamatory" onclick="checkSentenceType('exclamatory')">📕 Exclamatory</button>
+      <button class="speed-btn imperative" onclick="checkSentenceType('imperative')">📙 Imperative</button>
+    </div>
+  `;
+  document.getElementById('sentenceQuizArea').innerHTML = html;
+}
+function checkSentenceType(t) {
+  const fb = document.getElementById('sentenceFeedback');
+  if (t === curSentence.type) {
+    fb.className = 'feedback show success';
+    fb.innerHTML = `✅ Correct! "${curSentence.text}" is <strong>${curSentence.type}</strong>.`;
+  } else {
+    fb.className = 'feedback show error';
+    fb.innerHTML = `❌ Almost! That sentence is <strong>${curSentence.type}</strong>, not ${t}. Look at the punctuation!`;
+  }
+}
+
+// ============== TAB 2: VOCABULARY ==============
+function renderVocab() {
+  const html = VOCAB.map((v,i) =>
+    `<div class="vocab-card" onclick="toggleVocab(${i})" id="vc${i}">
+      <span class="vc-emoji">${v.emoji}</span>
+      <div class="vc-word">${v.en}</div>
+      <div class="vc-trans">${v.es}</div>
+      <div class="vc-example" id="vex${i}" style="display:none;">"${v.ex}"</div>
+    </div>`
+  ).join('');
+  document.getElementById('vocabGrid').innerHTML = html;
+}
+function toggleVocab(i) {
+  const ex = document.getElementById('vex'+i);
+  ex.style.display = ex.style.display === 'none' ? 'block' : 'none';
+}
+
+let vocabFillQs = [];
+function newVocabFill() {
+  const items = pick(VOCAB, 5);
+  vocabFillQs = items.map(v => {
+    const sentence = v.ex.replace(new RegExp('\\b'+v.en+'\\b','i'), '_____');
+    return {answer:v.en, sentence, options: shuffle([v.en, ...pick(VOCAB.filter(x=>x.en!==v.en),3).map(x=>x.en)])};
+  });
+  renderVocabFill();
+  document.getElementById('vocabFeedback').classList.remove('show');
+}
+function renderVocabFill() {
+  const html = vocabFillQs.map((q,i) =>
+    `<div style="margin:12px 0; padding:10px; background:white; border-radius:10px; border:1px solid #ddd;">
+      <p style="margin-bottom:8px;"><strong>${i+1}.</strong> ${q.sentence}</p>
+      <div style="display:flex; flex-wrap:wrap; gap:6px;">
+        ${q.options.map(o => `<button class="quiz-option" style="flex:1; min-width:100px;" onclick="answerVocab(${i},'${o}',this)">${o}</button>`).join('')}
+      </div>
+      <div id="vfeed${i}" style="margin-top:8px; font-size:0.9em; display:none;"></div>
+    </div>`
+  ).join('');
+  document.getElementById('vocabFillArea').innerHTML = html;
+}
+function answerVocab(idx, choice, btn) {
+  const q = vocabFillQs[idx];
+  const parent = btn.parentElement;
+  parent.querySelectorAll('button').forEach(b => b.classList.add('disabled'));
+  const feed = document.getElementById('vfeed'+idx);
+  if (choice === q.answer) {
+    btn.classList.add('correct-answer');
+    feed.style.display = 'block';
+    feed.style.color = '#2e7d32';
+    feed.innerHTML = '✅ Right!';
+  } else {
+    btn.classList.add('wrong-answer');
+    parent.querySelectorAll('button').forEach(b => { if (b.textContent===q.answer) b.classList.add('correct-answer'); });
+    feed.style.display = 'block';
+    feed.style.color = '#c62828';
+    feed.innerHTML = `❌ Was: <strong>${q.answer}</strong>`;
+  }
+}
+
+// ============== TAB 3: SYNONYMS ==============
+function renderSynonyms() {
+  const html = SYNONYMS.map(s =>
+    `<div class="syn-row">
+      <span class="syn-given">${s.given.join(', ')}</span>
+      <span class="syn-arrow">→</span>
+      <span class="syn-answer">${s.answer}</span>
+    </div>`
+  ).join('');
+  document.getElementById('synonymsList').innerHTML = html;
+}
+
+let synFillQs = [];
+function newSynFill() {
+  synFillQs = pick(SYNONYMS, 5);
+  const html = synFillQs.map((s,i) =>
+    `<div style="margin:10px 0;">
+      <strong>${i+1}.</strong> ${s.given.join(', ')} →
+      <input type="text" class="fill-blank-input" id="sf${i}" placeholder="?">
+      <span class="spanish" style="font-size:0.85em; margin-left:6px;">${s.clue}</span>
+    </div>`
+  ).join('');
+  document.getElementById('synFillArea').innerHTML = html;
+  document.getElementById('synFeedback').classList.remove('show');
+}
+function checkSynFill() {
+  let correct = 0;
+  synFillQs.forEach((s,i) => {
+    const inp = document.getElementById('sf'+i);
+    if (inp.value.trim().toLowerCase() === s.answer) {
+      inp.classList.add('correct'); inp.classList.remove('incorrect');
+      correct++;
+    } else {
+      inp.classList.add('incorrect'); inp.classList.remove('correct');
+      inp.title = 'Correct: ' + s.answer;
+    }
+  });
+  const fb = document.getElementById('synFeedback');
+  fb.className = 'feedback show ' + (correct===synFillQs.length?'success':'error');
+  fb.innerHTML = correct===synFillQs.length
+    ? `🌟 Perfect! ${correct}/${synFillQs.length}!`
+    : `📚 ${correct}/${synFillQs.length}. Hover the red boxes for answers.`;
+}
+
+// ============== TAB 4: PYRAMIDS ==============
+function renderPyramids() {
+  const words = pick(PYRAMID_WORDS, 4);
+  const html = words.map(w => {
+    const lines = [];
+    for (let i = 1; i <= w.length; i++) lines.push(w.substring(0,i));
+    return `<div class="pyramid">
+      <div class="pyramid-title">${w}</div>
+      ${lines.map(l => `<div class="pyramid-line">${l}</div>`).join('')}
+    </div>`;
+  }).join('');
+  document.getElementById('pyramidRow').innerHTML = html;
+}
+
+let pyrCurWord;
+function newPyramidQuiz() {
+  pyrCurWord = rand(PYRAMID_WORDS);
+  // hide some letters randomly
+  const lines = [];
+  for (let i = 1; i <= pyrCurWord.length; i++) {
+    const part = pyrCurWord.substring(0,i);
+    const showOriginal = Math.random() < 0.5 || i===1 || i===pyrCurWord.length;
+    if (showOriginal) lines.push({text:part, hidden:false, idx:i-1});
+    else lines.push({text:'', hidden:true, idx:i-1});
+  }
+  const html = `<div class="pyramid" style="max-width:280px; margin:0 auto;">
+    <div class="pyramid-title">Build: ${pyrCurWord}</div>
+    ${lines.map((l,i) => l.hidden
+      ? `<div class="pyramid-line"><input type="text" class="fill-blank-input" id="pq${i}" style="width:130px; padding:3px 8px; font-size:0.9em;" placeholder="${'_'.repeat(i+1)}"></div>`
+      : `<div class="pyramid-line">${l.text}</div>`
+    ).join('')}
+  </div>`;
+  document.getElementById('pyramidQuizArea').innerHTML = html;
+  document.getElementById('pyramidFeedback').classList.remove('show');
+}
+function checkPyramidQuiz() {
+  let correct = 0, total = 0;
+  for (let i = 0; i < pyrCurWord.length; i++) {
+    const inp = document.getElementById('pq'+i);
+    if (!inp) continue;
+    total++;
+    const expected = pyrCurWord.substring(0,i+1);
+    if (inp.value.trim().toLowerCase() === expected) {
+      inp.classList.add('correct'); inp.classList.remove('incorrect');
+      correct++;
+    } else {
+      inp.classList.add('incorrect'); inp.classList.remove('correct');
+      inp.title = 'Correct: ' + expected;
+    }
+  }
+  const fb = document.getElementById('pyramidFeedback');
+  fb.className = 'feedback show ' + (correct===total?'success':'error');
+  fb.innerHTML = correct===total ? `🌟 Perfect pyramid! ${correct}/${total}` : `📚 ${correct}/${total}. Hover red for answers.`;
+}
+
+// ============== TAB 5: GAMES ==============
+function showGame(g) {
+  ['memory','speed','scramble','builder','sort'].forEach(name => {
+    document.getElementById('game-'+name).style.display = name===g ? 'block' : 'none';
+  });
+  document.querySelectorAll('.game-tab').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// --- Memory Match ---
+let memCards = [], memFlipped = [], memMatched = 0, memMoves = 0, memTimer = null, memSeconds = 0;
+function initMemory() {
+  const items = pick(VOCAB, 8);
+  memCards = shuffle([
+    ...items.map(v => ({content:v.en, pair:v.en+'#'+v.es})),
+    ...items.map(v => ({content:v.es, pair:v.en+'#'+v.es}))
+  ]);
+  memFlipped = []; memMatched = 0; memMoves = 0; memSeconds = 0;
+  if (memTimer) clearInterval(memTimer);
+  memTimer = setInterval(() => { memSeconds++; document.getElementById('memTime').textContent = memSeconds+'s'; }, 1000);
+  document.getElementById('memMoves').textContent = '0';
+  document.getElementById('memTime').textContent = '0s';
+  document.getElementById('memPairs').textContent = '0/8';
+  document.getElementById('memoryFeedback').classList.remove('show');
+  document.getElementById('memoryGrid').innerHTML = memCards.map((c,i) =>
+    `<div class="memory-card" onclick="flipMemory(${i})" id="mc${i}">?</div>`
+  ).join('');
+}
+function flipMemory(i) {
+  if (memFlipped.length >= 2) return;
+  const card = document.getElementById('mc'+i);
+  if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
+  card.classList.add('flipped');
+  card.textContent = memCards[i].content;
+  memFlipped.push(i);
+  if (memFlipped.length === 2) {
+    memMoves++;
+    document.getElementById('memMoves').textContent = memMoves;
+    setTimeout(checkMemory, 700);
+  }
+}
+function checkMemory() {
+  const [a,b] = memFlipped;
+  if (memCards[a].pair === memCards[b].pair) {
+    document.getElementById('mc'+a).classList.add('matched');
+    document.getElementById('mc'+b).classList.add('matched');
+    memMatched++;
+    document.getElementById('memPairs').textContent = memMatched+'/8';
+    if (memMatched === 8) {
+      clearInterval(memTimer);
+      const fb = document.getElementById('memoryFeedback');
+      fb.className = 'feedback show success';
+      fb.innerHTML = `🌟 You won in ${memMoves} moves and ${memSeconds}s!`;
+    }
+  } else {
+    document.getElementById('mc'+a).classList.remove('flipped');
+    document.getElementById('mc'+a).textContent = '?';
+    document.getElementById('mc'+b).classList.remove('flipped');
+    document.getElementById('mc'+b).textContent = '?';
+  }
+  memFlipped = [];
+}
+
+// --- Speed Quiz ---
+let speedRunning = false, speedScore = 0, speedStreak = 0, speedTime = 30, speedInterval = null, speedCurrent = null;
+function startSpeed() {
+  if (speedInterval) clearInterval(speedInterval);
+  speedScore = 0; speedStreak = 0; speedTime = 30; speedRunning = true;
+  document.getElementById('speedScore').textContent = '0';
+  document.getElementById('speedStreak').textContent = '0';
+  document.getElementById('speedTimer').textContent = '30s';
+  document.getElementById('speedTimer').classList.remove('warning');
+  document.getElementById('speedFeedback').classList.remove('show');
+  nextSpeed();
+  speedInterval = setInterval(() => {
+    speedTime--;
+    document.getElementById('speedTimer').textContent = speedTime+'s';
+    if (speedTime <= 5) document.getElementById('speedTimer').classList.add('warning');
+    if (speedTime <= 0) endSpeed();
+  }, 1000);
+}
+function nextSpeed() {
+  speedCurrent = rand(SENTENCES);
+  document.getElementById('speedQText').textContent = '"'+speedCurrent.text+'"';
+}
+function speedAnswer(t) {
+  if (!speedRunning) return;
+  const btn = document.querySelector('.speed-btn.'+t);
+  if (t === speedCurrent.type) {
+    speedScore++; speedStreak++;
+    btn.classList.add('flash-correct');
+  } else {
+    speedStreak = 0;
+    btn.classList.add('flash-wrong');
+  }
+  document.getElementById('speedScore').textContent = speedScore;
+  document.getElementById('speedStreak').textContent = speedStreak;
+  setTimeout(() => btn.classList.remove('flash-correct','flash-wrong'), 200);
+  nextSpeed();
+}
+function endSpeed() {
+  clearInterval(speedInterval);
+  speedRunning = false;
+  document.getElementById('speedQText').textContent = "Time's up!";
+  const fb = document.getElementById('speedFeedback');
+  fb.className = 'feedback show ' + (speedScore>=10?'success':'error');
+  fb.innerHTML = `🏁 Final score: <strong>${speedScore}</strong> ${speedScore>=15?'🌟 Amazing!':speedScore>=10?'👍 Great!':'💪 Try again!'}`;
+}
+
+// --- Word Scramble ---
+let scrCurrent = null, scrScore = 0, scrStreak = 0;
+function newScramble() {
+  const w = rand(VOCAB);
+  scrCurrent = w;
+  let scrambled = w.en;
+  while (scrambled === w.en) scrambled = shuffle(w.en.split('')).join('');
+  document.getElementById('scrWord').textContent = scrambled.toUpperCase();
+  document.getElementById('scrHint').textContent = `Hint: ${w.es} ${w.emoji}`;
+  document.getElementById('scrInput').value = '';
+  document.getElementById('scrInput').focus();
+  document.getElementById('scrFeedback').classList.remove('show');
+}
+function checkScramble() {
+  if (!scrCurrent) return;
+  const v = document.getElementById('scrInput').value.trim().toLowerCase();
+  const fb = document.getElementById('scrFeedback');
+  if (v === scrCurrent.en) {
+    scrScore++; scrStreak++;
+    fb.className = 'feedback show success';
+    fb.innerHTML = `✅ Correct! <strong>${scrCurrent.en}</strong> = ${scrCurrent.es}`;
+    document.getElementById('scrScore').textContent = scrScore;
+    document.getElementById('scrStreak').textContent = scrStreak;
+    setTimeout(newScramble, 1500);
+  } else {
+    scrStreak = 0;
+    document.getElementById('scrStreak').textContent = '0';
+    fb.className = 'feedback show error';
+    fb.innerHTML = `❌ Not quite. Try again!`;
+  }
+}
+function revealScramble() {
+  const fb = document.getElementById('scrFeedback');
+  fb.className = 'feedback show error';
+  fb.innerHTML = `💡 The word is <strong>${scrCurrent.en}</strong>`;
+  scrStreak = 0;
+  document.getElementById('scrStreak').textContent = '0';
+}
+
+// --- Comparatives Builder ---
+let bldCurrent = null, bldScore = 0, bldStreak = 0;
+function newBuilder() {
+  bldCurrent = rand(BUILDER_PAIRS);
+  const html = `
+    <div class="builder-images">
+      <div class="builder-img">
+        <span class="b-emoji">${bldCurrent.a.emoji}</span>
+        <div class="b-label">${bldCurrent.a.label}</div>
+        ${bldCurrent.a.attr?'<div class="b-attr">'+bldCurrent.a.attr+'</div>':''}
+      </div>
+      <div class="builder-img">
+        <span class="b-emoji">${bldCurrent.b.emoji}</span>
+        <div class="b-label">${bldCurrent.b.label}</div>
+        ${bldCurrent.b.attr?'<div class="b-attr">'+bldCurrent.b.attr+'</div>':''}
+      </div>
+    </div>
+    <div class="builder-prompt">
+      Use <strong>${bldCurrent.adj}</strong> in the <strong>${bldCurrent.mode==='comp'?'comparative':'superlative'}</strong> form:
+    </div>
+    <div class="builder-input-row">
+      <span style="font-size:1em;">${bldCurrent.sentence.replace('_____','<input type=\"text\" class=\"fill-blank-input\" id=\"bldInput\" style=\"width:200px;\" placeholder=\"answer here\">')}</span>
+    </div>
+  `;
+  document.getElementById('builderArea').innerHTML = html;
+  document.getElementById('bldFeedback').classList.remove('show');
+  setTimeout(() => document.getElementById('bldInput').focus(), 100);
+}
+function checkBuilder() {
+  if (!bldCurrent) return;
+  const v = document.getElementById('bldInput').value.trim().toLowerCase();
+  const fb = document.getElementById('bldFeedback');
+  if (v === bldCurrent.answer.toLowerCase()) {
+    bldScore++; bldStreak++;
+    fb.className = 'feedback show success';
+    fb.innerHTML = `✅ Excellent! "<strong>${bldCurrent.sentence.replace('_____',bldCurrent.answer)}</strong>"`;
+    document.getElementById('bldScore').textContent = bldScore;
+    document.getElementById('bldStreak').textContent = bldStreak;
+  } else {
+    bldStreak = 0;
+    document.getElementById('bldStreak').textContent = '0';
+    fb.className = 'feedback show error';
+    fb.innerHTML = `❌ The right answer is "<strong>${bldCurrent.answer}</strong>". Try the next one!`;
+  }
+}
+
+// --- Sentence Sort ---
+let sortQueue = [], sortIdx = 0, sortCorrect = 0;
+function initSort() {
+  sortQueue = pick(SENTENCES, 8);
+  sortIdx = 0; sortCorrect = 0;
+  document.getElementById('sortCorrect').textContent = '0';
+  document.getElementById('sortRemaining').textContent = sortQueue.length;
+  document.getElementById('sortFeedback').classList.remove('show');
+  showSortNext();
+}
+function showSortNext() {
+  if (sortIdx >= sortQueue.length) {
+    document.getElementById('sortCurrent').innerHTML = '🎉 All done!';
+    const fb = document.getElementById('sortFeedback');
+    fb.className = 'feedback show ' + (sortCorrect===sortQueue.length?'success':'error');
+    fb.innerHTML = `🏁 ${sortCorrect}/${sortQueue.length} ${sortCorrect===sortQueue.length?'🌟 Perfect!':'💪 Try again!'}`;
+    return;
+  }
+  document.getElementById('sortCurrent').innerHTML = `<strong>"${sortQueue[sortIdx].text}"</strong>`;
+  document.getElementById('sortRemaining').textContent = sortQueue.length - sortIdx;
+}
+function sortPlace(t) {
+  if (sortIdx >= sortQueue.length) return;
+  const cur = sortQueue[sortIdx];
+  if (t === cur.type) {
+    sortCorrect++;
+    document.getElementById('sortCorrect').textContent = sortCorrect;
+  }
+  sortIdx++;
+  showSortNext();
+}
+
+// ============== TAB 6: FINAL EXAM ==============
+let examQs = [], examIdx = 0, examScore = 0;
+function startExam() {
+  document.getElementById('examIntro').style.display = 'none';
+  document.getElementById('examArea').style.display = 'block';
+  document.getElementById('examResult').style.display = 'none';
+  examQs = buildExamQuestions();
+  examIdx = 0; examScore = 0;
+  showExamQuestion();
+}
+function buildExamQuestions() {
+  const all = [];
+  // 6 sentence type questions
+  pick(SENTENCES, 6).forEach(s => {
+    all.push({
+      type:'mc',
+      q:`What type is this sentence?<br><em>"${s.text}"</em>`,
+      options:['declarative','interrogative','exclamatory','imperative'],
+      answer:s.type
+    });
+  });
+  // 5 comparative questions
+  pick(COMP_ITEMS, 5).forEach(c => {
+    const useSup = Math.random() < 0.5;
+    all.push({
+      type:'fill',
+      q:`Write the ${useSup?'superlative':'comparative'} form of <strong>${c.adj}</strong> <span class="spanish">(${c.es})</span>:`,
+      answer: useSup ? c.sup : c.comp
+    });
+  });
+  // 5 vocabulary questions
+  pick(VOCAB, 5).forEach(v => {
+    const sentence = v.ex.replace(new RegExp('\\b'+v.en+'\\b','i'), '_____');
+    all.push({
+      type:'mc',
+      q:`Complete: <em>${sentence}</em>`,
+      options: shuffle([v.en, ...pick(VOCAB.filter(x=>x.en!==v.en),3).map(x=>x.en)]),
+      answer:v.en
+    });
+  });
+  // 4 synonyms
+  pick(SYNONYMS, 4).forEach(s => {
+    all.push({
+      type:'fill',
+      q:`Find the synonym from Unit 6: <strong>${s.given.join(', ')}</strong> →`,
+      answer:s.answer
+    });
+  });
+  return shuffle(all);
+}
+function showExamQuestion() {
+  if (examIdx >= examQs.length) { showExamResult(); return; }
+  const q = examQs[examIdx];
+  document.getElementById('examCounter').textContent = `Question ${examIdx+1} of ${examQs.length}`;
+  document.getElementById('examProgress').style.width = ((examIdx)/examQs.length*100)+'%';
+  document.getElementById('examFeedback').classList.remove('show');
+  let html = `<p style="margin-bottom:12px; font-size:1.05em;">${q.q}</p>`;
+  if (q.type === 'mc') {
+    html += q.options.map(o => `<button class="quiz-option" onclick="examAnswer('${o.replace(/'/g,"\\'")}',this)">${o}</button>`).join('');
+  } else {
+    html += `<input type="text" class="fill-blank-input" id="examInput" style="width:280px; font-size:1em; padding:8px 14px;" placeholder="type your answer..." onkeydown="if(event.key==='Enter')document.getElementById('examSubmit').click()">
+      <button class="btn" id="examSubmit" onclick="examAnswer(document.getElementById('examInput').value,null)">Submit</button>`;
+  }
+  document.getElementById('examQuestion').innerHTML = html;
+  if (q.type === 'fill') setTimeout(() => { const i=document.getElementById('examInput'); if (i) i.focus(); }, 100);
+}
+function examAnswer(ans, btn) {
+  const q = examQs[examIdx];
+  const correct = ans.trim().toLowerCase() === q.answer.toLowerCase();
+  if (correct) examScore++;
+  const fb = document.getElementById('examFeedback');
+  fb.className = 'feedback show ' + (correct?'success':'error');
+  fb.innerHTML = correct ? `✅ Correct!` : `❌ Was: <strong>${q.answer}</strong>`;
+  if (btn) {
+    btn.classList.add(correct?'correct-answer':'wrong-answer');
+    btn.parentElement.querySelectorAll('button').forEach(b => {
+      b.classList.add('disabled');
+      if (b.textContent === q.answer) b.classList.add('correct-answer');
+    });
+  }
+  setTimeout(() => { examIdx++; showExamQuestion(); }, 1300);
+}
+function showExamResult() {
+  document.getElementById('examArea').style.display = 'none';
+  const r = document.getElementById('examResult');
+  r.style.display = 'block';
+  const pct = Math.round(examScore/examQs.length*100);
+  let msg, emoji;
+  if (pct >= 90) { msg = "🌟 EXCELLENT! You're ready to ACE the exam!"; emoji = '🏆'; }
+  else if (pct >= 75) { msg = "👍 Great job! Almost perfect."; emoji = '🌟'; }
+  else if (pct >= 60) { msg = "💪 Good effort! Review and try again."; emoji = '📚'; }
+  else { msg = "🤓 Keep practicing! You'll get it."; emoji = '🔁'; }
+  r.innerHTML = `
+    <div style="font-size:5em;">${emoji}</div>
+    <h2 style="margin:10px 0;">${examScore} / ${examQs.length}</h2>
+    <div style="font-size:2em; color:#764ba2; font-family:'Baloo 2',cursive;">${pct}%</div>
+    <p style="margin:15px 0; font-size:1.1em;">${msg}</p>
+    <button class="btn btn-orange" onclick="startExam()">🔄 Try again</button>
+    <button class="btn btn-green" onclick="showTab(0)">📚 Review theory</button>
+  `;
+}
+
+// ============== INIT ==============
+renderVocab();
+renderSynonyms();
+renderPyramids();
+newCompFill();
+newSentenceQuiz();
+newVocabFill();
+newSynFill();
+newPyramidQuiz();
+initMemory();
+newScramble();
+newBuilder();
+initSort();
+</script>
+</body>
+</html>
