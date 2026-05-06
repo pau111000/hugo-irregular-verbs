@@ -4,277 +4,306 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hugo's Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #0c0c1d 0%, #1a1a3e 30%, #2d1b69 60%, #1a1a3e 100%);
-    color: #f0f0f0;
-    overflow-x: hidden;
-  }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Nunito', sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  overflow-x: hidden;
+}
+h1, h2, h3 { font-family: 'Baloo 2', cursive; }
 
-  /* Stars background */
-  .stars {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none; z-index: 0; overflow: hidden;
-  }
-  .star-dot {
-    position: absolute; background: #fff; border-radius: 50%;
-    animation: twinkle var(--dur) ease-in-out infinite;
-  }
-  @keyframes twinkle {
-    0%,100% { opacity: 0.2; transform: scale(0.8); }
-    50% { opacity: 1; transform: scale(1.2); }
-  }
+/* Floating stars background */
+.stars {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 3s infinite alternate;
+}
+@keyframes twinkle {
+  0% { opacity: 0.3; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.3); }
+}
 
-  .container {
-    position: relative; z-index: 1;
-    max-width: 900px; margin: 0 auto; padding: 20px 16px 60px;
-  }
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 15px 40px;
+}
 
-  /* Header */
-  .hub-header {
-    text-align: center;
-    padding: 40px 20px 30px;
-    margin-bottom: 30px;
-  }
-  .hub-header .avatar {
-    width: 80px; height: 80px;
-    background: linear-gradient(135deg, #f9ca24, #f0932b);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 2.5rem;
-    margin: 0 auto 16px;
-    box-shadow: 0 4px 25px rgba(249,202,36,0.4);
-    animation: float 4s ease-in-out infinite;
-  }
-  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-  .hub-header h1 {
-    font-size: 2.4rem;
-    background: linear-gradient(90deg, #f9ca24, #f0932b, #ff6b6b, #6c5ce7, #00cec9);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: gradientText 4s linear infinite;
-    margin-bottom: 8px;
-  }
-  @keyframes gradientText { 0%{background-position:0%} 100%{background-position:200%} }
-  .hub-header p { color: #a0a0c0; font-size: 1.1rem; }
+/* Header */
+.hero {
+  text-align: center;
+  padding: 40px 20px 30px;
+}
+.hero-emoji {
+  font-size: 4em;
+  display: block;
+  margin-bottom: 10px;
+  animation: bounce 2s infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+.hero h1 {
+  font-size: 2.8em;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #ffd700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  margin-bottom: 8px;
+}
+.hero p {
+  color: rgba(255,255,255,0.8);
+  font-size: 1.15em;
+  font-weight: 600;
+}
 
-  /* Section titles */
-  .section-title {
-    display: flex; align-items: center; gap: 12px;
-    margin: 30px 0 18px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid rgba(255,255,255,0.1);
-  }
-  .section-title .icon {
-    width: 44px; height: 44px;
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.5rem;
-  }
-  .section-title h2 { font-size: 1.4rem; font-weight: 700; }
-  .section-title .badge {
-    margin-left: auto;
-    padding: 4px 14px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .badge-exam { background: rgba(255,71,87,0.2); color: #ff4757; border: 1px solid rgba(255,71,87,0.3); }
-  .badge-english { background: rgba(108,92,231,0.2); color: #a29bfe; border: 1px solid rgba(108,92,231,0.3); }
+/* Section headers */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 35px 0 18px;
+  padding-left: 5px;
+}
+.section-title h2 {
+  color: white;
+  font-size: 1.6em;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.section-line {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.4), transparent);
+  border-radius: 2px;
+}
 
-  /* Cards grid */
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 16px;
-  }
+/* Subject cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+.subject-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 22px 20px;
+  border-radius: 20px;
+  text-decoration: none;
+  color: white;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  cursor: pointer;
+}
+.subject-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 20px;
+  border: 2px solid rgba(255,255,255,0.15);
+  transition: border-color 0.3s;
+}
+.subject-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+.subject-card:hover::before {
+  border-color: rgba(255,255,255,0.4);
+}
+.subject-card:active {
+  transform: translateY(-1px) scale(0.99);
+}
 
-  .card {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 18px;
-    padding: 24px 22px;
-    cursor: pointer;
-    transition: all 0.35s ease;
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    position: relative;
-    overflow: hidden;
-  }
-  .card::before {
-    content: '';
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 4px;
-    background: var(--card-accent);
-    opacity: 0.7;
-  }
-  .card:hover {
-    transform: translateY(-5px);
-    background: rgba(255,255,255,0.1);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
-    border-color: var(--card-accent);
-  }
-  .card:active { transform: scale(0.98); }
+/* Card color themes */
+.card-english {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+.card-science {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+.card-science2 {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+.card-maths {
+  background: linear-gradient(135deg, #fc5c7d 0%, #6a82fb 100%);
+}
+.card-coming {
+  background: linear-gradient(135deg, #434343 0%, #555 100%);
+  opacity: 0.5;
+  pointer-events: none;
+}
 
-  .card-emoji { font-size: 2.2rem; margin-bottom: 12px; display: block; }
-  .card-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; }
-  .card-desc { font-size: 0.88rem; color: #a0a0b8; line-height: 1.5; margin-bottom: 8px; }
-  .card-desc-es { font-size: 0.78rem; color: #707088; font-style: italic; }
-  .card-tag {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 8px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    margin-top: 8px;
-    text-transform: uppercase;
-    background: rgba(255,255,255,0.08);
-    color: #ccc;
-  }
+.card-icon {
+  font-size: 2.8em;
+  min-width: 60px;
+  text-align: center;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+.card-info {
+  flex: 1;
+}
+.card-info h3 {
+  font-size: 1.35em;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+.card-info p {
+  font-size: 0.88em;
+  opacity: 0.85;
+  line-height: 1.4;
+}
+.card-arrow {
+  font-size: 1.5em;
+  opacity: 0.5;
+  transition: all 0.3s;
+}
+.subject-card:hover .card-arrow {
+  opacity: 1;
+  transform: translateX(4px);
+}
 
-  /* Exam countdown */
-  .exam-alert {
-    background: linear-gradient(135deg, rgba(255,71,87,0.15), rgba(255,107,53,0.15));
-    border: 1px solid rgba(255,71,87,0.25);
-    border-radius: 16px;
-    padding: 18px 22px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    animation: pulse 3s ease-in-out infinite;
-  }
-  @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,71,87,0)} 50%{box-shadow:0 0 20px 4px rgba(255,71,87,0.15)} }
-  .exam-alert .alert-icon { font-size: 2rem; }
-  .exam-alert .alert-text h3 { color: #ff6b6b; font-size: 1.1rem; }
-  .exam-alert .alert-text p { color: #ccc; font-size: 0.9rem; margin-top: 2px; }
+/* Badge */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 0.72em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.badge-new {
+  background: #ffd700;
+  color: #333;
+}
+.badge-coming {
+  background: rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.7);
+}
 
-  /* Footer */
-  .footer {
-    text-align: center;
-    margin-top: 40px;
-    padding: 20px;
-    color: #555;
-    font-size: 0.8rem;
-  }
+/* Footer */
+.footer {
+  text-align: center;
+  margin-top: 50px;
+  padding: 20px;
+  color: rgba(255,255,255,0.4);
+  font-size: 0.85em;
+}
+.footer a {
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+}
 
-  /* Responsive */
-  @media (max-width: 600px) {
-    .hub-header h1 { font-size: 1.8rem; }
-    .hub-header { padding: 30px 15px 20px; }
-    .cards-grid { grid-template-columns: 1fr; }
-    .section-title h2 { font-size: 1.2rem; }
-    .exam-alert { flex-direction: column; text-align: center; }
-  }
+/* Responsive */
+@media (min-width: 600px) {
+  .card-grid { grid-template-columns: 1fr 1fr; }
+  .subject-card { flex-direction: column; text-align: center; padding: 28px 20px; }
+  .card-icon { font-size: 3.5em; min-width: auto; }
+  .card-arrow { position: absolute; top: 15px; right: 15px; font-size: 1.1em; }
+}
+@media (max-width: 400px) {
+  .hero h1 { font-size: 2em; }
+  .card-icon { font-size: 2.2em; min-width: 45px; }
+}
 </style>
 </head>
 <body>
 
-<div class="stars" id="starsContainer"></div>
+<!-- Floating stars -->
+<div class="stars" id="stars"></div>
 
 <div class="container">
-
-  <!-- Header -->
-  <div class="hub-header">
-    <div class="avatar">🚀</div>
+  <div class="hero">
+    <span class="hero-emoji">ð</span>
     <h1>Hugo's Study Hub</h1>
-    <p>Your interactive learning space - Let's go!</p>
+    <p>Pick a subject and start learning!</p>
   </div>
 
-  <!-- Exam Alert -->
-  <div class="exam-alert">
-    <div class="alert-icon">🚨</div>
-    <div class="alert-text">
-      <h3>Science Exam - Wednesday!</h3>
-      <p>Properties of Light and Sound — Practice every day to ace it! 💪</p>
-    </div>
-  </div>
-
-  <!-- SCIENCE SECTION -->
+  <!-- ENGLISH -->
   <div class="section-title">
-    <div class="icon" style="background:linear-gradient(135deg,#ff6b6b,#ff8e53);">🔬</div>
-    <h2>Science — Light & Sound</h2>
-    <span class="badge badge-exam">Exam Wed</span>
+    <h2>ð¬ð§ English</h2>
+    <div class="section-line"></div>
   </div>
-
-  <div class="cards-grid">
-    <a class="card" href="science-review.html" style="--card-accent:#00cec9;">
-      <span class="card-emoji">📖</span>
-      <div class="card-title">Study & Review</div>
-      <div class="card-desc">All 8 chapters with interactive diagrams, fun facts, and mini-quizzes. Start here!</div>
-      <div class="card-desc-es">🇪🇸 Los 8 capítulos con diagramas, datos curiosos y mini-quizzes.</div>
-      <span class="card-tag">📚 8 chapters</span>
+  <div class="card-grid">
+    <a class="subject-card card-english" href="irregular-verbs.html">
+      <div class="card-icon">ð</div>
+      <div class="card-info">
+        <h3>Irregular Verbs</h3>
+        <p>Practice past simple & past participle forms with quizzes and games</p>
+      </div>
+      <div class="card-arrow">&#8250;</div>
     </a>
-
-    <a class="card" href="science-vocabulary.html" style="--card-accent:#6c5ce7;">
-      <span class="card-emoji">🧠</span>
-      <div class="card-title">Vocabulary Trainer</div>
-      <div class="card-desc">24 key terms with flashcards, matching game, fill-the-blank, and speed round!</div>
-      <div class="card-desc-es">🇪🇸 24 términos clave con tarjetas, juego de emparejar, completar y ronda rápida.</div>
-      <span class="card-tag">🎮 4 game modes</span>
-    </a>
-
-    <a class="card" href="science-exam-practice.html" style="--card-accent:#ff4757;">
-      <span class="card-emoji">📝</span>
-      <div class="card-title">Exam Practice</div>
-      <div class="card-desc">90+ exercises: true/false, multiple choice, fill-in, matching, diagrams, and a mock exam!</div>
-      <div class="card-desc-es">🇪🇸 +90 ejercicios: verdadero/falso, opción múltiple, completar, emparejar y examen simulado.</div>
-      <span class="card-tag">🔥 90+ questions</span>
-    </a>
-
-    <a class="card" href="science-lenses.html" style="--card-accent:#00b894;">
-      <span class="card-emoji">🔍</span>
-      <div class="card-title">Convex or Concave?</div>
-      <div class="card-desc">25 questions to master the difference between convex and concave lenses.</div>
-      <div class="card-desc-es">🇪🇸 25 preguntas para dominar la diferencia entre lentes convexas y cóncavas.</div>
-      <span class="card-tag">🔬 25 questions</span>
+    <a class="subject-card card-coming">
+      <div class="card-icon">ð</div>
+      <div class="card-info">
+        <h3>More coming soon <span class="badge badge-coming">Soon</span></h3>
+        <p>New English topics will appear here</p>
+      </div>
+      <div class="card-arrow">&#8250;</div>
     </a>
   </div>
 
-  <!-- ENGLISH SECTION -->
+  <!-- SCIENCE -->
   <div class="section-title">
-    <div class="icon" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe);">🇬🇧</div>
-    <h2>English</h2>
-    <span class="badge badge-english">Practice</span>
+    <h2>ð¬ Science</h2>
+    <div class="section-line"></div>
   </div>
-
-  <div class="cards-grid">
-    <a class="card" href="irregular-verbs.html" style="--card-accent:#a29bfe;">
-      <span class="card-emoji">💪</span>
-      <div class="card-title">Irregular Verbs Challenge</div>
-      <div class="card-desc">50 irregular verbs across 5 levels. Complete all levels to become a verb master!</div>
-      <div class="card-desc-es">🇪🇸 50 verbos irregulares en 5 niveles. ¡Completa todos para ser un maestro!</div>
-      <span class="card-tag">⭐ 5 levels</span>
+  <div class="card-grid">
+    <a class="subject-card card-science" href="magnets.html">
+      <div class="card-icon">ð§²</div>
+      <div class="card-info">
+        <h3>Magnets & Magnetism <span class="badge badge-new">New!</span></h3>
+        <p>Poles, magnetic fields, Earth's magnetosphere & everyday tech</p>
+      </div>
+      <div class="card-arrow">&#8250;</div>
+    </a>
+    <a class="subject-card card-coming">
+      <div class="card-icon">ð</div>
+      <div class="card-info">
+        <h3>More coming soon <span class="badge badge-coming">Soon</span></h3>
+        <p>New Science topics will appear here</p>
+      </div>
+      <div class="card-arrow">&#8250;</div>
     </a>
   </div>
 
   <div class="footer">
-    Made with ❤️ for Hugo — Keep studying, you've got this! 🌟
+    <p>Made with â¤ï¸ for Hugo | 2026</p>
   </div>
-
 </div>
 
 <script>
-// Create twinkling stars background
-const container = document.getElementById('starsContainer');
+// Generate random stars
+const starsEl = document.getElementById('stars');
 for (let i = 0; i < 80; i++) {
-  const star = document.createElement('div');
-  star.className = 'star-dot';
+  const s = document.createElement('div');
+  s.className = 'star';
   const size = Math.random() * 3 + 1;
-  star.style.width = size + 'px';
-  star.style.height = size + 'px';
-  star.style.left = Math.random() * 100 + '%';
-  star.style.top = Math.random() * 100 + '%';
-  star.style.setProperty('--dur', (2 + Math.random() * 4) + 's');
-  star.style.animationDelay = Math.random() * 4 + 's';
-  container.appendChild(star);
+  s.style.width = size + 'px';
+  s.style.height = size + 'px';
+  s.style.left = Math.random() * 100 + '%';
+  s.style.top = Math.random() * 100 + '%';
+  s.style.animationDelay = (Math.random() * 3) + 's';
+  s.style.animationDuration = (Math.random() * 2 + 2) + 's';
+  starsEl.appendChild(s);
 }
 </script>
 </body>
