@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hugo's Magnet Science Study Page 🧲</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Nunito', sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 10px;
+  color: #333;
+}
+h1, h2, h3 { font-family: 'Baloo 2', cursive; }
+.header {
+  text-align: center;
+  padding: 20px 10px;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+.header h1 { font-size: 2.2em; margin-bottom: 5px; }
+.header p { font-size: 1.1em; opacity: 0.9; }
+.tab-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin: 15px auto;
+  max-width: 900px;
+}
+.tab-btn {
+  background: rgba(255,255,255,0.25);
+  border: 2px solid rgba(255,255,255,0.5);
+  color: white;
+  padding: 8px 14px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.85em;
+  transition: all 0.3s;
+}
+.tab-btn:hover { background: rgba(255,255,255,0.4); transform: scale(1.05); }
+.tab-btn.active {
+  background: white;
+  color: #764ba2;
+  border-color: white;
+  transform: scale(1.08);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+.tab-content {
+  display: none;
+  max-width: 900px;
+  margin: 0 auto;
+  animation: fadeIn 0.4s ease;
+}
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.card {
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+.card h2 { color: #764ba2; margin-bottom: 15px; font-size: 1.6em; }
+.card h3 { color: #667eea; margin: 15px 0 10px; font-size: 1.2em; }
+.theory-point {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-left: 4px solid #764ba2;
+  padding: 12px 16px;
+  margin: 10px 0;
+  border-radius: 0 12px 12px 0;
+  font-size: 0.95em;
+  line-height: 1.6;
+}
+.spanish { color: #e91e63; font-style: italic; font-size: 0.9em; }
+canvas {
+  display: block;
+  margin: 15px auto;
+  border-radius: 15px;
+  max-width: 100%;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.exercise-area {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 20px;
+}
+.exercise-area h3 { color: #e65100; }
+.object-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  margin: 15px 0;
+}
+.object-item {
+  background: white;
+  border: 3px solid #ddd;
+  border-radius: 15px;
+  padding: 15px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 0.9em;
+  user-select: none;
+}
+.object-item:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+.object-item.selected { border-color: #2196f3; background: #e3f2fd; }
+.object-item.correct { border-color: #4caf50; background: #e8f5e9; }
+.object-item.incorrect { border-color: #f44336; background: #ffebee; }
+.object-item .emoji { font-size: 2em; display: block; margin-bottom: 5px; }
+.btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 25px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 1em;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin: 10px 5px;
+}
+.btn:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(102,126,234,0.4); }
+.btn:active { transform: scale(0.98); }
+.feedback {
+  padding: 12px 18px;
+  border-radius: 12px;
+  margin: 10px 0;
+  font-weight: 600;
+  display: none;
+}
+.feedback.show { display: block; animation: fadeIn 0.3s ease; }
+.feedback.success { background: #e8f5e9; color: #2e7d32; border: 2px solid #4caf50; }
+.feedback.error { background: #ffebee; color: #c62828; border: 2px solid #f44336; }
+.quiz-option {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 12px 18px;
+  margin: 8px 0;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.95em;
+}
+.quiz-option:hover { border-color: #667eea; background: #f3f0ff; }
+.quiz-option.selected { border-color: #2196f3; background: #e3f2fd; }
+.quiz-option.correct-answer { border-color: #4caf50; background: #e8f5e9; }
+.quiz-option.wrong-answer { border-color: #f44336; background: #ffebee; }
+.quiz-option.disabled { pointer-events: none; opacity: 0.8; }
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 15px 0;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 6px;
+  transition: width 0.5s ease;
+}
+.score-display {
+  text-align: center;
+  font-size: 1.3em;
+  font-weight: 700;
+  color: #764ba2;
+  margin: 10px 0;
+}
+.fill-blank-input {
+  border: 2px dashed #764ba2;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.95em;
+  width: 150px;
+  text-align: center;
+  margin: 0 5px;
+  transition: all 0.3s;
+}
+.fill-blank-input:focus { outline: none; border-color: #667eea; box-shadow: 0 0 8px rgba(102,126,234,0.3); }
+.fill-blank-input.correct { border-color: #4caf50; background: #e8f5e9; }
+.fill-blank-input.incorrect { border-color: #f44336; background: #ffebee; }
+.match-container { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 15px 0; }
+.match-item {
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9em;
+  user-select: none;
+}
+.match-item:hover { transform: scale(1.05); }
+.match-item.selected { border-color: #ff9800; background: #fff3e0; box-shadow: 0 2px 8px rgba(255,152,0,0.3); }
+.match-item.matched { border-color: #4caf50; background: #e8f5e9; pointer-events: none; opacity: 0.7; }
+.hint-box {
+  background: #fff9c4;
+  border: 2px solid #fdd835;
+  border-radius: 12px;
+  padding: 10px 15px;
+  margin: 10px 0;
+  font-size: 0.9em;
+  display: none;
+}
+.hint-box.show { display: block; }
+.question-counter {
+  font-size: 0.85em;
+  color: #666;
+  margin-bottom: 8px;
+}
+.explanation {
+  background: #e8eaf6;
+  border-radius: 10px;
+  padding: 10px 15px;
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #283593;
+  display: none;
+}
+.explanation.show { display: block; }
+@media (max-width: 600px) {
+  .header h1 { font-size: 1.6em; }
+  .tab-btn { padding: 6px 10px; font-size: 0.75em; }
+  .card { padding: 18px; }
+  .object-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🧲 Hugo's Magnet Lab 🧲</h1>
+  <p>Your interactive study guide for the Science exam!</p>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="showTab(0)">🧲 Basics</button>
+  <button class="tab-btn" onclick="showTab(1)">🌀 Field</button>
+  <button class="tab-btn" onclick="showTab(2)">⚡ Magnetization</button>
+  <button class="tab-btn" onclick="showTab(3)">🌍 Earth</button>
+  <button class="tab-btn" onclick="showTab(4)">💡 Technology</button>
+  <button class="tab-btn" onclick="showTab(5)">📝 Final Exam</button>
+</div>
+
+<!-- TAB 1: MAGNETS BASICS -->
+<div class="tab-content active" id="tab0">
+  <div class="card">
+    <h2>🧲 Magnets Basics</h2>
+    <div class="theory-point">
+      <strong>Every magnet has two poles:</strong> a <span style="color:#d32f2f;font-weight:700">North pole</span> (north-seeking) and a <span style="color:#1565c0;font-weight:700">South pole</span> (south-seeking) <span class="spanish">(polo norte y polo sur)</span>
+    </div>
+    <div class="theory-point">
+      <strong>Like poles repel, unlike poles attract!</strong> N+N = push away 💨 | N+S = come together 🤝 <span class="spanish">(los polos iguales se repelen, los polos opuestos se atraen)</span>
+    </div>
+    <div class="theory-point">
+      A <strong>magnet</strong> <span class="spanish">(imán)</span> is any object that has a <strong>magnetic field</strong> <span class="spanish">(campo magnético)</span> around it.
+    </div>
+    <div class="theory-point">
+      The <strong>magnetic field</strong> is an invisible area of force created by the magnet around itself. You can't see it, but it's there! 👻 <span class="spanish">(campo magnético - área invisible de fuerza)</span>
+    </div>
+    <canvas id="canvas-basics" width="700" height="300"></canvas>
+  </div>
+
+  <div class="card exercise-area">
+    <h3>🎯 Exercise: Which objects can be attracted to a magnet?</h3>
+    <p>Click on the objects that a magnet can attract! Then press "Check my answers".</p>
+    <div class="object-grid" id="magnetic-objects">
+      <div class="object-item" data-magnetic="true" onclick="toggleObject(this)">
+        <span class="emoji">📎</span>Paper clip
+      </div>
+      <div class="object-item" data-magnetic="false" onclick="toggleObject(this)">
+        <span class="emoji">🧽</span>Eraser
+      </div>
+      <div class="object-item" data-magnetic="false" onclick="toggleObject(this)">
+        <span class="emoji">🐹</span>Hamster
+      </div>
+      <div class="object-item" data-magnetic="true" onclick="toggleObject(this)">
+        <span class="emoji">📌</span>Staples
+      </div>
+      <div class="object-item" data-magnetic="true" onclick="toggleObject(this)">
+        <span class="emoji">🔩</span>Nail
+      </div>
+      <div class="object-item" data-magnetic="false" onclick="toggleObject(this)">
+        <span class="emoji">🖍️</span>Crayon
+      </div>
+      <div class="object-item" data-magnetic="false" onclick="toggleObject(this)">
+        <span class="emoji">🐞</span>Ladybug
+      </div>
+      <div class="object-item" data-magnetic="false" onclick="toggleObject(this)">
+        <span class="emoji">🌱</span>Plant
+      </div>
+    </div>
+    <button class="btn" onclick="checkMagneticObjects()">Check my answers! ✅</button>
+    <div class="feedback" id="magnetic-feedback"></div>
+  </div>
+</div>
+
+<!-- TAB 2: MAGNETIC FIELD -->
+<div class="tab-content" id="tab1">
+  <div class="card">
+    <h2>🌀 Magnetic Field</h2>
+    <div class="theory-point">
+      Every magnet has a <strong>magnetic field</strong> <span class="spanish">(campo magnético)</span> - this is the area of magnetic force around it that pulls on magnetic materials.
+    </div>
+    <div class="theory-point">
+      <strong>Opposite magnetic fields attract</strong> and <strong>like poles repel</strong> one another. <span class="spanish">(Los campos opuestos se atraen y los polos iguales se repelen)</span>
+    </div>
+    <div class="theory-point">
+      <strong>Magnetic field lines</strong> <span class="spanish">(líneas de campo magnético)</span> begin at the North pole and end at the South pole. They show the direction of the force!
+    </div>
+    <div class="theory-point">
+      The field is <strong>stronger near the poles</strong> (lines are closer together) and weaker far away (lines spread out). <span class="spanish">(El campo es más fuerte cerca de los polos)</span>
+    </div>
+    <canvas id="canvas-field" width="700" height="350"></canvas>
+  </div>
+
+  <div class="card exercise-area">
+    <h3>🎯 True or False Quiz!</h3>
+    <p>Test your knowledge about magnetic fields. Click True or False for each statement.</p>
+    <div id="tf-quiz"></div>
+    <div class="score-display" id="tf-score" style="display:none"></div>
+  </div>
+</div>
+
+<!-- TAB 3: MAGNETIZATION -->
+<div class="tab-content" id="tab2">
+  <div class="card">
+    <h2>⚡ Magnetization</h2>
+    <div class="theory-point">
+      If you <strong>divide a bar magnet</strong> in two, each piece becomes a new magnet with its own N and S poles! 🪄 <span class="spanish">(Si divides un imán, cada parte se convierte en un nuevo imán)</span>
+    </div>
+    <div class="theory-point">
+      You can <strong>magnetize</strong> <span class="spanish">(magnetizar)</span> an unmagnetized piece of magnetic material (like an iron screw) by rubbing it with a magnet. This is called <strong>magnetization</strong> <span class="spanish">(magnetización)</span>.
+    </div>
+    <div class="theory-point">
+      Magnetism can be transferred using: <strong>heat</strong>, <strong>vibration</strong>, and <strong>stroking</strong> a ferromagnetic object with a magnet. <span class="spanish">(calor, vibración y frotamiento)</span>
+    </div>
+    <div class="theory-point">
+      <strong>Ferromagnetic objects</strong> <span class="spanish">(objetos ferromagnéticos)</span> are materials that can become magnetized. The main ones are: <strong>iron</strong> (hierro), <strong>nickel</strong> (níquel), and <strong>cobalt</strong> (cobalto).
+    </div>
+    <canvas id="canvas-magnetization" width="700" height="300"></canvas>
+  </div>
+
+  <div class="card exercise-area">
+    <h3>🎯 Fill in the Blanks!</h3>
+    <p>Complete the sentences with the correct words. Then click "Check answers"!</p>
+    <div id="fill-blanks">
+      <div style="margin:12px 0; line-height:2.2">
+        1. If you divide a bar magnet in two, each piece becomes a new <input type="text" class="fill-blank-input" data-answer="magnet" placeholder="???"> with its own N and S.
+      </div>
+      <div style="margin:12px 0; line-height:2.2">
+        2. Rubbing an iron nail with a magnet is called <input type="text" class="fill-blank-input" data-answer="magnetization" placeholder="???"> .
+      </div>
+      <div style="margin:12px 0; line-height:2.2">
+        3. Objects that can become magnetized are called <input type="text" class="fill-blank-input" data-answer="ferromagnetic" placeholder="???"> objects.
+      </div>
+      <div style="margin:12px 0; line-height:2.2">
+        4. Three ferromagnetic materials are iron, nickel, and <input type="text" class="fill-blank-input" data-answer="cobalt" placeholder="???"> .
+      </div>
+      <div style="margin:12px 0; line-height:2.2">
+        5. Magnetism can be transferred using heat, vibration, and <input type="text" class="fill-blank-input" data-answer="stroking" placeholder="???"> a ferromagnetic object.
+      </div>
+    </div>
+    <button class="btn" onclick="checkFillBlanks()">Check answers! ✅</button>
+    <div class="feedback" id="fill-feedback"></div>
+  </div>
+</div>
+
+<!-- TAB 4: EARTH'S MAGNETOSPHERE -->
+<div class="tab-content" id="tab3">
+  <div class="card">
+    <h2>🌍 Earth's Magnetosphere</h2>
+    <div class="theory-point">
+      Earth possesses a <strong>magnetosphere</strong> <span class="spanish">(magnetosfera)</span> - it acts like a HUGE magnet! 🧲🌍
+    </div>
+    <div class="theory-point">
+      Earth's core has two layers: the <strong>inner core</strong> (a hot solid ball) and the <strong>outer core</strong> (hot liquid metal). <span class="spanish">(núcleo interno - sólido; núcleo externo - líquido)</span>
+    </div>
+    <div class="theory-point">
+      The liquid in the outer core <strong>moves constantly</strong> because of heat and Earth's rotation. Scientists think this generates Earth's magnetic field! <span class="spanish">(El líquido del núcleo externo se mueve constantemente)</span>
+    </div>
+    <div class="theory-point">
+      Earth's magnetic field extends from the inner core up to the magnetosphere. It is <strong>NOT aligned</strong> with Earth's spin axis - it's tilted about <strong>11.5°</strong>! <span class="spanish">(No está alineado con el eje de rotación)</span>
+    </div>
+    <div class="theory-point">
+      The <strong>North Magnetic Pole</strong> <span class="spanish">(Polo Norte Magnético)</span> is NOT the same as the <strong>Geographic North Pole</strong> <span class="spanish">(Polo Norte Geográfico)</span>!
+    </div>
+    <div class="theory-point">
+      Thanks to the magnetosphere: we can use a <strong>compass</strong> <span class="spanish">(brújula)</span> AND we are protected from the Sun's harmful particles! ☀️🛡️
+    </div>
+    <canvas id="canvas-earth" width="700" height="400"></canvas>
+  </div>
+
+  <div class="card exercise-area">
+    <h3>🎯 Match the Terms!</h3>
+    <p>Click a term on the left, then click its matching description on the right.</p>
+    <div style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center;">
+      <div>
+        <h4 style="text-align:center; margin-bottom:10px;">Terms</h4>
+        <div class="match-container" id="match-terms">
+          <div class="match-item" data-match="A" onclick="selectMatch(this,'term')">Magnetosphere</div>
+          <div class="match-item" data-match="B" onclick="selectMatch(this,'term')">Inner Core</div>
+          <div class="match-item" data-match="C" onclick="selectMatch(this,'term')">Outer Core</div>
+          <div class="match-item" data-match="D" onclick="selectMatch(this,'term')">Compass</div>
+          <div class="match-item" data-match="E" onclick="selectMatch(this,'term')">11.5°</div>
+        </div>
+      </div>
+      <div>
+        <h4 style="text-align:center; margin-bottom:10px;">Descriptions</h4>
+        <div class="match-container" id="match-descs">
+          <div class="match-item" data-match="B" onclick="selectMatch(this,'desc')">Hot solid ball at Earth's center</div>
+          <div class="match-item" data-match="E" onclick="selectMatch(this,'desc')">Tilt of magnetic axis</div>
+          <div class="match-item" data-match="A" onclick="selectMatch(this,'desc')">Earth's magnetic shield</div>
+          <div class="match-item" data-match="D" onclick="selectMatch(this,'desc')">Uses Earth's field to find North</div>
+          <div class="match-item" data-match="C" onclick="selectMatch(this,'desc')">Hot liquid that generates the field</div>
+        </div>
+      </div>
+    </div>
+    <div class="feedback" id="match-feedback"></div>
+    <div class="score-display" id="match-score" style="display:none"></div>
+  </div>
+</div>
+
+<!-- TAB 5: EVERYDAY TECHNOLOGIES -->
+<div class="tab-content" id="tab4">
+  <div class="card">
+    <h2>💡 Everyday Technologies</h2>
+    <div class="theory-point">
+      <strong>🔴 LASERS</strong> <span class="spanish">(láseres)</span>: Used in printers, CD/DVD players, and barcode readers. They use focused light beams!
+    </div>
+    <div class="theory-point">
+      <strong>📡 RADIO WAVES & WI-FI</strong> <span class="spanish">(ondas de radio y Wi-Fi)</span>: Routers use radio waves to connect your devices to the Internet wirelessly.
+    </div>
+    <div class="theory-point">
+      <strong>📱 ELECTROMAGNETISM</strong> <span class="spanish">(electromagnetismo)</span>: Used in touchscreens of smartphones and tablets. When you touch the screen, it detects the change in the electromagnetic field!
+    </div>
+    <div class="theory-point">
+      <strong>🤖 ROBOTS</strong> <span class="spanish">(robots)</span>: Used in the automotive industry since the 1960s! They help move heavy objects and spray-paint cars.
+    </div>
+  </div>
+
+  <div class="card exercise-area">
+    <h3>🎯 Match Technology to Use!</h3>
+    <p>Click a technology, then click what it's used for. Match all 4 pairs!</p>
+    <div style="display:flex; flex-wrap:wrap; gap:20px; justify-content:center;">
+      <div>
+        <h4 style="text-align:center; margin-bottom:10px;">Technology</h4>
+        <div class="match-container" id="tech-terms">
+          <div class="match-item" data-match="1" onclick="selectTechMatch(this,'term')">🔴 Lasers</div>
+          <div class="match-item" data-match="2" onclick="selectTechMatch(this,'term')">📡 Radio Waves</div>
+          <div class="match-item" data-match="3" onclick="selectTechMatch(this,'term')">📱 Electromagnetism</div>
+          <div class="match-item" data-match="4" onclick="selectTechMatch(this,'term')">🤖 Robots</div>
+        </div>
+      </div>
+      <div>
+        <h4 style="text-align:center; margin-bottom:10px;">Used for...</h4>
+        <div class="match-container" id="tech-descs">
+          <div class="match-item" data-match="3" onclick="selectTechMatch(this,'desc')">Touchscreens on phones</div>
+          <div class="match-item" data-match="1" onclick="selectTechMatch(this,'desc')">Barcode readers & DVD players</div>
+          <div class="match-item" data-match="4" onclick="selectTechMatch(this,'desc')">Moving heavy objects in factories</div>
+          <div class="match-item" data-match="2" onclick="selectTechMatch(this,'desc')">Connecting devices to Internet</div>
+        </div>
+      </div>
+    </div>
+    <div class="feedback" id="tech-feedback"></div>
+    <div class="score-display" id="tech-score" style="display:none"></div>
+  </div>
+</div>
+
+<!-- TAB 6: FINAL EXAM -->
+<div class="tab-content" id="tab5">
+  <div class="card">
+    <h2>📝 Final Exam Practice</h2>
+    <p>15 questions covering everything! Good luck Hugo! 🍀</p>
+    <div class="progress-bar"><div class="progress-fill" id="exam-progress" style="width:0%"></div></div>
+    <div class="score-display" id="exam-score-display">Question 1 of 15 | Score: 0</div>
+    <div id="exam-container"></div>
+    <div id="exam-final" style="display:none; text-align:center; padding:30px;">
+      <h2 id="exam-final-title"></h2>
+      <p id="exam-final-msg" style="font-size:1.2em; margin:15px 0;"></p>
+      <button class="btn" onclick="restartExam()">Try Again! 🔄</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// === TAB NAVIGATION ===
+function showTab(index) {
+  document.querySelectorAll('.tab-content').forEach((t,i) => {
+    t.classList.toggle('active', i === index);
+  });
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    b.classList.toggle('active', i === index);
+  });
+}
+
+// === CANVAS: BASICS ===
+function drawBasics() {
+  const c = document.getElementById('canvas-basics');
+  const ctx = c.getContext('2d');
+  const w = c.width, h = c.height;
+
+  ctx.fillStyle = '#f8f9fa';
+  ctx.fillRect(0, 0, w, h);
+
+  // Grid
+  ctx.strokeStyle = '#e0e0e0';
+  ctx.lineWidth = 0.5;
+  for (let x = 0; x < w; x += 30) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
+  for (let y = 0; y < h; y += 30) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+
+  // Bar magnet
+  const mx = 200, my = 120, mw = 200, mh = 60;
+  // N pole (red)
+  ctx.fillStyle = '#e53935';
+  ctx.beginPath();
+  ctx.roundRect(mx, my, mw/2, mh, [10, 0, 0, 10]);
+  ctx.fill();
+  // S pole (blue)
+  ctx.fillStyle = '#1565c0';
+  ctx.beginPath();
+  ctx.roundRect(mx + mw/2, my, mw/2, mh, [0, 10, 10, 0]);
+  ctx.fill();
+
+  // Labels
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 28px Nunito';
+  ctx.textAlign = 'center';
+  ctx.fillText('N', mx + mw/4, my + mh/2 + 10);
+  ctx.fillText('S', mx + 3*mw/4, my + mh/2 + 10);
+
+  // Attraction arrows (N-S)
+  ctx.strokeStyle = '#4caf50';
+  ctx.lineWidth = 3;
+  ctx.fillStyle = '#4caf50';
+  drawArrow(ctx, 480, 100, 540, 100);
+  drawArrow(ctx, 600, 100, 540, 100);
+  ctx.font = 'bold 14px Nunito';
+  ctx.fillText('ATTRACT! 🤝', 540, 85);
+  // Small magnets for attraction
+  ctx.fillStyle = '#e53935'; ctx.fillRect(460, 92, 20, 16);
+  ctx.fillStyle = '#1565c0'; ctx.fillRect(600, 92, 20, 16);
+  ctx.fillStyle = 'white'; ctx.font = 'bold 10px Nunito';
+  ctx.fillText('N', 470, 103); ctx.fillText('S', 610, 103);
+
+  // Repulsion arrows (N-N)
+  ctx.strokeStyle = '#f44336';
+  ctx.fillStyle = '#f44336';
+  ctx.lineWidth = 3;
+  drawArrow(ctx, 520, 200, 470, 200);
+  drawArrow(ctx, 580, 200, 630, 200);
+  ctx.font = 'bold 14px Nunito';
+  ctx.fillText('REPEL! 💨', 550, 185);
+  // Small magnets for repulsion
+  ctx.fillStyle = '#e53935'; ctx.fillRect(500, 192, 20, 16);
+  ctx.fillStyle = '#e53935'; ctx.fillRect(580, 192, 20, 16);
+  ctx.fillStyle = 'white'; ctx.font = 'bold 10px Nunito';
+  ctx.fillText('N', 510, 203); ctx.fillText('N', 590, 203);
+
+  // Title
+  ctx.fillStyle = '#333';
+  ctx.font = 'bold 16px Baloo 2';
+  ctx.textAlign = 'left';
+  ctx.fillText('Bar Magnet (imán de barra)', 20, 30);
+}
+
+function drawArrow(ctx, fx, fy, tx, ty) {
+  const angle = Math.atan2(ty-fy, tx-fx);
+  ctx.beginPath();
+  ctx.moveTo(fx, fy);
+  ctx.lineTo(tx, ty);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(tx, ty);
+  ctx.lineTo(tx - 10*Math.cos(angle-0.4), ty - 10*Math.sin(angle-0.4));
+  ctx.lineTo(tx - 10*Math.cos(angle+0.4), ty - 10*Math.sin(angle+0.4));
+  ctx.closePath();
+  ctx.fill();
+}
+
+// === CANVAS: MAGNETIC FIELD ===
+function drawField() {
+  const c = document.getElementById('canvas-field');
+  const ctx = c.getContext('2d');
+  const w = c.width, h = c.height;
+
+  ctx.fillStyle = '#f0f4ff';
+  ctx.fillRect(0, 0, w, h);
+
+  // Grid
+  ctx.strokeStyle = '#e8eaf6';
+  ctx.lineWidth = 0.5;
+  for (let x = 0; x < w; x += 25) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
+  for (let y = 0; y < h; y += 25) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+
+  const cx = w/2, cy = h/2;
+  const mw = 160, mhalf = mw/2;
+
+  // Draw field lines
+  ctx.lineWidth = 2;
+  const curves = [
+    {dy: 30, cp: 80}, {dy: 60, cp: 140}, {dy: 90, cp: 200}, {dy: 120, cp: 260}, {dy: 0, cp: 40}
+  ];
+
+  curves.forEach(({dy, cp}) => {
+    ctx.strokeStyle = '#7c4dff';
+    ctx.beginPath();
+    // Top curve
+    ctx.moveTo(cx - mhalf, cy - dy);
+    ctx.bezierCurveTo(cx - mhalf - cp, cy - dy - cp, cx + mhalf + cp, cy - dy - cp, cx + mhalf, cy - dy);
+    ctx.stroke();
+    // Arrow on top
+    if (dy > 0) {
+      const arrowX = cx + 20, arrowY = cy - dy - cp*0.6;
+      ctx.fillStyle = '#7c4dff';
+      ctx.beginPath();
+      ctx.moveTo(arrowX+8, arrowY); ctx.lineTo(arrowX-4, arrowY-5); ctx.lineTo(arrowX-4, arrowY+5);
+      ctx.closePath(); ctx.fill();
+    }
+
+    if (dy > 0) {
+      // Bottom curve
+      ctx.beginPath();
+      ctx.moveTo(cx - mhalf, cy + dy);
+      ctx.bezierCurveTo(cx - mhalf - cp, cy + dy + cp, cx + mhalf + cp, cy + dy + cp, cx + mhalf, cy + dy);
+      ctx.stroke();
+      // Arrow on bottom
+      const arrowX2 = cx - 20, arrowY2 = cy + dy + cp*0.6;
+      ctx.fillStyle = '#7c4dff';
+      ctx.beginPath();
+      ctx.moveTo(arrowX2+8, arrowY2); ctx.lineTo(arrowX2-4, arrowY2-5); ctx.lineTo(arrowX2-4, arrowY2+5);
+      ctx.closePath(); ctx.fill();
+    }
+  });
+
+  // Bar magnet
+  ctx.fillStyle = '#e53935';
+  ctx.beginPath();
+  ctx.roundRect(cx - mhalf, cy - 25, mhalf, 50, [8,0,0,8]);
+  ctx.fill();
+  ctx.fillStyle = '#1565c0';
+  ctx.beginPath();
+  ctx.roundRect(cx, cy - 25, mhalf, 50, [0,8,8,0]);
+  ctx.fill();
+
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 24px Nunito';
+  ctx.textAlign = 'center';
+  ctx.fillText('N', cx - mhalf/2, cy + 8);
+  ctx.fillText('S', cx + mhalf/2, cy + 8);
+
+  // Labels
+  ctx.fillStyle = '#333';
+  ctx.font = 'bold 13px Nunito';
+  ctx.fillText('Field lines go from N → S', cx, 30);
+  ctx.fillText('Lines closer together = STRONGER field', cx, h - 15);
+  ctx.font = '12px Nunito';
+  ctx.fillText('(líneas de campo magnético)', cx, 48);
+}
+
+// === CANVAS: MAGNETIZATION ===
+function drawMagnetization() {
+  const c = document.getElementById('canvas-magnetization');
+  const ctx = c.getContext('2d');
+  const w = c.width, h = c.height;
+
+  ctx.fillStyle = '#fff8e1';
+  ctx.fillRect(0, 0, w, h);
+
+  // Grid
+  ctx.strokeStyle = '#fff3e0';
+  ctx.lineWidth = 0.5;
+  for (let x = 0; x < w; x += 25) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
+  for (let y = 0; y < h; y += 25) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+
+  // BEFORE section
+  ctx.fillStyle = '#333';
+  ctx.font = 'bold 16px Baloo 2';
+  ctx.textAlign = 'center';
+  ctx.fillText('BEFORE (antes)', 175, 30);
+
+  // Nail (unmagnetized)
+  ctx.fillStyle = '#9e9e9e';
+  ctx.beginPath();
+  ctx.roundRect(100, 60, 150, 20, 5);
+  ctx.fill();
+  ctx.fillStyle = '#666';
+  ctx.font = '12px Nunito';
+  ctx.fillText('Iron nail (not magnetic yet)', 175, 105);
+
+  // Magnet rubbing
+  ctx.fillStyle = '#e53935';
+  ctx.beginPath();
+  ctx.roundRect(120, 90, 40, 25, 5);
+  ctx.fill();
+  ctx.fillStyle = '#1565c0';
+  ctx.beginPath();
+  ctx.roundRect(160, 90, 40, 25, 5);
+  ctx.fill();
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 10px Nunito';
+  ctx.fillText('N', 140, 107);
+  ctx.fillText('S', 180, 107);
+
+  // Arrow showing rubbing motion
+  ctx.strokeStyle = '#ff9800';
+  ctx.lineWidth = 3;
+  ctx.setLineDash([5,3]);
+  ctx.beginPath();
+  ctx.moveTo(130, 130);
+  ctx.lineTo(220, 130);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#ff9800';
+  ctx.beginPath();
+  ctx.moveTo(220,130); ctx.lineTo(210,125); ctx.lineTo(210,135); ctx.closePath(); ctx.fill();
+  ctx.font = 'bold 12px Nunito';
+  ctx.fillText('Rub! (frotar) →', 175, 150);
+
+  // AFTER section
+  ctx.fillStyle = '#333';
+  ctx.font = 'bold 16px Baloo 2';
+  ctx.fillText('AFTER (después) ✨', 525, 30);
+
+  // Magnetized nail
+  ctx.fillStyle = '#e53935';
+  ctx.beginPath();
+  ctx.roundRect(450, 60, 75, 20, [5,0,0,5]);
+  ctx.fill();
+  ctx.fillStyle = '#1565c0';
+  ctx.beginPath();
+  ctx.roundRect(525, 60, 75, 20, [0,5,5,0]);
+  ctx.fill();
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 14px Nunito';
+  ctx.fillText('N', 487, 75);
+  ctx.fillText('S', 562, 75);
+
+  ctx.fillStyle = '#2e7d32';
+  ctx.font = 'bold 12px Nunito';
+  ctx.fillText('Now it\'s a magnet! 🎉', 525, 105);
+  ctx.font = '11px Nunito';
+  ctx.fillText('(¡Ahora es un imán!)', 525, 120);
+
+  // Dividing magnet illustration
+  ctx.fillStyle = '#333';
+  ctx.font = 'bold 14px Baloo 2';
+  ctx.textAlign = 'center';
+  ctx.fillText('Dividing a magnet:', 350, 180);
+
+  // Original magnet
+  ctx.fillStyle = '#e53935';
+  ctx.fillRect(250, 195, 100, 30);
+  ctx.fillStyle = '#1565c0';
+  ctx.fillRect(350, 195, 100, 30);
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 16px Nunito';
+  ctx.fillText('N', 300, 215);
+  ctx.fillText('S', 400, 215);
+
+  // Scissors
+  ctx.font = '24px serif';
+  ctx.fillText('✂️', 350, 255);
+
+  // Two new magnets
+  ctx.fillStyle = '#e53935';
+  ctx.fillRect(220, 265, 50, 24);
+  ctx.fillStyle = '#1565c0';
+  ctx.fillRect(270, 265, 50, 24);
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 12px Nunito';
+  ctx.fillText('N', 245, 281);
+  ctx.fillText('S', 295, 281);
+
+  ctx.fillStyle = '#e53935';
+  ctx.fillRect(380, 265, 50, 24);
+  ctx.fillStyle = '#1565c0';
+  ctx.fillRect(430, 265, 50, 24);
+  ctx.fillStyle = 'white';
+  ctx.fillText('N', 405, 281);
+  ctx.fillText('S', 455, 281);
+
+  ctx.fillStyle = '#2e7d32';
+  ctx.font = '11px Nunito';
+  ctx.fillText('Each piece = new magnet!', 350, 298);
+}
+
+// === CANVAS: EARTH ===
+function drawEarth() {
+  const c = document.getElementById('canvas-earth');
+  const ctx = c.getContext('2d');
+  const w = c.width, h = c.height;
+
+  ctx.fillStyle = '#0d1b2a';
+  ctx.fillRect(0, 0, w, h);
+
+  // Stars
+  for (let i = 0; i < 50; i++) {
+    ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.8+0.2})`;
+    ctx.beginPath();
+    ctx.arc(Math.random()*w, Math.random()*h, Math.random()*1.5+0.5, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  const cx = w/2, cy = h/2, r = 80;
+
+  // Magnetosphere (oval shape)
+  ctx.strokeStyle = '#64b5f6';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([4,4]);
+  ctx.beginPath();
+  ctx.ellipse(cx, cy, 200, 160, 0, 0, Math.PI*2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#64b5f6';
+  ctx.font = 'bold 13px Nunito';
+  ctx.textAlign = 'center';
+  ctx.fillText('MAGNETOSPHERE (magnetosfera)', cx, cy - 170);
+
+  // Field lines around Earth
+  ctx.strokeStyle = '#ab47bc';
+  ctx.lineWidth = 1.5;
+  const fieldOffsets = [30, 55, 80];
+  fieldOffsets.forEach(off => {
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - r - 5);
+    ctx.bezierCurveTo(cx - off - 60, cy - r - off - 40, cx - off - 60, cy + r + off + 40, cx, cy + r + 5);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - r - 5);
+    ctx.bezierCurveTo(cx + off + 60, cy - r - off - 40, cx + off + 60, cy + r + off + 40, cx, cy + r + 5);
+    ctx.stroke();
+  });
+
+  // Earth
+  const grad = ctx.createRadialGradient(cx-15, cy-15, 10, cx, cy, r);
+  grad.addColorStop(0, '#4fc3f7');
+  grad.addColorStop(0.5, '#2196f3');
+  grad.addColorStop(1, '#0d47a1');
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI*2);
+  ctx.fill();
+
+  // Continents (simplified)
+  ctx.fillStyle = '#4caf50';
+  ctx.beginPath();
+  ctx.ellipse(cx-20, cy-20, 25, 15, -0.3, 0, Math.PI*2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(cx+20, cy+15, 18, 22, 0.2, 0, Math.PI*2);
+  ctx.fill();
+
+  // Core
+  ctx.fillStyle = '#ff6f00';
+  ctx.beginPath();
+  ctx.arc(cx, cy, 20, 0, Math.PI*2);
+  ctx.fill();
+  ctx.fillStyle = '#ffab00';
+  ctx.beginPath();
+  ctx.arc(cx, cy, 10, 0, Math.PI*2);
+  ctx.fill();
+
+  // Geographic axis (vertical)
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([3,3]);
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - r - 30);
+  ctx.lineTo(cx, cy + r + 30);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Magnetic axis (tilted ~11.5°)
+  const tilt = 11.5 * Math.PI / 180;
+  ctx.strokeStyle = '#ff5722';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(cx + Math.sin(tilt)*(r+30), cy - Math.cos(tilt)*(r+30));
+  ctx.lineTo(cx - Math.sin(tilt)*(r+30), cy + Math.cos(tilt)*(r+30));
+  ctx.stroke();
+
+  // Labels
+  ctx.fillStyle = 'white';
+  ctx.font = 'bold 11px Nunito';
+  ctx.fillText('Geographic N', cx + 5, cy - r - 35);
+  ctx.fillStyle = '#ff5722';
+  ctx.fillText('Magnetic N', cx + Math.sin(tilt)*(r+30) + 50, cy - Math.cos(tilt)*(r+30) + 5);
+  ctx.fillStyle = '#ffab00';
+  ctx.font = '10px Nunito';
+  ctx.fillText('Inner core', cx, cy + 3);
+  ctx.fillStyle = '#ff6f00';
+  ctx.fillText('Outer core', cx + 35, cy - 15);
+
+  // 11.5° label
+  ctx.fillStyle = '#ffd54f';
+  ctx.font = 'bold 12px Nunito';
+  ctx.fillText('11.5°', cx + 20, cy - r - 10);
+
+  // Sun particles
+  ctx.fillStyle = '#fdd835';
+  ctx.font = '18px serif';
+  ctx.fillText('☀️', 50, 60);
+  ctx.strokeStyle = '#fdd835';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([2,4]);
+  for (let i = 0; i < 5; i++) {
+    ctx.beginPath();
+    ctx.moveTo(80, 55 + i*8);
+    ctx.lineTo(cx - 210, cy - 80 + i*30);
+    ctx.stroke();
+  }
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#fdd835';
+  ctx.font = '11px Nunito';
+  ctx.textAlign = 'left';
+  ctx.fillText('Sun particles', 30, 85);
+  ctx.fillText('(blocked!)', 30, 100);
+
+  // Compass
+  ctx.font = '20px serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('🧭', w - 60, h - 40);
+  ctx.fillStyle = 'white';
+  ctx.font = '11px Nunito';
+  ctx.fillText('Compass works!', w - 60, h - 15);
+}
+
+// === MAGNETIC OBJECTS EXERCISE ===
+function toggleObject(el) {
+  if (el.classList.contains('correct') || el.classList.contains('incorrect')) return;
+  el.classList.toggle('selected');
+}
+
+function checkMagneticObjects() {
+  const items = document.querySelectorAll('#magnetic-objects .object-item');
+  let correct = 0, total = 0;
+  items.forEach(item => {
+    const isMagnetic = item.dataset.magnetic === 'true';
+    const isSelected = item.classList.contains('selected');
+    item.classList.remove('selected');
+    if (isMagnetic) total++;
+    if (isMagnetic && isSelected) { item.classList.add('correct'); correct++; }
+    else if (!isMagnetic && isSelected) { item.classList.add('incorrect'); }
+    else if (isMagnetic && !isSelected) { item.classList.add('incorrect'); }
+    else { item.classList.add('correct'); }
+  });
+  const fb = document.getElementById('magnetic-feedback');
+  fb.classList.add('show');
+  if (correct === total && !document.querySelector('#magnetic-objects .object-item.incorrect[data-magnetic="false"].incorrect')) {
+    // Check no false positives
+    const wrongSelections = document.querySelectorAll('#magnetic-objects .object-item[data-magnetic="false"].incorrect');
+    if (wrongSelections.length === 0) {
+      fb.className = 'feedback show success';
+      fb.innerHTML = '🎉 Perfect! Paper clips, staples, and nails are made of metal (iron/steel) so magnets attract them! <span class="spanish">(Los clips, grapas y clavos son de metal)</span>';
+    } else {
+      fb.className = 'feedback show error';
+      fb.innerHTML = '🤔 Almost! Remember: only objects made of iron, nickel, or cobalt are attracted to magnets. Living things, rubber, and wax are NOT magnetic!';
+    }
+  } else {
+    fb.className = 'feedback show error';
+    fb.innerHTML = '🤔 Not quite! The magnetic objects are: paper clip 📎, staples 📌, and nail 🔩. They contain iron! Erasers, hamsters, crayons, ladybugs, and plants are NOT magnetic.';
+  }
+}
+
+// === TRUE/FALSE QUIZ ===
+const tfQuestions = [
+  { q: "Magnetic field lines go from the South pole to the North pole.", a: false, exp: "They go from North to South! (Van del Norte al Sur)" },
+  { q: "The magnetic field is stronger near the poles.", a: true, exp: "Correct! The field is strongest at the poles where lines are closest together. (El campo es más fuerte cerca de los polos)" },
+  { q: "You can see magnetic field lines with your eyes.", a: false, exp: "Magnetic fields are invisible! But you can see their effect with iron filings. (Los campos magnéticos son invisibles)" },
+  { q: "Like poles (N-N or S-S) attract each other.", a: false, exp: "Like poles REPEL! Only opposite poles attract. (Los polos iguales se repelen)" },
+  { q: "Every magnet creates a magnetic field around itself.", a: true, exp: "Yes! Every magnet has an invisible area of force around it. (Todo imán crea un campo magnético)" },
+  { q: "The magnetic field has the same strength everywhere around the magnet.", a: false, exp: "No! It's stronger near the poles and weaker further away. (Es más fuerte cerca de los polos)" }
+];
+
+function buildTFQuiz() {
+  const container = document.getElementById('tf-quiz');
+  let html = '';
+  let tfScore = 0;
+  let tfAnswered = 0;
+
+  tfQuestions.forEach((q, i) => {
+    html += `<div style="margin:15px 0; padding:15px; background:white; border-radius:12px;" id="tf-q${i}">
+      <p style="font-weight:600; margin-bottom:10px;">${i+1}. ${q.q}</p>
+      <button class="btn" style="font-size:0.85em; padding:8px 20px;" onclick="answerTF(${i}, true)">✅ True</button>
+      <button class="btn" style="font-size:0.85em; padding:8px 20px; background:linear-gradient(135deg, #f44336, #e91e63);" onclick="answerTF(${i}, false)">❌ False</button>
+      <div class="explanation" id="tf-exp${i}"></div>
+    </div>`;
+  });
+  container.innerHTML = html;
+}
+
+let tfScore = 0, tfAnswered = 0;
+function answerTF(index, answer) {
+  const qDiv = document.getElementById(`tf-q${index}`);
+  if (qDiv.classList.contains('answered')) return;
+  qDiv.classList.add('answered');
+  tfAnswered++;
+
+  const correct = tfQuestions[index].a === answer;
+  if (correct) tfScore++;
+
+  const exp = document.getElementById(`tf-exp${index}`);
+  exp.classList.add('show');
+  exp.innerHTML = correct
+    ? `<span style="color:#2e7d32">✅ Correct! ${tfQuestions[index].exp}</span>`
+    : `<span style="color:#c62828">❌ Wrong! ${tfQuestions[index].exp}</span>`;
+
+  qDiv.querySelectorAll('button').forEach(b => b.style.opacity = '0.5');
+
+  if (tfAnswered === tfQuestions.length) {
+    const scoreEl = document.getElementById('tf-score');
+    scoreEl.style.display = 'block';
+    const pct = Math.round(tfScore/tfQuestions.length*100);
+    const emoji = pct === 100 ? '🏆' : pct >= 80 ? '🌟' : pct >= 60 ? '👍' : '📞';
+    scoreEl.innerHTML = `${emoji} Score: ${tfScore}/${tfQuestions.length} (${pct}%)`;
+  }
+}
+
+// === FILL IN THE BLANKS ===
+function checkFillBlanks() {
+  const inputs = document.querySelectorAll('#fill-blanks .fill-blank-input');
+  let correct = 0;
+  inputs.forEach(input => {
+    const answer = input.dataset.answer.toLowerCase();
+    const userAnswer = input.value.trim().toLowerCase();
+    if (userAnswer === answer) {
+      input.classList.add('correct');
+      input.classList.remove('incorrect');
+      correct++;
+    } else {
+      input.classList.add('incorrect');
+      input.classList.remove('correct');
+    }
+  });
+  const fb = document.getElementById('fill-feedback');
+  fb.classList.add('show');
+  if (correct === inputs.length) {
+    fb.className = 'feedback show success';
+    fb.innerHTML = `🎉 Perfect score! You got all ${inputs.length} correct! You're a magnetization expert! (¡Eres un experto en magnetización!)`;
+  } else {
+    fb.className = 'feedback show error';
+    fb.innerHTML = `You got ${correct}/${inputs.length} correct. Hint: The answers are: magnet, magnetization, ferromagnetic, cobalt, stroking. Try again! 💪`;
+  }
+}
+
+// === MATCHING EXERCISE (Earth) ===
+let matchSelectedTerm = null, matchSelectedDesc = null, matchScore = 0, matchTotal = 5;
+
+function selectMatch(el, type) {
+  if (el.classList.contains('matched')) return;
+
+  if (type === 'term') {
+    document.querySelectorAll('#match-terms .match-item').forEach(i => i.classList.remove('selected'));
+    el.classList.add('selected');
+    matchSelectedTerm = el;
+  } else {
+    document.querySelectorAll('#match-descs .match-item').forEach(i => i.classList.remove('selected'));
+    el.classList.add('selected');
+    matchSelectedDesc = el;
+  }
+
+  if (matchSelectedTerm && matchSelectedDesc) {
+    const fb = document.getElementById('match-feedback');
+    if (matchSelectedTerm.dataset.match === matchSelectedDesc.dataset.match) {
+      matchSelectedTerm.classList.add('matched');
+      matchSelectedDesc.classList.add('matched');
+      matchSelectedTerm.classList.remove('selected');
+      matchSelectedDesc.classList.remove('selected');
+      matchScore++;
+      fb.className = 'feedback show success';
+      fb.innerHTML = '✅ Correct match! Keep going!';
+    } else {
+      fb.className = 'feedback show error';
+      fb.innerHTML = '❌ Not a match! Try again.';
+      matchSelectedTerm.classList.remove('selected');
+      matchSelectedDesc.classList.remove('selected');
+    }
+    matchSelectedTerm = null;
+    matchSelectedDesc = null;
+
+    if (matchScore === matchTotal) {
+      const scoreEl = document.getElementById('match-score');
+      scoreEl.style.display = 'block';
+      scoreEl.innerHTML = '🏆 All matched! Fantastic work! (¡Fantástico!)';
+      fb.className = 'feedback show success';
+      fb.innerHTML = '🎉 You matched all terms correctly!';
+    }
+  }
+}
+
+// === TECHNOLOGY MATCHING ===
+let techSelectedTerm = null, techSelectedDesc = null, techScore = 0, techTotal = 4;
+
+function selectTechMatch(el, type) {
+  if (el.classList.contains('matched')) return;
+
+  if (type === 'term') {
+    document.querySelectorAll('#tech-terms .match-item').forEach(i => i.classList.remove('selected'));
+    el.classList.add('selected');
+    techSelectedTerm = el;
+  } else {
+    document.querySelectorAll('#tech-descs .match-item').forEach(i => i.classList.remove('selected'));
+    el.classList.add('selected');
+    techSelectedDesc = el;
+  }
+
+  if (techSelectedTerm && techSelectedDesc) {
+    const fb = document.getElementById('tech-feedback');
+    if (techSelectedTerm.dataset.match === techSelectedDesc.dataset.match) {
+      techSelectedTerm.classList.add('matched');
+      techSelectedDesc.classList.add('matched');
+      techSelectedTerm.classList.remove('selected');
+      techSelectedDesc.classList.remove('selected');
+      techScore++;
+      fb.className = 'feedback show success';
+      fb.innerHTML = '✅ Great match!';
+    } else {
+      fb.className = 'feedback show error';
+      fb.innerHTML = '❌ Nope! Think about what each technology does.';
+      techSelectedTerm.classList.remove('selected');
+      techSelectedDesc.classList.remove('selected');
+    }
+    techSelectedTerm = null;
+    techSelectedDesc = null;
+
+    if (techScore === techTotal) {
+      const scoreEl = document.getElementById('tech-score');
+      scoreEl.style.display = 'block';
+      scoreEl.innerHTML = '🏆 All 4 matched! You know your tech! (¡Genial!)';
+    }
+  }
+}
+
+// === FINAL EXAM ===
+const examQuestions = [
+  {
+    q: "Every magnet has...",
+    options: ["One pole", "Two poles (N and S)", "Three poles", "No poles"],
+    correct: 1,
+    hint: "Think about the bar magnet diagram!",
+    exp: "Todo imán tiene dos polos: Norte y Sur."
+  },
+  {
+    q: "What happens when you put two North poles together?",
+    options: ["They attract", "They repel", "Nothing happens", "They explode"],
+    correct: 1,
+    hint: "Like poles do what?",
+    exp: "Los polos iguales se repelen (se empujan)."
+  },
+  {
+    q: "Magnetic field lines go from...",
+    options: ["South to North", "North to South", "East to West", "They don't move"],
+    correct: 1,
+    hint: "Remember the field lines canvas!",
+    exp: "Las líneas van del polo Norte al polo Sur."
+  },
+  {
+    q: "Where is the magnetic field strongest?",
+    options: ["In the middle of the magnet", "Far from the magnet", "Near the poles", "Everywhere equally"],
+    correct: 2,
+    hint: "Where are the field lines closest together?",
+    exp: "El campo es más fuerte cerca de los polos."
+  },
+  {
+    q: "What is magnetization?",
+    options: ["Breaking a magnet", "Making a non-magnet become magnetic", "Heating metal", "Painting metal red and blue"],
+    correct: 1,
+    hint: "What did we do to the iron nail?",
+    exp: "Magnetización es convertir algo no magnético en magnético."
+  },
+  {
+    q: "Which of these is a ferromagnetic material?",
+    options: ["Wood", "Plastic", "Iron", "Glass"],
+    correct: 2,
+    hint: "Iron, nickel, and cobalt are the three...",
+    exp: "El hierro es ferromagnético (también el níquel y el cobalto)."
+  },
+  {
+    q: "If you break a magnet in half, you get...",
+    options: ["One N piece and one S piece", "Two new magnets, each with N and S", "Two non-magnetic pieces", "A mess"],
+    correct: 1,
+    hint: "Each piece becomes its own magnet!",
+    exp: "Cada parte se convierte en un imán nuevo con su propio N y S."
+  },
+  {
+    q: "Earth's magnetic field is generated by...",
+    options: ["The mountains", "Moving liquid in the outer core", "The atmosphere", "The Moon"],
+    correct: 1,
+    hint: "Think about what's hot and liquid inside Earth...",
+    exp: "El líquido del núcleo externo en movimiento genera el campo."
+  },
+  {
+    q: "The magnetic North Pole and Geographic North Pole are...",
+    options: ["The same point", "In different locations (about 11.5° apart)", "On opposite sides of Earth", "Both at the equator"],
+    correct: 1,
+    hint: "Remember the tilted axis!",
+    exp: "Están separados unos 11.5° - no están en el mismo sitio."
+  },
+  {
+    q: "The magnetosphere protects us from...",
+    options: ["Rain", "The Sun's harmful particles", "Earthquakes", "Loud noises"],
+    correct: 1,
+    hint: "What does the Sun shoot at us?",
+    exp: "La magnetosfera nos protege de las partículas dañinas del Sol."
+  },
+  {
+    q: "A compass works because of...",
+    options: ["Gravity", "Earth's magnetic field", "The wind", "Batteries"],
+    correct: 1,
+    hint: "The compass needle is a tiny magnet that aligns with...",
+    exp: "La brújula funciona gracias al campo magnético de la Tierra."
+  },
+  {
+    q: "Lasers are used in...",
+    options: ["Barcode readers and DVD players", "Making food", "Growing plants", "Building houses"],
+    correct: 0,
+    hint: "Think about the red light at the supermarket checkout...",
+    exp: "Los láseres se usan en lectores de códigos de barras y reproductores de DVD."
+  },
+  {
+    q: "Wi-Fi routers use ___ to connect devices.",
+    options: ["Cables only", "Radio waves", "Magnets", "Sound waves"],
+    correct: 1,
+    hint: "What kind of invisible waves?",
+    exp: "Los routers usan ondas de radio para conectar dispositivos."
+  },
+  {
+    q: "Robots have been used in car factories since the...",
+    options: ["1920s", "1960s", "1990s", "2020s"],
+    correct: 1,
+    hint: "It was in the second half of the 20th century...",
+    exp: "Los robots se han usado en la industria del automóvil desde los años 60."
+  },
+  {
+    q: "Electromagnetism is used in...",
+    options: ["Touchscreens of phones and tablets", "Paper books", "Wooden toys", "Candles"],
+    correct: 0,
+    hint: "What happens when you touch your phone screen?",
+    exp: "El electromagnetismo se usa en las pantallas táctiles de móviles y tablets."
+  }
+];
+
+let examCurrent = 0, examScore = 0, examAnswered = [];
+
+function buildExam() {
+  examCurrent = 0;
+  examScore = 0;
+  examAnswered = [];
+  document.getElementById('exam-final').style.display = 'none';
+  showExamQuestion();
+}
+
+function showExamQuestion() {
+  if (examCurrent >= examQuestions.length) {
+    showExamResults();
+    return;
+  }
+  const q = examQuestions[examCurrent];
+  const container = document.getElementById('exam-container');
+  const progress = ((examCurrent) / examQuestions.length) * 100;
+  document.getElementById('exam-progress').style.width = progress + '%';
+  document.getElementById('exam-score-display').innerHTML = `Question ${examCurrent+1} of ${examQuestions.length} | Score: ${examScore}`;
+
+  let html = `<div class="question-counter">Question ${examCurrent+1}</div>`;
+  html += `<h3 style="margin-bottom:15px;">${q.q}</h3>`;
+  q.options.forEach((opt, i) => {
+    html += `<div class="quiz-option" onclick="answerExam(${i})">${opt}</div>`;
+  });
+  html += `<div style="margin-top:10px;">
+    <button class="btn" style="font-size:0.8em; padding:8px 16px; background:linear-gradient(135deg,#ffa726,#ff7043);" onclick="showExamHint()">💡 Hint</button>
+  </div>`;
+  html += `<div class="hint-box" id="exam-hint">${q.hint}</div>`;
+  html += `<div class="explanation" id="exam-exp"></div>`;
+  container.innerHTML = html;
+}
+
+function showExamHint() {
+  document.getElementById('exam-hint').classList.add('show');
+}
+
+function answerExam(choice) {
+  const q = examQuestions[examCurrent];
+  const options = document.querySelectorAll('#exam-container .quiz-option');
+  if (options[0].classList.contains('disabled')) return;
+
+  options.forEach((opt, i) => {
+    opt.classList.add('disabled');
+    if (i === q.correct) opt.classList.add('correct-answer');
+    if (i === choice && i !== q.correct) opt.classList.add('wrong-answer');
+  });
+
+  const correct = choice === q.correct;
+  if (correct) examScore++;
+
+  const exp = document.getElementById('exam-exp');
+  exp.classList.add('show');
+  exp.innerHTML = correct
+    ? `✅ ¡Correcto! ${q.exp}`
+    : `❌ Incorrect. ${q.exp}`;
+
+  examCurrent++;
+  setTimeout(() => {
+    showExamQuestion();
+  }, 2000);
+}
+
+function showExamResults() {
+  document.getElementById('exam-container').innerHTML = '';
+  document.getElementById('exam-progress').style.width = '100%';
+  const final = document.getElementById('exam-final');
+  final.style.display = 'block';
+
+  const pct = Math.round(examScore / examQuestions.length * 100);
+  let title, msg;
+  if (pct === 100) { title = '🏆🎉 PERFECT SCORE! 🎉🏆'; msg = 'You got everything right, Hugo! You are a MAGNET MASTER! (¡Eres un maestro de los imanes!)'; }
+  else if (pct >= 80) { title = '🌟 Excellent! 🌟'; msg = `You scored ${examScore}/${examQuestions.length} (${pct}%)! Almost perfect! (¡Casi perfecto!)`; }
+  else if (pct >= 60) { title = '👍 Good job!'; msg = `You scored ${examScore}/${examQuestions.length} (${pct}%). Review the tricky parts and try again! (Repasa las partes difíciles)`; }
+  else { title = '📚 Keep studying!'; msg = `You scored ${examScore}/${examQuestions.length} (${pct}%). Go back to the other tabs and review, then try again! (Vuelve a repasar)`; }
+
+  document.getElementById('exam-final-title').textContent = title;
+  document.getElementById('exam-final-msg').textContent = msg;
+  document.getElementById('exam-score-display').innerHTML = `Final Score: ${examScore}/${examQuestions.length} (${pct}%)`;
+}
+
+function restartExam() {
+  buildExam();
+}
+
+// === INIT ===
+window.addEventListener('load', () => {
+  drawBasics();
+  drawField();
+  drawMagnetization();
+  drawEarth();
+  buildTFQuiz();
+  buildExam();
+});
+
+// Redraw canvases on resize
+window.addEventListener('resize', () => {
+  drawBasics();
+  drawField();
+  drawMagnetization();
+  drawEarth();
+});
+</script>
+</body>
+</html>
